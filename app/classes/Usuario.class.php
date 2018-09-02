@@ -3,10 +3,12 @@
 class Usuario {
 
 	private $idusuario;
-	private $deslogin;
-	private $dessenha;
+	private $login;
+        private $nome;
+	private $senha;
 	private $dtcadastro;
 
+        
 	public function getIdusuario(){
 		return $this->idusuario;
 	}
@@ -14,21 +16,29 @@ class Usuario {
 	public function setIdusuario($value){
 		$this->idusuario = $value;
 	}
+        
+        public function getNome(){
+            return $this->nome;
+        }
+        
+        public function setNome($value){
+            $this->nome = $value;
+        }
 
-	public function getDeslogin(){
-		return $this->deslogin;
+        public function getLogin(){
+		return $this->login;
 	}
 
-	public function setDeslogin($value){
-		$this->deslogin = $value;
+	public function setLogin($value){
+		$this->login = $value;
 	}
 
-	public function getDessenha(){
-		return $this->dessenha;
+	public function getSenha(){
+		return $this->senha;
 	}
 
-	public function setDessenha($value){
-		$this->dessenha = $value;
+	public function setSenha($value){
+		$this->senha = $value;
 	}
 
 	public function getDtcadastro(){
@@ -43,7 +53,7 @@ class Usuario {
 
 		$sql = new Sql();
 
-		$results = $sql->select("SELECT * FROM tb_usuarios WHERE idusuario = :ID", array(
+		$results = $sql->select("SELECT * FROM tb_sys001 WHERE id = :ID", array(
 			":ID"=>$id
 		));
 
@@ -59,7 +69,7 @@ class Usuario {
 
 		$sql = new Sql();
 
-		return $sql->select("SELECT * FROM tb_usuarios ORDER BY deslogin;");
+		return $sql->select("SELECT * FROM tb_sys001 ORDER BY login;");
 
 	}
 
@@ -67,7 +77,7 @@ class Usuario {
 
 		$sql = new Sql();
 
-		return $sql->select("SELECT * FROM tb_usuarios WHERE deslogin LIKE :SEARCH ORDER BY deslogin", array(
+		return $sql->select("SELECT * FROM tb_sys001 WHERE login LIKE :SEARCH ORDER BY login", array(
 			':SEARCH'=>"%".$login."%"
 		));
 
@@ -77,7 +87,7 @@ class Usuario {
 
 		$sql = new Sql();
 
-		$results = $sql->select("SELECT * FROM tb_usuarios WHERE deslogin = :LOGIN AND dessenha = :PASSWORD", array(
+		$results = $sql->select("SELECT * FROM tb_sys001 WHERE login = :LOGIN AND senha = :PASSWORD", array(
 			":LOGIN"=>$login,
 			":PASSWORD"=>$password
 		));
@@ -96,10 +106,11 @@ class Usuario {
 
 	public function setData($data){
 
-		$this->setIdusuario($data['idusuario']);
-		$this->setDeslogin($data['deslogin']);
-		$this->setDessenha($data['dessenha']);
-		$this->setDtcadastro(new DateTime($data['dtcadastro']));
+		$this->setIdusuario($data['id']);
+		$this->setNome($data['nome']);
+		$this->setLogin($data['login']);
+		$this->setSenha($data['senha']);
+		$this->setDtcadastro(new DateTime($data['dt_cadastro']));
 
 	}
 
@@ -125,7 +136,7 @@ class Usuario {
 
 		$sql = new Sql();
 
-		$sql->query("UPDATE tb_usuarios SET deslogin = :LOGIN, dessenha = :PASSWORD WHERE idusuario = :ID", array(
+		$sql->query("UPDATE  tb_sys001 SET login = :LOGIN, senha = :PASSWORD WHERE idusuario = :ID", array(
 			':LOGIN'=>$this->getDeslogin(),
 			':PASSWORD'=>$this->getDessenha(),
 			':ID'=>$this->getIdusuario()
@@ -137,7 +148,7 @@ class Usuario {
 
 		$sql = new Sql();
 
-		$sql->query("DELETE FROM tb_usuarios WHERE idusuario = :ID", array(
+		$sql->query("DELETE FROM tb_sys001 WHERE idusuario = :ID", array(
 			':ID'=>$this->getIdusuario()
 		));
 
@@ -150,24 +161,22 @@ class Usuario {
 
 	public function __construct($login = "", $password = ""){
 
-		$this->setDeslogin($login);
-		$this->setDessenha($password);
+		$this->setLogin($login);
+		$this->setSenha($password);
 
 	}
 
 	public function __toString(){
 
 		return json_encode(array(
-			"idusuario"=>$this->getIdusuario(),
-			"deslogin"=>$this->getDeslogin(),
-			"dessenha"=>$this->getDessenha(),
-			"dtcadastro"=>$this->getDtcadastro()->format("d/m/Y H:i:s")
+			"Id"=>$this->getIdusuario(),
+                        "nome"=> $this->getNome(),
+			"Login"=>$this->getLogin(),
+			"Senha"=>$this->getSenha(),
+			"Dt.Cadastro"=>$this->getDtcadastro()->format("d/m/Y H:i:s")
 		));
 
 	}
 
 } 	
-	
-
-
  ?>

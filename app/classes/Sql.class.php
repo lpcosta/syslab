@@ -2,11 +2,11 @@
 
 class Sql extends PDO {
 
-	private $conn;
+	private $conexao;
 
 	public function __construct(){
 
-		$this->conn = new PDO("mysql:host=localhost;dbname=dbphp7", "root", "root");
+		$this->conexao = new PDO("mysql:host=localhost;dbname=db_syslab", "syslab", "@syslab@001");
 
 	}
 
@@ -28,7 +28,7 @@ class Sql extends PDO {
 
 	public function query($rawQuery, $params = array()){
 
-		$stmt = $this->conn->prepare($rawQuery);
+		$stmt = $this->conexao->prepare($rawQuery);
 
 		$this->setParams($stmt, $params);
 
@@ -49,4 +49,3 @@ class Sql extends PDO {
 
 }
 
- ?>

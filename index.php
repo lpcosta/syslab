@@ -1,47 +1,22 @@
-<?php 
+<!DOCTYPE html> 
+<html lang="pt-br">   
+    <head>
+        <meta charset="utf-8">     
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">    
+        <title>SysLab</title>         
+        <link rel="shortcut icon" href="app/images/icons/syslab-logo.PNG" type="image/x-icon">
+        <!-- HTML5 shim and Respond.js for IE8 support of HTML5
+        elements and media queries -->     <!-- WARNING: Respond.js doesn't work if you
+        view the page via file:// -->     <!--[if lt IE 9]>       <script
+        src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+        <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+        <![endif]-->     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+       <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>-->
+        
+    </head>
 
-require_once("config.php");
-
-//Carrega um usuário
-//$root = new Usuario();
-//$root->loadbyId(3);
-//echo $root;
-
-//Carrega uma lista de usuários
-//$lista = Usuario::getList();
-//echo json_encode($lista);
-
-//Carrega uma lista de usuários buscando pelo login
-//$search = Usuario::search("jo");
-//echo json_encode($search);
-
-//carrega um usuário usando o login e a senha
-//$usuario = new Usuario();
-//$usuario->login("root", "!@#$");
-
-//echo $usuario;
-/*
-//Criando um novo usuário
-$aluno = new Usuario("aluno", "@lun0");
-$aluno->insert();
-echo $aluno;
-*/
-/*
-//Alterar um usuário
-$usuario = new Usuario();
-
-$usuario->loadById(8);
-
-$usuario->update("professor", "!@#$%¨&*");
-
-echo $usuario;
-*/
-
-$usuario = new Usuario();
-
-$usuario->loadById(7);
-
-$usuario->delete();
-
-echo $usuario;
- ?>
+    <body>
+        
+    </body>
+</html>
