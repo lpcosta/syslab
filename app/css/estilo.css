@@ -1,0 +1,68 @@
+*{margin: 0; padding: 0;}
+body{
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+}
+
+header > div#div-logo{
+    width: 40px;
+    heigt: 38px;
+    margin: 0;
+    float: left;
+}
+header > div#div-nome-sistema{
+    background-color: #B1ABAC;
+    width: calc(100% - 180px);
+    height: 38px;
+    margin: 0;
+    text-align: center;
+    float: left;
+    
+}
+header > div#div-user-logado{
+    background-color: #B1ABAC;
+    width: 140px;
+    height: 38px;
+    float: left;
+    margin: 0;
+}
+#div-user-logado p{
+    margin: 0;
+    padding:0 3px 0 0;
+    font-size: 10pt;
+    text-align: center;
+    
+}
+#div-user-logado img{
+    border-radius: 50%;
+    background-color: #ff0;
+    width: 39px;
+    height: 39px;
+    float: left;
+}
+
+/*MENU*/
+#login{width: 100%;}
+#login .boxin{position: absolute; width: 322px; min-height: 300px; background: #eee; left: 50%; top: 25%;}
+#login .boxin{padding: 20px 20px 10px; margin-left: -181px; margin-top: -170px;}
+#login .boxin h1{font-size: 30px; text-transform: uppercase; font-weight: 600; color: #09f; border-bottom: 5px solid #09f;}
+#login .boxin h1{margin-bottom: 15px; padding-bottom: 5px; text-align: center;}
+#login form label{display: block; margin-bottom: 15px;}
+#login form label span{display: block; margin-bottom: 5px;}
+#login form label input{width: 300px; padding: 10px; font-size: 18px; border: none;}
+#login form .btn{margin-top: 10px;}
+/*fim MENU*/
+.form_load{display: none; vertical-align: middle;}
+
+/*RODAPÉ*/
+footer {
+    position: fixed;
+    bottom:0;
+    left:0;
+    background-color: #31708f;
+    width: 100%;
+    height: 20px;
+    text-align: center;
+}
