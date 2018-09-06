@@ -8,9 +8,9 @@
         
     </ul>
     <div id="div1">
-        <h2>Cadastro de Equipamento</h2>
+        <h2>Cadastro de Localidade</h2>
     </div>
     <div id="div2">
-        <h2>Pesquisar Equipamento</h2>
+        <h2>Pesquisar Localidade</h2>
     </div>
 </div>

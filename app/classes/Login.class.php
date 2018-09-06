@@ -10,7 +10,6 @@ class Login {
 
     private $Login;
     private $Senha;
-    private $Error;
     private $Result;
 
     /**
@@ -32,15 +31,6 @@ class Login {
     public function getResult() {
         return $this->Result;
     }
-
-    /**
-     * <b>Obter Erro:</b> Retorna um array associativo com uma mensagem e um tipo de erro WS_.
-     * @return ARRAY $Error = Array associatico com o erro
-     */
-    public function getError() {
-        return $this->Error;
-    }
-
     /*
      * ***************************************
      * **********  PRIVATE METHODS  **********
@@ -50,14 +40,9 @@ class Login {
     //Valida os dados e armazena os erros caso existam. Executa o login!
     private function setLogin() {
         if (!$this->Login || !$this->Senha):
-            $this->Error = ['Informe seu Login e Senha para efetuar o login!', WS_INFOR];
-            $this->Result = false;
+            $this->Result = 'Informe seu Login e Senha!';
         elseif (!$this->getUser()):
-            $this->Error = ['Os dados informados não são compatíveis!', WS_ALERT];
-            $this->Result = false;
-        elseif ($this->Result['user_level'] < $this->Level):
-            $this->Error = ["Desculpe {$this->Result['user_name']}, você não tem permissão para acessar esta área!", WS_ERROR];
-            $this->Result = false;
+            $this->Result = 'Login ou senha Inválidos!';
         else:
             $this->Execute();
         endif;
@@ -68,7 +53,8 @@ class Login {
         $this->Senha = hash('whirlpool',hash('sha512',hash('sha384',hash('sha256',sha1(md5('mjll'.$this->Senha))))));
 
         $read = new Read;
-        $read->ExeRead("tb_sys001", "WHERE login = :LOGIN AND senha = :SENHA", "LOGIN={$this->Login}&SENHA={$this->Senha}");
+        //$read->ExeRead("tb_sys001", "WHERE login = :LOGIN AND senha = :SENHA", "LOGIN={$this->Login}&SENHA={$this->Senha}");
+        $read->FullRead("SELECT id,nome,login,situacao,nivel,tentativa_login,senha_padrao,grupo_id FROM tb_sys001 WHERE login = :LOGIN AND senha = :SENHA", "LOGIN={$this->Login}&SENHA={$this->Senha}");
 
         if ($read->getResult()):
             $this->Result = $read->getResult()[0];
@@ -85,7 +71,7 @@ class Login {
         endif;
         $_SESSION['UserLogado']=true;
         $_SESSION['UserLogado'] = $this->Result;
-        $this->Error = ["Olá {$this->Result['user_name']}, seja bem vindo(a). Aguarde redirecionamento!", WS_ACCEPT];
+        
         $this->Result = true;
     }
 

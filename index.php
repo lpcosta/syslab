@@ -23,21 +23,21 @@ require_once './app/config/config.inc.php';
         <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
         <![endif]-->     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
        <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>-->
-        
+         <script src="https://www.google.com/jsapi" /></script>
     </head>
 
     <body>
         <header>
             <div id="div-logo">
-                <img src ='./app/images/logos/logo-sistema.png' alt="Logo do Sistema" title="Logo do Sistema" onclick="location.href='http://localhost/syslab/'" />
+                <img src ='./app/imagens/logos/logo-sistema.png' alt="Logo do Sistema" title="Logo do Sistema" onclick="location.href='http://localhost/syslab/'" />
             </div>
             <div id="div-nome-sistema">
                 <p>syslab</p>
             </div>
             <div id="div-user-logado">
                 <?php if(isset($_SESSION['UserLogado'])):?>
-                <img src="app/images/icons/avatar.png" alt="Avatar" />
-                <p>tbpdomingos</p>
+                <img src="app/imagens/icons/avatar.png" alt="Avatar" title="<?= ucfirst($_SESSION['UserLogado']['nome'])?>" />
+                <p title="<?= ucfirst($_SESSION['UserLogado']['nome'])?>"><?=$_SESSION['UserLogado']['login']; ?></p>
                 <p><a href="index.php?ref=logoff">sair</a></p>
                 <? endif;?>
             </div>
@@ -175,7 +175,7 @@ require_once './app/config/config.inc.php';
     <script src="./app/libs/JQuery-ui-1.12.1/jquery-ui.js" /></script>
     <script src="./app/js/gobal.js" /></script>
     <script src="./app/libs/BootStrap-4.0/js/bootstrap.js" /></script>
-    
+   
    
 </html>
 <?php ob_end_flush();

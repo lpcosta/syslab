@@ -27,14 +27,14 @@ require_once '../config/config.inc.php';
     <body>
         <header>
             <div id="div-logo">
-                <img src ='../images/logos/logo-sistema.png' alt="Logo do Sistema" title="Logo do Sistema" onclick="location.href='http://localhost/syslab/'" />
+                <img src ='../imagens/logos/logo-sistema.png' alt="Logo do Sistema" title="Logo do Sistema" onclick="location.href='http://localhost/syslab/'" />
             </div>
             <div id="div-nome-sistema">
                 <p>syslab</p>
             </div>
             <div id="div-user-logado">
                 <?php if(isset($_SESSION['UserLogado'])):?>
-                <img src="app/images/icons/avatar.png" alt="Avatar" />
+                <img src="app/imagens/icons/avatar.png" alt="Avatar" />
                 <p>tbpdomingos</p>
                 <p><a href="index.php?ref=logoff">sair</a></p>
                 <? endif;?>
