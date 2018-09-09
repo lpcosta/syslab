@@ -1,7 +1,17 @@
 <?php
+if (!isset($_SERVER['HTTPS']) || $_SERVER['HTTPS'] != 'on') {
+    $redirect_url = "https://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+
+    header('HTTP/1.1 301 Moved Permanently');
+    header("Location: $redirect_url");
+    exit();
+}
 ob_start();
 session_start();
+require_once './app/composer/vendor/autoload.php';
 require_once './app/config/config.inc.php';
+require_once './app/funcoes/func.inc.php';
+
 ?>
 
 <!DOCTYPE html> 
@@ -11,7 +21,7 @@ require_once './app/config/config.inc.php';
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">    
         <title>SysLab</title>         
-        <link rel="shortcut icon" href="./app/images/icons/syslab-logo.PNG" type="image/x-icon">
+        <link rel="shortcut icon" href="./app/imagens/icons/syslab-logo.PNG" type="image/x-icon">
         <link rel="stylesheet" href="./app/libs/BootStrap-4.0/css/bootstrap.css" />
         <link rel="stylesheet" href="./app/libs/JQuery-ui-1.12.1/jquery-ui.css" />
         <link rel="stylesheet" href="./app/css/estilo.css" />
@@ -23,7 +33,8 @@ require_once './app/config/config.inc.php';
         <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
         <![endif]-->     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
        <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>-->
-         <script src="https://www.google.com/jsapi" /></script>
+      <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
     </head>
 
     <body>
@@ -154,6 +165,7 @@ require_once './app/config/config.inc.php';
                 require_once './app/sistema/login.php';
             
             elseif(isset($_SESSION['UserLogado'])&& file_exists($includepatch)):
+                
                     require_once("{$includepatch}");
             elseif(isset($_SESSION['UserLogado']) && !isset($_GET['ref'])):
                    require_once("{$includepatch}");

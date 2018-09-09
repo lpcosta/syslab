@@ -11,6 +11,8 @@ define('HOME', 'http://localhost/syslab');
 //define('REQUIRE_PATH', 'themes' . DIRECTORY_SEPARATOR . THEME);
 define('REQUIRE_PATH', HOME . DIRECTORY_SEPARATOR .'app' . DIRECTORY_SEPARATOR .'sistema');
 
+
+
 // AUTO LOAD DE CLASSES ####################
 spl_autoload_register(function($class){
        	$classe = "./app".DIRECTORY_SEPARATOR."classes".DIRECTORY_SEPARATOR.$class.".class.php";
@@ -23,5 +25,3 @@ spl_autoload_register(function($class){
             die;
         endif;
 });
-
-

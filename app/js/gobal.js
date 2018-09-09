@@ -1,19 +1,19 @@
 /* by Leandro Pereira*/
 
- //carregando modulo visualization
-      google.load("visualization", "1", {packages:["corechart"]});
-
-
+ 
 $( ".tabs" ).tabs({
-      beforeLoad: function( event, ui ) {
+      beforeLoad: function( e, ui ) {
         ui.jqXHR.fail(function() {
           ui.panel.html(
-            "<div class='alert alert-danger' role='alert'>Erro ao incluir arquivo, por favor contato o desenvolvedor " +
-            "resolveremos o quanto antes o problema.</div>" );
+            "<div class='text-center'><img src='./app/imagens/loader-lg.gif' alt='carregando...' title='carregando...' /></div>");
         });
+      },
+      /*event: "mouseover"*/
+      show: { 
+          effect: "blind", duration: 500
       }
-    });
-
+   })
+      
 function fctLogin()
 {
     var dados = $('.j_Cadastra').serialize();
@@ -28,7 +28,7 @@ function fctLogin()
           success: function (res){
            $('.form_load').fadeOut(1000);
            if(res != 1){
-               $('.j_Aviso').fadeIn(1000).html(res);
+               $('.j_Aviso').addClass('alert alert-warning').text(res).slideDown(800);
            }else{
                setTimeout(function(){
                    location.href='http://localhost/syslab/index.php?ref=home';

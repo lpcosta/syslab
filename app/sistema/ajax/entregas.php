@@ -1,5 +1,3 @@
-<h2>Entregas</h2>
-
 <?php
 session_start();
 require_once '../../config/autoload.inc.php';
@@ -13,12 +11,15 @@ $sql = new Read();
                             JOIN tb_sys018 FAB ON FAB.id_fabricante = EQP.fabricante
                             JOIN tb_sys022 MO ON MO.id_modelo = EQP.modelo
                             JOIN tb_sys008 LOC ON LOC.id = EQP.id_local
-                            JOIN tb_sys010 AVA ON AVA.id_item_entrada = I_ENT.id AND ENT.id_tecnico = :ID_TEC AND I_ENT.status = :STATUS", "ID_TEC={$_SESSION['UserLogado']['id']}&STATUS=4");
+                            JOIN tb_sys010 AVA ON AVA.id_item_entrada = I_ENT.id AND I_ENT.status = :STATUS ORDER BY local", "STATUS=4");
+            
+$data = new Datas();
+$dt_fim = date("d/m/Y");
           if($sql->getRowCount() > 0):?>
         <table class="table-responsive-sm tabela-tab table-hover">
             <tr class="text-uppercase">
-                <th class="tab-tam-min-os text-center">o.s</th>
-                <th class="tab-tam-min-pat text-center">patrimônio</th>
+                <th class="tab-tam-min-os text-center cursor-pointer">o.s</th>
+                <th class="tab-tam-min-pat text-center cursor-pointer">patrimônio</th>
                 <th>equipamento</th>
                 <th>localidade</th>
                 <th class="text-center">dt.entrada</th>
@@ -30,13 +31,13 @@ $sql = new Read();
             foreach ($result as $row):
         ?>
             <tr class="text-uppercase">
-                <td class="text-center"><?php print $row['os']?></td>
-                <td class="text-center"><?php print $row['patrimonio']?></td>
+                <td class="text-center cursor-pointer"><?php print $row['os']?></td>
+                <td class="text-center cursor-pointer"><?php print $row['patrimonio']?></td>
                 <td><?php print $row['equipamento']." ".$row['fabricante']." ".$row['modelo']?></td>
                 <td><?php print $row['local']?></td>
-                <td class="text-center"><?php print date("d/m/Y",strtotime($row['dtent']))." ".date("H:i:s", strtotime($row['hrent']))?></td>
-                <td class="text-center"><?php print date("d/m/Y",strtotime($row['dtava']))." ".date("H:i:s", strtotime($row['hrava']))?></td>
-                <td><?php print "";?></td>
+                <td class="text-center"><?php print date("d/m/Y",strtotime($row['dtent']))."<span class=\"hide\" > ".date("H:i:s", strtotime($row['hrent']))."</span>"?></td>
+                <td class="text-center"><?php print date("d/m/Y",strtotime($row['dtava']))."<span class=\"hide\" > ".date("H:i:s", strtotime($row['hrava']))."</span>"?></td>
+                <td class="text-center"><?php print $data->setData($row['dtent'], $dt_fim);?></td>
             </tr>
             <?php endforeach;?>
         </table>

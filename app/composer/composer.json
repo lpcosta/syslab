@@ -1,0 +1,14 @@
+{
+    "name": "syslab/composer",
+    "description": "Composer do Syslab",
+    "authors": [
+        {
+            "name": "Leandro Pereira",
+            "email": "lcosta@outlook.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.6.28",
+        "phpoffice/phpspreadsheet":">0"
+    }
+}
