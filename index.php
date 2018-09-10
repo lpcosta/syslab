@@ -74,6 +74,7 @@ require_once './app/funcoes/func.inc.php';
                         <a class="dropdown-item" href="index.php?ref=cadastra/fabricante">Fabricante</a>
                         <a class="dropdown-item" href="index.php?ref=cadastra/localidade">Localidade</a>
                         <a class="dropdown-item" href="index.php?ref=cadastra/categoria">Categoria</a>
+                        <a class="dropdown-item" href="index.php?ref=cadastra/software">Software</a>
                         <a class="dropdown-item" href="index.php?ref=cadastra/empresa">Empresa</a>
                         <a class="dropdown-item" href="index.php?ref=cadastra/usuario">Usuário</a>
                         <a class="dropdown-item" href="index.php?ref=cadastra/cidade">Cidade</a>
@@ -187,6 +188,7 @@ require_once './app/funcoes/func.inc.php';
     <script src="./app/libs/JQuery-ui-1.12.1/jquery-ui.js" /></script>
     <script src="./app/js/gobal.js" /></script>
     <script src="./app/libs/BootStrap-4.0/js/bootstrap.js" /></script>
+    <script src="./app/libs/JQuery-Masked-Input/src/jquery.maskedinput.js" /></script>
    
    
 </html>

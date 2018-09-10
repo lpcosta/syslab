@@ -37,3 +37,55 @@ function fctLogin()
           }
       });
 }
+
+       
+function getModelos(fab)/*essa função busca cidades e preenche um combo com as cidades e cep*/
+{
+    $.post('./app/sistema/ajax/buscamodelos.php',
+            {
+                fabricante: fab
+            }, function (res){
+                if(res){
+                    $("#txtModelo").attr('disabled', false);
+                    $("#txtModelo").children(".cmbv_modelos").remove();
+                    $("#txtModelo").append(res);
+                }
+                else{
+                    $("#txtModelo").children(".cmbv_modelos").remove();
+                    $("#txtModelo").append("<option value='' class='cmbv_modelos'>Selecione..</option>");
+                    $('#txtModelo').attr('disabled',true);
+                }
+            });
+}  
+
+function setCadEquipamento(e){
+   switch(e){
+        case '1':
+                $('.opcao-cad-cpu').hide();
+                $('.opcao-cad-monitor').hide();
+                $('.opcao-cad-printer').slideDown(500);
+            break;
+        case '2':
+                $('.opcao-cad-printer').hide();
+                $('.opcao-cad-monitor').hide();
+                $('.opcao-cad-cpu').slideDown(500);
+            break;
+        case '4':
+                $('.opcao-cad-printer').hide();
+                $('.opcao-cad-cpu').hide();
+                $('.opcao-cad-monitor').slideDown(500)();
+            break;
+        default:
+        $('.opcao-cad-cpu').slideUp();
+        $('.opcao-cad-monitor').slideUp();
+        $('.opcao-cad-printer').slideUp();
+   }
+}
+
+/*mascaras de campos*/
+$(function() {
+        $.mask.definitions['~'] = "[+-]";
+        $(".m_key").mask("99999-99999-99999-99999-99999");
+        $("#txtIp").mask("999.999.999.999");
+    });
+/*fim das mascaras de campos*/

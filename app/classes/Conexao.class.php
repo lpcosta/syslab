@@ -8,18 +8,18 @@
  * @copyright (56648)(c) 2016, Robson V. Leite - UPINSIDE TREINAMENTOS
  */
 abstract class Conexao {
-    
+    /*
     private static $Host = '192.185.211.34';
     private static $User = 'lpcos421_lpcosta';
     private static $Pass = '@lpc!!@#%*!#@';
     private static $Dbsa = 'lpcos421_syslab';
+    */
     
-    /*
     private static $Host = 'localhost';
     private static $User = 'syslab';
     private static $Pass = '@syslab@001';
     private static $Dbsa = 'db_syslab';
-    */
+    
     /** @var PDO */
     private static $Connect = null;
 
