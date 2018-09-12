@@ -6,13 +6,11 @@
 ?>
 <div class="tabs">
     <ul>
-        <li><a href="#div1">Cadastrar</a></li>
-        <li><a href="#div2">Cadastrados</a></li>
-        
+        <li><a href="#cad-equipamento">Cadastrar Equipamento</a></li>
     </ul>
-    <div id="div1">
-        <h2>Cadastro de Equipamento</h2>
-        <form action="javascript:void(0);" class="form-cadastra">
+    <div id="cad-equipamento">
+        <h2>Dados do Equipamento</h2>
+        <form name="cadastra-equipamento" class="form-cadastra" action="javascript:void(0);">
             <div class="row">
                 <div class="col-md form-inline">
                     <label>equipamento</label>
@@ -25,7 +23,6 @@
                         ?>
                     </select>
                 </div>
-                
                 <div class="col-md form-inline">
                     <label>fabricante</label>
                     <select class="form-control" id="txtFab" onchange="getModelos(this.value);" onblur="getModelos(this.value);">
@@ -37,7 +34,6 @@
                         ?>
                     </select>
                 </div>
-                
             </div>
             <div class="row">
                 <div class="col-md form-inline">
@@ -70,90 +66,112 @@
                    </select>
                 </div>
             </div>
-            <div class="row opcao-cad-printer" >
-                <div class="col-md form-inline">
-                    <label>IP</label>
-                    <input type="text" id="txtIp" class="form-control" size="12" placeholder="IP..." />
+           
+            <div class="opcao-cad-printer"> <!-- opção impressora -->
+                <hr />
+                <p class="text-center">Dado Opcional</p>
+                <hr />
+                <div class="row" >
+                    <div class="col-md form-inline">
+                        <label>IP</label>
+                        <input type="text" id="txtIp" class="form-control" size="12" placeholder="IP..." />
+                    </div>
+                     
                 </div>
-                 <div class="col-md form-inline">
-                   
+            </div><!-- fim campos impressora --> 
+            
+            <div class="opcao-cad-cpu"> <!-- campos CPU --> 
+                <hr />
+                <p class="text-center">Dados Opcionais</p>
+                <hr />
+                <div class="row" >
+                    <div class="col-md form-inline">
+                        <label title="Sistema Operacional">S.O</label>
+                        <select class="form-control" id="txtSo">
+                            <?php $sql->ExeRead("tb_sys025"); ?>
+                            <option selected value="">Selecione...</option>
+                            <?php foreach ($sql->getResult() as $res):
+                                print "<option value=".$res['id'].">".ucfirst($res['descricao_so'].' '.$res['versao_so'].' '.$res['arquitetura_so'])."</option>";
+                            endforeach;
+                            ?>
+                        </select>
+                    </div>
+                     <div class="col-md form-inline">
+                        <label title="Chave de Ativação">Chave</label>
+                        <input type="text" id="txtKeySo" class="form-control m_key" size="25"placeholder="Chave de Ativação Windows" />
+                    </div>
+                </div>
+                <div class="row" >
+                    <div class="col-md form-inline">
+                        <label title="Office">Office</label>
+                        <select class="form-control" id="txtOffice">
+                            <?php $sql->ExeRead("tb_sys026"); ?>
+                            <option selected value="">Selecione...</option>
+                            <?php foreach ($sql->getResult() as $res):
+                                print "<option value=".$res['id'].">".ucfirst($res['descricao_office'].' '.$res['versao_office'].' '.$res['arquitetura_office'])."</option>";
+                            endforeach;
+                            ?>
+                        </select>
+                    </div>
+                     <div class="col-md form-inline">
+                        <label title="Chave de Ativação do Office">Chave</label>
+                        <input type="text" id="txtKeyOffice" class="form-control m_key" size="25"placeholder="Chave de Ativação Office" />
+                    </div>
+                </div>
+                <div class="row" >
+                    <div class="col-md form-inline">
+                        <label title="Office">Memória</label>
+                        <input type="text" id="txtMemoria" class="form-control " size="5"placeholder="ram..." />
+                    </div>
+                     <div class="col-md form-inline">
+                        <label title="Chave de Ativação do Office">HD</label>
+                        <input type="text" id="txtHd" class="form-control " size="5"placeholder="hd..." />
+                    </div>
+                </div>
+            </div><!-- Fim campos CPU --> 
+            <div class="opcao-cad-monitor"><!-- opção Monitor -->
+                <hr />
+                <p class="text-center">Dados Opcionais</p>
+                <hr />
+                <div class="row">
+                    <div class="col-md form-inline">
+                        <label title="Office">Tela</label>
+                        <input type="text" id="txtTela" class="form-control " size="5"placeholder="pol.." />
+                    </div>
+                    <div class="col-md form-inline">
+                        <label title="Chave de Ativação do Office">Tipo Tela</label>
+                        <select class="form-control" id="txtTipoTela">
+                            <option selected value="">Selecione...</option>
+                            <option value="normal">Normal</option>
+                            <option value="wide">WideScreen</option>
+                            <option value="super-wide">Super Wide-Screen</option>
+                        </select>
+                    </div>
+                </div>
+            </div><!-- Fim opção Monitor -->
+            <div class="opcao-cad-estabilizador"> <!-- opção Estabilizador -->
+                <hr />
+                <p class="text-center">Dado Opcional</p>
+                <hr />
+                <div class="row" >
+                    <div class="col-md form-inline">
+                        <label>Volt-Ampere</label>
+                        <input type="text" id="txtVa" class="form-control" size="8" placeholder="(VA)" />
+                    </div>
+                </div>
+            </div><!-- fim Opção estabilizador --> 
+            <hr />
+            <div class="row">
+                <div class="col-md form-inline">
+                    <button type="button" class="btn btn-primary" onclick="cadastra('equipamento')">Cadastrar</button>
+                    &nbsp;&nbsp;
+                    <img src="./app/imagens/load.gif" class="form_load" alt="[CARREGANDO...]" title="CARREGANDO.." /> 
+                </div>
+                <div class="col-md form-inline">
+                    <button type="button" class="btn btn-primary" onclick="history.back()">Cancelar</button>
                 </div>
             </div>
-            <div class="row opcao-cad-cpu" >
-                <div class="col-md form-inline">
-                    <label title="Sistema Operacional">S.O</label>
-                    <select class="form-control" id="txtSo">
-                        <?php $sql->ExeRead("tb_sys025"); ?>
-                        <option selected value="">Selecione...</option>
-                        <?php foreach ($sql->getResult() as $res):
-                            print "<option value=".$res['id'].">".ucfirst($res['descricao_so'].' '.$res['versao_so'].' '.$res['arquitetura_so'])."</option>";
-                        endforeach;
-                        ?>
-                    </select>
-                </div>
-                 <div class="col-md form-inline">
-                    <label title="Chave de Ativação">Chave</label>
-                    <input type="text" id="txtKeySo" class="form-control m_key" size="25"placeholder="Chave de Ativação Windows" />
-                </div>
-            </div>
-            <div class="row opcao-cad-cpu" >
-                <div class="col-md form-inline">
-                    <label title="Office">Office</label>
-                    <select class="form-control" id="txtOffice">
-                        <?php $sql->ExeRead("tb_sys026"); ?>
-                        <option selected value="">Selecione...</option>
-                        <?php foreach ($sql->getResult() as $res):
-                            print "<option value=".$res['id'].">".ucfirst($res['descricao_office'].' '.$res['versao_office'].' '.$res['arquitetura_office'])."</option>";
-                        endforeach;
-                        ?>
-                    </select>
-                </div>
-                 <div class="col-md form-inline">
-                    <label title="Chave de Ativação do Office">Chave</label>
-                    <input type="text" id="txtKeyOffice" class="form-control m_key" size="25"placeholder="Chave de Ativação Office" />
-                </div>
-            </div>
+            <hr />
         </form>
-    </div>
-    <div id="div2">
-        <h2>Equipamentos Cadastrados</h2>
-        <!--
-         <table class="table-responsive-sm tabela-tab table-hover">
-             <tr class="text-uppercase" style="width: 60px;">
-                <th colspan="2">Ação</th>
-                <th class="text-center" style="width:80px;">Patrimônio</th>
-                <th class="text-left">Equipamento</th>
-                <th class="text-left">Localidade</th>
-            </tr>
-            <?php
-            $sql->FullRead("SELECT 
-                            EQP.id,
-                            EQP.patrimonio,
-                            EQP.serie,
-                            FAB.nome_fabricante fabricante,
-                            CAT.descricao equipamento,
-                            LOC.local,
-                            MDL.modelo
-                        FROM
-                            tb_sys004 EQP
-                                JOIN
-                            tb_sys003 CAT ON CAT.id = EQP.id_categoria
-                                JOIN
-                            tb_sys018 FAB ON FAB.id_fabricante = EQP.fabricante
-                                JOIN
-                            tb_sys008 LOC ON LOC.id = EQP.id_local
-                                JOIN
-                            tb_sys022 MDL ON MDL.id_modelo = EQP.modelo order by EQP.id limit 1000");
-            foreach ($sql->getResult() as $res):
-           ?>
-            <tr class="text-uppercase">
-                <td class="text-center" style="width: 25px; cursor: pointer;"><img src="./app/imagens/ico-alterar.png" /></td>
-                <td class="text-center" style="width: 25px; cursor: pointer;"><img src="./app/imagens/ico-deleta.png" /></td>
-                <td class="text-center"><?=$res['patrimonio']?></td>
-                <td class="text-left"><?=$res['equipamento'].' '.$res['fabricante'].' '.$res['modelo']?></td>
-                <td class="text-left"><?=$res['local']?></td>
-            </tr>
-            <?php endforeach ?>
-         </table>-->
     </div>
 </div>

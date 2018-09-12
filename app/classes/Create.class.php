@@ -54,9 +54,9 @@ class Create extends Conexao {
 
     //Cria a sintaxe da query para Prepared Statements
     private function getSyntax() {
-        $Fileds = implode(', ', array_keys($this->Dados));
+        $Fields = implode(', ', array_keys($this->Dados));
         $Places = ':' . implode(', :', array_keys($this->Dados));
-        $this->Create = "INSERT INTO {$this->Tabela} ({$Fileds}) VALUES ({$Places})";
+        $this->Create = "INSERT INTO {$this->Tabela} ({$Fields}) VALUES ({$Places})";
     }
 
     //Obtém a Conexão e a Syntax, executa a query!

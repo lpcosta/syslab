@@ -20,9 +20,9 @@ require_once './app/funcoes/func.inc.php';
         <meta charset="utf-8">     
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">    
-        <title>SysLab</title>         
+        <title>.:SysLab - homolog :.</title>         
         <link rel="shortcut icon" href="./app/imagens/icons/syslab-logo.PNG" type="image/x-icon">
-        <link rel="stylesheet" href="./app/libs/BootStrap-4.0/css/bootstrap.css" />
+        <link rel="stylesheet" href="./app/libs/BootStrap-4.0/css/bootstrap.min.css" />
         <link rel="stylesheet" href="./app/libs/JQuery-ui-1.12.1/jquery-ui.css" />
         <link rel="stylesheet" href="./app/css/estilo.css" />
         

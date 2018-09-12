@@ -36,7 +36,11 @@ header > div#div-user-logado{background-color: #B1ABAC;width: 140px;height: 38px
 
 
 /* opcoes de cadastro*/
-.form-cadastra .opcao-cad-printer{display: none;}
+.form-cadastra hr{ background-color: #09f; height: 1px;}
+.form-cadastra .opcao-cad-estabilizador,
+.form-cadastra .opcao-cad-monitor,
+.form-cadastra .opcao-cad-printer,
+.form-cadastra .opcao-cad-cpu{display: none;}
 /*fim opcoes de cadastro*/
 /*FIM CLASSES GLOBAIS*/
 
@@ -54,7 +58,7 @@ header > div#div-user-logado{background-color: #B1ABAC;width: 140px;height: 38px
 
 @media (max-width: 1680px) {
  .tabs .tabela-tab th,td {font-size: 10pt;}
- .grafico-home{width: 500px; height: 400; margin: 0 auto;}
+ .grafico-home{width: 500px; height: 400px; margin: 0 auto;}
 }
 
 @media (max-width: 1440px) {

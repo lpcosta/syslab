@@ -12,7 +12,7 @@ $( ".tabs" ).tabs({
       show: { 
           effect: "blind", duration: 500
       }
-   })
+   });
       
 function fctLogin()
 {
@@ -63,22 +63,37 @@ function setCadEquipamento(e){
         case '1':
                 $('.opcao-cad-cpu').hide();
                 $('.opcao-cad-monitor').hide();
+                $('.opcao-cad-estabilizador').hide();
                 $('.opcao-cad-printer').slideDown(500);
             break;
-        case '2':
+        case  '2':
+        case  '5':
+        case '17':
+        case '23':
+        case '22':
+        case '26':
                 $('.opcao-cad-printer').hide();
                 $('.opcao-cad-monitor').hide();
+                $('.opcao-cad-estabilizador').hide();
                 $('.opcao-cad-cpu').slideDown(500);
+            break;
+        case '3':
+                $('.opcao-cad-printer').hide();
+                $('.opcao-cad-monitor').hide();
+                $('.opcao-cad-cpu').hide();
+                $('.opcao-cad-estabilizador').slideDown(500);
             break;
         case '4':
                 $('.opcao-cad-printer').hide();
                 $('.opcao-cad-cpu').hide();
-                $('.opcao-cad-monitor').slideDown(500)();
+                $('.opcao-cad-estabilizador').hide();
+                $('.opcao-cad-monitor').slideDown(500);
             break;
         default:
         $('.opcao-cad-cpu').slideUp();
         $('.opcao-cad-monitor').slideUp();
         $('.opcao-cad-printer').slideUp();
+        $('.opcao-cad-estabilizador').slideUp();
    }
 }
 
@@ -89,3 +104,83 @@ $(function() {
         $("#txtIp").mask("999.999.999.999");
     });
 /*fim das mascaras de campos*/
+
+
+/*FUNCOES DE CADASTRO*/
+
+function cadastra(e,s = null)
+{
+    switch(e){
+        case 'equipamento':
+                $.ajax({
+                url:'./app/sistema/ajax/cadastra.php',
+                data:{
+                    acao:e,
+                    equipamento: $('#txtEqpmt').val(),
+                    fabricante:$('#txtFab').val(),
+                    modelo: $('#txtModelo').val(),
+                    serie:$('#txtSerie').val(),
+                    patrimonio:$('#txtPatrimonio').val(),
+                    localidade:$('#txtLocalidade').val(),
+                    so: $('#txtSo').val(),
+                    keyso: $('#txtKeySo').val(),
+                    office: $('#txtOffice').val(),
+                    keyoffice:$('#txtKeyOffice').val(),
+                    memoria: $('#txtMemoria').val(),
+                    hd: $('#txtHd').val(),
+                    tela: $('#txtTela').val(),
+                    tipotela: $('#txtTipoTela').val(),
+                    va: $('#txtVa').val(),
+                    ip: $('#txtIp').val()
+                },
+                type:'POST',
+                dataType:'HTML',
+                    beforeSend:function(){
+                   $('.form_load').fadeIn(500);
+                    },
+                    success: function (res){
+                 console.log(res);
+                    }
+                });
+            break;
+        case 'software':
+                if(s =='windows'){
+                    software    = $('#txtWindows').val();
+                    versao      = $('#txtVersaoWindows').val();
+                    arquitetura = $('#txtArquiteturaSo').val();
+                }
+                else{
+                    software    = $('#txtOffice').val();
+                    versao      = $('#txtVersaoOffice').val();
+                    arquitetura = $('#txtArquiteturaOffice').val();
+                }
+                $.ajax({
+                url:'./app/sistema/ajax/cadastra.php',
+                data:{
+                    acao:e,
+                    tipo:s,
+                    software:       software,
+                    versao:         versao,
+                    arquitetura:    arquitetura
+                },
+                type:'POST',
+                dataType:'HTML',
+                    beforeSend:function(){
+                   $('.form_load').fadeIn(1000);
+                    },
+                    success: function (res){
+                    $('.form_load').fadeOut(500);
+                    $('#txtWindows').val();
+                    $('#txtWindows').focus();
+                    $('#txtOffice').val();
+                    $('.msg').slideDown(500).text(res);
+                    }
+                });
+            break;
+        default:
+            dados=null;
+            
+    }
+}
+
+/*FIM DAS FUNCOES DE */
