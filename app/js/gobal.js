@@ -105,6 +105,83 @@ $(function() {
     });
 /*fim das mascaras de campos*/
 
+/*FUNÇÕES QUE VALIDA FORMULARIOS*/
+$(document).ready(function(){
+    $('#cadastra-windows').validate({
+        rules:{
+            windows:{
+                required: true,
+                minlength: 9,
+                maxlength: 15,
+                minWords: 2
+            },
+            VersaoWindows:{
+                required: true,
+                minlength: 4,
+                maxlength: 15
+            },
+            ArquiteturaSo:{
+                required: true
+            }
+        },
+        submitHandler: function(){
+            cadastra('software','windows');
+        }
+    });
+    
+    $('#cadastra-office').validate({
+        rules:{
+            office:{
+                required: true,
+                minlength: 9,
+                maxlength: 15,
+                minWords: 2
+            },
+            versaoOffice:{
+                required: true,
+                minlength: 4,
+                maxlength: 15
+            },
+            arquiteturaOffice:{
+                required: true
+            }
+        },
+        submitHandler: function(){
+            cadastra('software','office');
+        }
+            
+    });
+});
+/*
+function validaCadastro(c,p=null){
+    
+    switch(c){
+        case 'software':
+            if(p=='windows'){
+                if($.trim($('#txtWindows').val()) == ""){
+                    $('#txtWindows').focus().css({border:'1px solid #f00'});
+                }else if($.trim($('#txtVersaoWindows').val()) == ""){
+                    $('#txtVersaoWindows').focus().css({border:'1px solid #f00'});
+                }else if($.trim($('#txtArquiteturaSo').val()) == ""){
+                    $('#txtArquiteturaSo').focus().css({border:'1px solid #f00'});
+                }else{cadastra(c,p)}
+            }else if(p == 'office'){
+                if($.trim($('#txtOffice').val()) == ""){
+                    $('#txtOffice').focus().css({border:'1px solid #f00'});
+                }else if($.trim($('#txtVersaoOffice').val()) == ""){
+                    $('#txtVersaoOffice').focus().css({border:'1px solid #f00'});
+                }else if($.trim($('#txtArquiteturaOffice').val()) == ""){
+                    $('#txtArquiteturaOffice').focus().css({border:'1px solid #f00'});
+                }else{cadastra(c,p)}
+            }
+            break;
+        default:
+            alert('algo deu errado!');
+    }
+    
+}
+*/
+/*FIM DAS FUNCOES QUE VALIDA FOMULARIOS*/
 
 /*FUNCOES DE CADASTRO*/
 
@@ -154,6 +231,7 @@ function cadastra(e,s = null)
                     versao      = $('#txtVersaoOffice').val();
                     arquitetura = $('#txtArquiteturaOffice').val();
                 }
+                if($.trim(software) != "" && $.trim(versao) != "" && $.trim(arquitetura) != ""){
                 $.ajax({
                 url:'./app/sistema/ajax/cadastra.php',
                 data:{
@@ -170,12 +248,13 @@ function cadastra(e,s = null)
                     },
                     success: function (res){
                     $('.form_load').fadeOut(500);
-                    $('#txtWindows').val();
-                    $('#txtWindows').focus();
-                    $('#txtOffice').val();
                     $('.msg').slideDown(500).text(res);
                     }
                 });
+            }else{
+                $('.msg').removeClass('alert-success');
+                $('.msg').addClass('alert-warning').text('Todos os campos devem ser preenchidos!').slideDown(500);
+            }
             break;
         default:
             dados=null;

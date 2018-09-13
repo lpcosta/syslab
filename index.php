@@ -189,7 +189,10 @@ require_once './app/funcoes/func.inc.php';
     <script src="./app/js/gobal.js" /></script>
     <script src="./app/libs/BootStrap-4.0/js/bootstrap.js" /></script>
     <script src="./app/libs/JQuery-Masked-Input/src/jquery.maskedinput.js" /></script>
-   
+    <script src="./app/libs/JQuery-Validate/jquery.validate.js"></script>
+    <script src="./app/libs/JQuery-Validate/additional-methods.js"></script>
+    <script src="./app/libs/JQuery-Validate/localization/messages_pt_BR.js" /></script>
+    
    
 </html>
 <?php ob_end_flush();

@@ -32,7 +32,7 @@ class Check {
      * @param STRING $Name = Uma string qualquer
      * @return STRING = $Data = Uma URL amigável válida
      */
-    public static function Name($Name) {
+    public static function Url($Name) {
         self::$Format = array();
         self::$Format['a'] = 'ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜüÝÞßàáâãäåæçèéêëìíîïðñòóôõöøùúûýýþÿRr"!@#$%&*()_-+={[}]/?;:.,\\\'<>°ºª';
         self::$Format['b'] = 'aaaaaaaceeeeiiiidnoooooouuuuuybsaaaaaaaceeeeiiiidnoooooouuuyybyRr                                 ';
@@ -44,7 +44,10 @@ class Check {
 
         return strtolower(utf8_encode(self::$Data));
     }
-
+    
+    public static function Texto($text) {
+        return strip_tags(trim(mb_strtolower($text, 'UTF-8')));
+    }
     /**
      * <b>Tranforma Data:</b> Transforma uma data no formato DD/MM/YY em uma data no formato TIMESTAMP!
      * @param STRING $Name = Data em (d/m/Y) ou (d/m/Y H:i:s)

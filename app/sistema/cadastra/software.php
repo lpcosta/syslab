@@ -7,26 +7,26 @@
 <div class="tabs">
     <ul>
         <li><a href="#cad-windows">Cadastrar Windows</a></li>
-        <li><a href="#cad-office">Cadastrar Office</a></li>
+        <li><a href="#cad-office" onclick="$('.msg').hide();">Cadastrar Office</a></li>
     </ul>
     <div id="cad-windows">
         <h2>Dados do Windows</h2>
-        <form name="cadastra-software" class="form-cadastra" action="javascript:void(0);">
+        <form class="form-cadastra cadastra-software" id="cadastra-windows" onsubmit="return false;">
             
             <div class="row">
                 <div class="col-md form-inline">
                     <label>Windows</label>
-                    <input type="text" id="txtWindows" class="form-control" required="" placeholder="Windows..." />
+                    <input type="text" id="txtWindows" name="windows" class="form-control" placeholder="Windows..." />
                 </div>
                 <div class="col-md form-inline">
                     <label>Versão</label>
-                    <input type="text" id="txtVersaoWindows" class="form-control" required="" placeholder="Versão..." />
+                    <input type="text" id="txtVersaoWindows" name="VersaoWindows" class="form-control" placeholder="Versão..." />
                 </div>
             </div>
             <div class="row">
                 <div class="col-md form-inline">
                    <label>Arquitetura</label>
-                   <select class="form-control" id="txtArquiteturaSo">
+                   <select class="form-control" id="txtArquiteturaSo" name="ArquiteturaSo">
                        <option selected value="">Selecione</option>
                        <option value="x64">64 Bits</option>
                        <option value="x86">32 Bits</option>
@@ -36,7 +36,7 @@
             <hr />
             <div class="row">
                 <div class="col-md form-inline">
-                    <button type="button" class="btn btn-primary" onclick="cadastra('software','windows')">Cadastrar</button>
+                    <button type="submit" class="btn btn-primary" >Cadastrar</button>
                     &nbsp;&nbsp;
                     <img src="./app/imagens/load.gif" class="form_load" alt="[CARREGANDO...]" title="CARREGANDO.." /> 
                 </div>
@@ -52,25 +52,25 @@
     </div>
     <div id="cad-office">
         <h2>Dados do Office</h2>
-        <form name="cadastra-software" class="form-cadastra" action="javascript:void(0);">
+        <form class="form-cadastra cadastra-software" id="cadastra-office" onsubmit="return false;">
           
             <div class="row">
                 <div class="col-md form-inline">
                     <label>Office</label>
-                    <input type="text" id="txtOffice" class="form-control" required="" placeholder="Office..." />
+                    <input type="text" id="txtOffice" name="office" class="form-control" required="" placeholder="Office..." />
                 </div>
                 <div class="col-md form-inline">
                     <label>Versão</label>
-                    <input type="text" id="txtVersaoOffice" class="form-control" required="" placeholder="Versão..." />
+                    <input type="text" id="txtVersaoOffice" name="versaoOffice" class="form-control" required="" placeholder="Versão..." />
                 </div>
             </div>
             <div class="row">
                 <div class="col-md form-inline">
                    <label>Arquitetura</label>
-                   <select class="form-control" id="txtArquiteturaOffice">
+                   <select class="form-control" id="txtArquiteturaOffice" name="arquiteturaOffice">
                        <option selected value="">Selecione</option>
-                       <option selected value="x64">64 Bits</option>
-                       <option selected value="x86">32 Bits</option>
+                       <option value="x64">64 Bits</option>
+                       <option value="x86">32 Bits</option>
                    </select>
                 </div>
                 <div class="col-md form-inline">
@@ -80,7 +80,7 @@
             <hr />
             <div class="row">
                 <div class="col-md form-inline">
-                    <button type="button" class="btn btn-primary" onclick="cadastra('software','office')">Cadastrar</button>
+                    <button type="submit" class="btn btn-primary">Cadastrar</button>
                     &nbsp;&nbsp;
                     <img src="./app/imagens/load.gif" class="form_load" alt="[CARREGANDO...]" title="CARREGANDO.." /> 
                 </div>
@@ -89,6 +89,9 @@
                 </div>
             </div>
             <hr />
+             <div class="alert alert-success msg text-center" role="alert" style="display: none;">
+                
+            </div>
         </form>
     </div>
 </div>
