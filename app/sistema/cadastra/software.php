@@ -1,5 +1,5 @@
 <?php
-    require_once './app/config/pagina-segura.php';
+   paginaSegura();
     
     $sql = new Read();
 
@@ -12,11 +12,12 @@
     <div id="cad-windows">
         <h2>Dados do Windows</h2>
         <form class="form-cadastra cadastra-software" id="cadastra-windows" onsubmit="return false;">
-            
+            <input type="hidden" name="tipo" value="windows" />
+            <input type="hidden" name="acao" value="software" />
             <div class="row">
                 <div class="col-md form-inline">
                     <label>Windows</label>
-                    <input type="text" id="txtWindows" name="windows" class="form-control" placeholder="Windows..." />
+                    <input type="text" id="txtWindows" name="windows" class="form-control" placeholder="Windows..." autofocus="" />
                 </div>
                 <div class="col-md form-inline">
                     <label>Versão</label>
@@ -28,8 +29,8 @@
                    <label>Arquitetura</label>
                    <select class="form-control" id="txtArquiteturaSo" name="ArquiteturaSo">
                        <option selected value="">Selecione</option>
-                       <option value="x64">64 Bits</option>
-                       <option value="x86">32 Bits</option>
+                       <option value=x64>64 Bits</option>
+                       <option value=x86>32 Bits</option>
                    </select>
                 </div>
             </div>
@@ -53,7 +54,8 @@
     <div id="cad-office">
         <h2>Dados do Office</h2>
         <form class="form-cadastra cadastra-software" id="cadastra-office" onsubmit="return false;">
-          
+            <input type="hidden" name="tipo" value="office" />
+            <input type="hidden" name="acao" value="software" />
             <div class="row">
                 <div class="col-md form-inline">
                     <label>Office</label>

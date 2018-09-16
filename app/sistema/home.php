@@ -1,5 +1,5 @@
 <?php
-require_once './app/config/pagina-segura.php';
+paginaSegura();
 
 $sql = new Read();
 
@@ -10,15 +10,10 @@ $dtfim = '2018-04-30';
 <div class="tabs">
     <ul>
         <li><a href="#home">Home</a></li>
-        <li><a href="app/sistema/ajax/entregas.php">Entregas</a></li>
-        <li><a href="app/sistema/ajax/agpeca.php">Aguardo de Peças</a></li>
-        <li><a href="app/sistema/ajax/pendencias.php">Pendências</a></li>
-        
-       
+
     </ul>
     <div id="home">
-        
-            <div class="row">
+        <div class="row home-charts">
                 <div class="col-md">
                   <h3>Laboratorio</h3>
                   <?php
@@ -151,9 +146,8 @@ $dtfim = '2018-04-30';
                 <div id="piechart2" class="grafico-home" > </div> 
                 </div>
             </div>
-        
-    </div>
-</div>
+    </div><!-- div home -->
+</div><!-- div tabs-->
 <script>
     google.charts.load('current', {'packages':['corechart']});
     google.charts.setOnLoadCallback(graficoTotalEquipamento);  

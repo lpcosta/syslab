@@ -6,6 +6,8 @@ define('WS_INFOR', 'infor');
 define('WS_ALERT', 'alert');
 define('WS_ERROR', 'error');
 define('HOJE',date('d/m/Y'));
+define('SITE', 'http://localhost/syslab');
+
 //WSErro :: Exibe erros lançados :: Front
 function WSErro($ErrMsg, $ErrNo, $ErrDie = null) {
     $CssClass = ($ErrNo == E_USER_NOTICE ? WS_INFOR : ($ErrNo == E_USER_WARNING ? WS_ALERT : ($ErrNo == E_USER_ERROR ? WS_ERROR : $ErrNo)));
@@ -13,6 +15,12 @@ function WSErro($ErrMsg, $ErrNo, $ErrDie = null) {
 
     if ($ErrDie):
         die;
+    endif;
+}
+
+function paginaSegura() {
+    if(!isset($_SESSION['UserLogado'])):
+        header("Location:".SITE."");
     endif;
 }
 

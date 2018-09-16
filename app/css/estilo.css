@@ -32,10 +32,12 @@ header > div#div-user-logado{background-color: #B1ABAC;width: 140px;height: 38px
 .cursor-pointer:hover{background-color: #ddd;color: #000; font-weight: bolder;}
 .row .col-md h3{text-align: center; border-bottom: 1px solid #09f; padding: 0;}
 .row{margin-bottom: 5px;}
-.form-cadastra label{text-transform: capitalize; font-weight: bolder; margin-right: 5px; width: 120px; display: block;text-align: left;}
-
+/*opcoes de pesquisa*/
+.pesquisa{margin: 0; padding: 3px; width: 100%; background-color: #ddd;border-radius: 10px;-moz-border-radius: 10px;}
+/*fim opcoes de pesquisa*/
 
 /* opcoes de cadastro*/
+.form-cadastra label{text-transform: capitalize; font-weight: bolder; margin-right: 5px; width: 120px; display: block;text-align: left;}
 .form-cadastra hr{ background-color: #09f; height: 1px;}
 .form-cadastra .opcao-cad-estabilizador,
 .form-cadastra .opcao-cad-monitor,

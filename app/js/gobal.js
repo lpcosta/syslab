@@ -1,6 +1,4 @@
 /* by Leandro Pereira*/
-
- 
 $( ".tabs" ).tabs({
       beforeLoad: function( e, ui ) {
         ui.jqXHR.fail(function() {
@@ -13,7 +11,7 @@ $( ".tabs" ).tabs({
           effect: "blind", duration: 500
       }
    });
-      
+/*REALIZA LOGIN*/
 function fctLogin()
 {
     var dados = $('.j_Cadastra').serialize();
@@ -36,10 +34,10 @@ function fctLogin()
            }
           }
       });
-}
+}/*FIM LOGIN*/
 
-       
-function getModelos(fab)/*essa função busca cidades e preenche um combo com as cidades e cep*/
+/*PEGA OS MODELOS DE EQUIPAMENTO CONFORME O FABRICANTE ESCOLHIDO*/     
+function getModelos(fab)
 {
     $.post('./app/sistema/ajax/buscamodelos.php',
             {
@@ -56,8 +54,9 @@ function getModelos(fab)/*essa função busca cidades e preenche um combo com as
                     $('#txtModelo').attr('disabled',true);
                 }
             });
-}  
+}/*FIM GETMODELOS*/  
 
+/*MOSTRA E OCUPA CAMPOS OPCIONAIS NO CADASTRO DE EQUIPAMENTO*/
 function setCadEquipamento(e){
    switch(e){
         case '1':
@@ -95,171 +94,173 @@ function setCadEquipamento(e){
         $('.opcao-cad-printer').slideUp();
         $('.opcao-cad-estabilizador').slideUp();
    }
-}
+}/*FIM SETCADEQUIPAMENTO*/
 
 /*mascaras de campos*/
 $(function() {
         $.mask.definitions['~'] = "[+-]";
         $(".m_key").mask("99999-99999-99999-99999-99999");
         $("#txtIp").mask("999.999.999.999");
+        $("#txtContatoUser").mask("(99)9999-9999");
+        $("#txtCelularUser").mask("(99)99999-9999");
     });
+    
 /*fim das mascaras de campos*/
 
 /*FUNÇÕES QUE VALIDA FORMULARIOS*/
 $(document).ready(function(){
+/*CADASTRA WINDOWS*/
     $('#cadastra-windows').validate({
         rules:{
-            windows:{
-                required: true,
-                minlength: 9,
-                maxlength: 15,
-                minWords: 2
-            },
-            VersaoWindows:{
-                required: true,
-                minlength: 4,
-                maxlength: 15
-            },
-            ArquiteturaSo:{
-                required: true
-            }
+            windows         :{required:true,minlength:9,maxlength:15,minWords:2},
+            VersaoWindows   :{required:true,minlength:4,maxlength:15},
+            ArquiteturaSo   :{required:true}
         },
         submitHandler: function(){
-            cadastra('software','windows');
+            cadastra('./app/sistema/ajax/cadastra.php','#cadastra-windows');
         }
-    });
+    });/*FIM CADASTRO WINDOWS*/
     
+/*CADASTRA OFFICE*/
     $('#cadastra-office').validate({
         rules:{
-            office:{
-                required: true,
-                minlength: 9,
-                maxlength: 15,
-                minWords: 2
-            },
-            versaoOffice:{
-                required: true,
-                minlength: 4,
-                maxlength: 15
-            },
-            arquiteturaOffice:{
-                required: true
-            }
+            office              :{required:true,minlength:9,maxlength:15,minWords:2},
+            versaoOffice        :{required:true,minlength:4,maxlength:15},
+            arquiteturaOffice   :{required:true}
         },
         submitHandler: function(){
-            cadastra('software','office');
+           cadastra('./app/sistema/ajax/cadastra.php','#cadastra-office');
         }
-            
-    });
-});
-/*
-function validaCadastro(c,p=null){
+    });/*FIM CADASTRO OFFICE*/
     
-    switch(c){
-        case 'software':
-            if(p=='windows'){
-                if($.trim($('#txtWindows').val()) == ""){
-                    $('#txtWindows').focus().css({border:'1px solid #f00'});
-                }else if($.trim($('#txtVersaoWindows').val()) == ""){
-                    $('#txtVersaoWindows').focus().css({border:'1px solid #f00'});
-                }else if($.trim($('#txtArquiteturaSo').val()) == ""){
-                    $('#txtArquiteturaSo').focus().css({border:'1px solid #f00'});
-                }else{cadastra(c,p)}
-            }else if(p == 'office'){
-                if($.trim($('#txtOffice').val()) == ""){
-                    $('#txtOffice').focus().css({border:'1px solid #f00'});
-                }else if($.trim($('#txtVersaoOffice').val()) == ""){
-                    $('#txtVersaoOffice').focus().css({border:'1px solid #f00'});
-                }else if($.trim($('#txtArquiteturaOffice').val()) == ""){
-                    $('#txtArquiteturaOffice').focus().css({border:'1px solid #f00'});
-                }else{cadastra(c,p)}
+    
+/*CADASTRO DE EQUIPAMENTO*/
+$('#cad-equip').validate({
+        rules:{
+            equipamento :{required:true},
+            fabricante  :{required:true},
+            modelo      :{required:true},
+            serie       :{required:true,minlength:5},
+            patrimonio  :{required:true,minlength:6,maxlength:7},
+            localidade  :{required:true}
+        },
+        submitHandler: function(){
+             cadastra('./app/sistema/ajax/cadastra.php','#cad-equip');
+         }
+    });/*FIM DO CADASTRO DE EQUIPAMENTO*/
+    
+ /*CADASTRO DE USUARIO*/
+ $('#cadastra-user').validate({
+    rules:{
+        nomeUser    :{required:true,minWords:2},
+        mailUser    :{required:true,email:true},
+        empresaUser :{required:true},
+        contatoUser :{required:true},
+        loginUser   :{required:true,minlength:5},
+        passUser    :{required:true,minlength:7,maxlength:12},
+        tipoUser    :{required:true},
+        grupoUser   :{required:true}
+    },
+    submitHandler: function(){
+         cadastra('./app/sistema/ajax/cadastra.php','#cadastra-user');
+     }
+ });
+ /*FIM DO CADASTRO DE USUARIO*/
+    
+    
+/*PESQUISA PATRIMONIO*/
+$('#formSearch').validate({
+    onfocusout: false,
+    onkeyup: false,
+    rules:{
+        busca: {
+                required: true,
+                minlength: 6,
+                maxlength:7,
+                onkeyup:false
             }
-            break;
-        default:
-            alert('algo deu errado!');
+            },
+        messages: {busca:"Patrimonio Inválido"},
+        submitHandler: function(form){
+            var dados = $(form).serialize();
+            $.ajax({
+                    type: "POST",
+                    url: "./app/sistema/pesquisa/patrimonio.php",
+                    data: dados,
+                    success: function( res )
+                    {
+                      show_modal('#modal-busca-patrimonio',res);                              
+                    }
+            });
+         return false;
     }
-    
-}
-*/
+});/*FIM DA PESQUISA DE PATRIMONIO*/
+
+});/*fim do document ready*/
+
 /*FIM DAS FUNCOES QUE VALIDA FOMULARIOS*/
 
 /*FUNCOES DE CADASTRO*/
 
-function cadastra(e,s = null)
-{
-    switch(e){
-        case 'equipamento':
-                $.ajax({
-                url:'./app/sistema/ajax/cadastra.php',
-                data:{
-                    acao:e,
-                    equipamento: $('#txtEqpmt').val(),
-                    fabricante:$('#txtFab').val(),
-                    modelo: $('#txtModelo').val(),
-                    serie:$('#txtSerie').val(),
-                    patrimonio:$('#txtPatrimonio').val(),
-                    localidade:$('#txtLocalidade').val(),
-                    so: $('#txtSo').val(),
-                    keyso: $('#txtKeySo').val(),
-                    office: $('#txtOffice').val(),
-                    keyoffice:$('#txtKeyOffice').val(),
-                    memoria: $('#txtMemoria').val(),
-                    hd: $('#txtHd').val(),
-                    tela: $('#txtTela').val(),
-                    tipotela: $('#txtTipoTela').val(),
-                    va: $('#txtVa').val(),
-                    ip: $('#txtIp').val()
-                },
-                type:'POST',
-                dataType:'HTML',
-                    beforeSend:function(){
-                   $('.form_load').fadeIn(500);
-                    },
-                    success: function (res){
-                 console.log(res);
-                    }
-                });
-            break;
-        case 'software':
-                if(s =='windows'){
-                    software    = $('#txtWindows').val();
-                    versao      = $('#txtVersaoWindows').val();
-                    arquitetura = $('#txtArquiteturaSo').val();
-                }
-                else{
-                    software    = $('#txtOffice').val();
-                    versao      = $('#txtVersaoOffice').val();
-                    arquitetura = $('#txtArquiteturaOffice').val();
-                }
-                if($.trim(software) != "" && $.trim(versao) != "" && $.trim(arquitetura) != ""){
-                $.ajax({
-                url:'./app/sistema/ajax/cadastra.php',
-                data:{
-                    acao:e,
-                    tipo:s,
-                    software:       software,
-                    versao:         versao,
-                    arquitetura:    arquitetura
-                },
-                type:'POST',
-                dataType:'HTML',
-                    beforeSend:function(){
-                   $('.form_load').fadeIn(1000);
-                    },
-                    success: function (res){
-                    $('.form_load').fadeOut(500);
-                    $('.msg').slideDown(500).text(res);
-                    }
-                });
-            }else{
-                $('.msg').removeClass('alert-success');
-                $('.msg').addClass('alert-warning').text('Todos os campos devem ser preenchidos!').slideDown(500);
+ /*função generica que realiza o cadastro via ajax;
+ url=</ pagina que recebera os dados;
+ form= id no formato[#idform], do formulario que contem os dados para cadastro)
+ */
+function cadastra(url,form){
+var dados = $(form).serialize();
+    $.ajax({url: url,data: dados,type:'POST',dataType:'HTML',
+            beforeSend:function(){
+           $('.form_load').fadeIn(500);
+            },
+            success: function (res){
+            /*var formAll = $('main form *');
+            formAll.val('');*/
+            $('.form_load').fadeOut(500);
+             modal(res);
             }
-            break;
-        default:
-            dados=null;
-            
-    }
-}
+        });
+    return false;
+}/*fim cadastra()*/
 
 /*FIM DAS FUNCOES DE */
+function show_modal(id,html)
+{
+    //pegando a altura e largura da janela
+    var winH = $(window).height();
+    var winW = $(window).width();
+    $(id).show();$(id).html(html);
+    $(id).dialog({
+      resizable: false,
+      height: (winH / 1.1),
+      width: (winW / 1.1),
+      modal: true,
+      show    :{effect: "slideDown",duration:800},
+      hide    : {effect: "slideUp",duration:800},
+      buttons: {
+           Fechar: function() {
+            $( this ).dialog( "close" );
+        }
+      }
+    });
+}
+
+function modal(html)
+{
+    $("#dialog").html(html);
+    $("#dialog").dialog({
+        width       : "auto",
+        heigth      : "auto",
+        modal       : true,
+        minHeight   : 180,
+        show    :{effect: "fold",duration:1000},
+        hide    : {effect: "fold",duration:1000}
+        /*
+        buttons: {
+          "Fechar": function() {
+            $( this ).dialog( "close" );
+          }
+    }*/
+    });
+}
+
+

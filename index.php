@@ -1,17 +1,16 @@
 <?php
+ob_start();
 if (!isset($_SERVER['HTTPS']) || $_SERVER['HTTPS'] != 'on') {
     $redirect_url = "https://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
-
     header('HTTP/1.1 301 Moved Permanently');
     header("Location: $redirect_url");
     exit();
 }
-ob_start();
+
 session_start();
 require_once './app/composer/vendor/autoload.php';
 require_once './app/config/config.inc.php';
 require_once './app/funcoes/func.inc.php';
-
 ?>
 
 <!DOCTYPE html> 
@@ -24,7 +23,10 @@ require_once './app/funcoes/func.inc.php';
         <link rel="shortcut icon" href="./app/imagens/icons/syslab-logo.PNG" type="image/x-icon">
         <link rel="stylesheet" href="./app/libs/BootStrap-4.0/css/bootstrap.min.css" />
         <link rel="stylesheet" href="./app/libs/JQuery-ui-1.12.1/jquery-ui.css" />
+        <link rel="stylesheet" href="./app/libs/JQuery-ui-1.12.1/jquery-ui.theme.css" />
+        <link rel="stylesheet" href="./app/libs/JQuery-ui-1.12.1/jquery-ui.structure.css" />
         <link rel="stylesheet" href="./app/css/estilo.css" />
+        <link rel="stylesheet" href="./app/css/menu.css" />
         
         <!-- HTML5 shim and Respond.js for IE8 support of HTML5
         elements and media queries -->     <!-- WARNING: Respond.js doesn't work if you
@@ -53,104 +55,78 @@ require_once './app/funcoes/func.inc.php';
                 <? endif;?>
             </div>
             <?php if(isset($_SESSION['UserLogado'])):?>
-            <nav class="navbar navbar-expand-lg navbar-light bg-light">
-                <a class="navbar-brand" href="<?=HOME?>">Menu</a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                  <span class="navbar-toggler-icon"></span>
-                </button>
-
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                  <ul class="navbar-nav mr-auto">
-                    <li class="nav-item active">
-                      <a class="nav-link" href="<?=HOME?>">Home <span class="sr-only">(current)</span></a>
+            <nav class="navbar nav-menu">
+                <ul class="menu">
+                    <li><a href="index.php">Home</a></li>
+                    <li><a href="#">Laboratório</a>
+                        <ul class="submenu-1">
+                            <li><a href="index.php?ref=laboratorio">Laboratório</a></li>
+                            <li><a href="#">Entrada</a></li>
+                            <li><a href="#">Saída</a></li>
+                        </ul>
                     </li>
-                    <li class="nav-item dropdown"><!-- Inicio Menu Cadasto -->
-                      <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Cadastro
-                      </a>
-                      <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="index.php?ref=cadastra/equipamento">Equipamento</a>
-                        <a class="dropdown-item" href="index.php?ref=cadastra/secretaria">Secretaria</a>
-                        <a class="dropdown-item" href="index.php?ref=cadastra/fabricante">Fabricante</a>
-                        <a class="dropdown-item" href="index.php?ref=cadastra/localidade">Localidade</a>
-                        <a class="dropdown-item" href="index.php?ref=cadastra/categoria">Categoria</a>
-                        <a class="dropdown-item" href="index.php?ref=cadastra/software">Software</a>
-                        <a class="dropdown-item" href="index.php?ref=cadastra/empresa">Empresa</a>
-                        <a class="dropdown-item" href="index.php?ref=cadastra/usuario">Usuário</a>
-                        <a class="dropdown-item" href="index.php?ref=cadastra/cidade">Cidade</a>
-                        <a class="dropdown-item" href="index.php?ref=cadastra/status">Status</a>
-                        <a class="dropdown-item" href="index.php?ref=cadastra/motivo_entrada">Motivo Entrada</a>
-                        <a class="dropdown-item" href="index.php?ref=cadastra/modelo_equipamento">Modelo de Equipamento</a>
-                        <a class="dropdown-item" href="index.php?ref=cadastra/baixa_equipamento">Baixa de Equipamento</a>
-                        <!--
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="#">Something else here</a>
-                        -->
-                      </div>
-                    </li><!--Fim do menu Cadastro -->
-                    
-                    <li class="nav-item dropdown"><!-- Inicio Menu Laboratório -->
-                      <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Laboratório
-                      </a>
-                      <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="#">Bancada</a>
-                        <a class="dropdown-item" href="#">Entrada</a>
-                        <a class="dropdown-item" href="#">Saida</a>
-                        <a class="dropdown-item" href="#">Entregas</a>
-                      </div>
-                    </li><!--Fim do menu Laboratório -->
-                    
-                    <li class="nav-item dropdown"><!-- Inicio Menu Estoque -->
-                      <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Estoque
-                      </a>
-                      <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="#">Entrada de Peça</a>
-                        <a class="dropdown-item" href="#">Cadastrar Peça</a>
-                        <a class="dropdown-item" href="#">Baixar Peça</a>
-                        <a class="dropdown-item" href="#">Consultar</a>
-                      </div>
-                    </li><!--Fim do menu Estoque -->
-                    
-                    <li class="nav-item dropdown"><!-- Inicio Menu Administração -->
-                      <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Administração
-                      </a>
-                      <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="#">Redefinir Usuário</a>
-                        <a class="dropdown-item" href="#">Trocar Senha</a>
-                        <a class="dropdown-item" href="#">Logs</a>
-                        <a class="dropdown-item" href="#">Backup</a>
-                      </div>
-                    </li><!--Fim do menu Administração -->
-                    <li class="nav-item dropdown"><!--Inicio do menu Relatorios -->
-                      <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Relatório
-                      </a>
-                      <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="#">Aguardando Peça</a>
-                        <a class="dropdown-item" href="#">Equipamento</a>
-                        <a class="dropdown-item" href="#">Bancada</a>
-                        <a class="dropdown-item" href="#">Estoque</a>
-                        <a class="dropdown-item" href="#">Status</a>
-                        <a class="dropdown-item" href="#">Entrada</a>
-                        <a class="dropdown-item" href="#">Saída</a>
-                      </div>
-                    </li><!--Fim do menu Relatorios -->
-                    <li class="nav-item dropdown"><!--Inicio do menu Consultar -->
-                      <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Consultar
-                      </a>
-                      <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="#">Ordem de Serviço</a>
-                        <a class="dropdown-item" href="#">Patrimonio</a>
-                        <a class="dropdown-item" href="#">Localidade</a>
-                        <a class="dropdown-item" href="#">Usuario</a>
-                      </div>
-                    </li><!--Fim do menu Consultar -->
-                  </ul>
-                </div>
+                    <li><a href="#">Relatorios</a>
+                        <ul class="submenu-1">
+                            <li><a href="#">Relatorio001</a></li>
+                            <li><a href="#">Relatorio002</a></li>
+                            <li><a href="#">Relatorio003</a></li>
+                            <li><a href="#">Relatorio004</a></li>
+                            <li><a href="#">Relatorio005</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#">Administração</a>
+                        <ul class="submenu-1">
+                            <li><a href="#">Cadastrar</a>
+                                <ul class="submenu-2">
+                                    <li><a href="#">Categoria</a></li>
+                                    <li><a href="index.php?ref=cadastra/equipamento">Equipamento</a></li>
+                                    <li><a href="#">Empresa</a></li>
+                                    <li><a href="#">Localidade</a></li>
+                                    <li><a href="#">Motivo de Entrada</a></li>
+                                    <li><a href="#">Secretaria</a></li>
+                                    <li><a href="#">Status</a></li>
+                                    <li><a href="index.php?ref=cadastra/usuario">Usuario</a></li>                                    
+                                    <li><a href="index.php?ref=cadastra/software">Windows/Office</a></li>
+                                </ul>
+                            </li>
+                            <li><a href="#">Gerenciar</a>
+                                <ul class="submenu-2">
+                                    <li><a href="#">Equipamento</a>
+                                        <ul class="submenu-3">
+                                            <li><a href="#">Cadastrar Modelo</a></li>
+                                            <li><a href="#">Editar</a></li>
+                                            <li><a href="#">Excluir</a></li>
+                                        </ul>
+                                    </li>
+                                    <li><a href="#">Windows/Office</a>
+                                        <ul class="submenu-3">
+                                            <li><a href="#">Editar Windows</a></li>
+                                            <li><a href="#">Excluir Windows</a></li>
+                                            <li><a href="#">Editar Office</a></li>
+                                            <li><a href="#">Excluir Office</a></li>
+                                        </ul>
+                                    </li>
+                                    <li><a href="#">Localidade</a>
+                                        <ul class="submenu-3">
+                                            <li><a href="#">Editar</a></li>
+                                            <li><a href="#">Excluir</a></li>
+                                        </ul>
+                                    </li>
+                                    <li><a href="#">Usuario</a></li>
+                                </ul>
+                            </li>
+                            <li><a href="#">Alterar Senha</a></li>
+                            <li><a href="#">Backup</a></li>
+                            <li><a href="#">Logs</a></li>
+                            <li><a href="#">Tabelas de Apoio</a></li>
+                        </ul>
+                    </li>
+                </ul> 
+                <form name="formSearch" id="formSearch" class="text-right" onsubmit="return false;">
+                    <label for="txtBusca">Pesquisar:</label>
+                    <input type="search" size="7" placeholder="patrimonio.." name="busca" maxlength="7" id="txtBusca" required="" autofocus="">
+                    <button type="submit" name="btnSearch" id="btnSearch" onclick="buscaPatrimonio($('#txtBusca').val());">Buscar</button>
+                </form>
             </nav>
             <? endif;?>
         </header>
@@ -177,6 +153,8 @@ require_once './app/funcoes/func.inc.php';
             endif;
             ?>
         </main>
+        <div id="modal-busca-patrimonio" title="PESQUISA DE PATRIMONIO" style="display: none; z-index: 5000;"></div>
+        <div id="dialog" title="AVISO"></div>
     </body>
     
     <footer>
@@ -185,14 +163,17 @@ require_once './app/funcoes/func.inc.php';
         </div>
     </footer>
     <script src="./app/libs/JQuery/jquery-3.3.1.min.js" /></script>
-    <script src="./app/libs/JQuery-ui-1.12.1/jquery-ui.js" /></script>
-    <script src="./app/js/gobal.js" /></script>
     <script src="./app/libs/BootStrap-4.0/js/bootstrap.js" /></script>
+    <script src="./app/libs/JQuery-ui-1.12.1/jquery-ui.js" /></script>
     <script src="./app/libs/JQuery-Masked-Input/src/jquery.maskedinput.js" /></script>
     <script src="./app/libs/JQuery-Validate/jquery.validate.js"></script>
     <script src="./app/libs/JQuery-Validate/additional-methods.js"></script>
     <script src="./app/libs/JQuery-Validate/localization/messages_pt_BR.js" /></script>
+   <script src="./app/js/gobal.js" /></script>
     
-   
 </html>
-<?php ob_end_flush();
+<?php 
+$html = ob_get_clean ();
+echo preg_replace('/\s+/', ' ', $html);
+
+ob_end_flush();

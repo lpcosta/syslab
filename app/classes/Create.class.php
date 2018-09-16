@@ -11,6 +11,7 @@ class Create extends Conexao {
     private $Tabela;
     private $Dados;
     private $Result;
+    private $Error;
 
     /** @var PDOStatement */
     private $Create;
@@ -41,6 +42,9 @@ class Create extends Conexao {
         return $this->Result;
     }
 
+    public function getError() {
+        return $this->Error;
+    }
     /**
      * ****************************************
      * *********** PRIVATE METHODS ************
@@ -67,7 +71,7 @@ class Create extends Conexao {
             $this->Result = $this->Conn->lastInsertId();
         } catch (PDOException $e) {
             $this->Result = null;
-            WSErro("<b>Erro ao cadastrar:</b> {$e->getMessage()}", $e->getCode());
+            $this->Error = "<b>Erro ao cadastrar:</b>"." MSG  = ".$e->getMessage()."CÓDIGO = ".$e->getCode();
         }
     }
 

@@ -54,7 +54,7 @@ class Login {
 
         $read = new Read;
         //$read->ExeRead("tb_sys001", "WHERE login = :LOGIN AND senha = :SENHA", "LOGIN={$this->Login}&SENHA={$this->Senha}");
-        $read->FullRead("SELECT id,nome,login,situacao,nivel,tentativa_login,senha_padrao,grupo_id FROM tb_sys001 WHERE login = :LOGIN AND senha = :SENHA", "LOGIN={$this->Login}&SENHA={$this->Senha}");
+        $read->FullRead("SELECT id,nome,login,situacao,tentativa_login,senha_padrao,grupo_id FROM tb_sys001 WHERE login = :LOGIN AND senha = :SENHA", "LOGIN={$this->Login}&SENHA={$this->Senha}");
 
         if ($read->getResult()):
             $this->Result = $read->getResult()[0];

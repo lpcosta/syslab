@@ -1,5 +1,5 @@
 <?php
-    require_once './app/config/pagina-segura.php';
+   paginaSegura();
 ?>
 <div class="tabs">
     <ul>

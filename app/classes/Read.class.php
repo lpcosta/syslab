@@ -11,6 +11,7 @@ class Read extends Conexao {
     private $Select;
     private $Places;
     private $Result;
+    private $Error;
 
     /** @var PDOStatement */
     private $Read;
@@ -41,6 +42,10 @@ class Read extends Conexao {
      */
     public function getResult() {
         return $this->Result;
+    }
+    
+    public function getError() {
+        return $this->Error;        
     }
 
     /**
@@ -103,7 +108,7 @@ class Read extends Conexao {
             $this->Result = $this->Read->fetchAll();
         } catch (PDOException $e) {
             $this->Result = null;
-            WSErro("<b>Erro ao Ler:</b> {$e->getMessage()}", $e->getCode());
+            $this->Error ="<b>Erro ao Ler:</b>"."MSG = ".$e->getMessage()." CÓDIGO = ".$e->getCode();
         }
     }
 

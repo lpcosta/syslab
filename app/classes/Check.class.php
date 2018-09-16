@@ -45,7 +45,7 @@ class Check {
         return strtolower(utf8_encode(self::$Data));
     }
     
-    public static function Texto($text) {
+    public static function setTexto($text) {
         return strip_tags(trim(mb_strtolower($text, 'UTF-8')));
     }
     /**
