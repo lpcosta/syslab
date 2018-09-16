@@ -1,0 +1,11 @@
+{
+    "name": "vendor/syslab",
+    "description": "Descrição do projeto syslab.",
+    "authors": [
+        {
+            "name": "lpcosta",
+            "email": "your@email.here"
+        }
+    ],
+    "require": {}
+}
