@@ -21,12 +21,12 @@ require_once './app/funcoes/func.inc.php';
         <meta name="viewport" content="width=device-width, initial-scale=1">    
         <title>.:SysLab - homolog :.</title>         
         <link rel="shortcut icon" href="./app/imagens/icons/syslab-logo.PNG" type="image/x-icon">
-        <link rel="stylesheet" href="./app/libs/BootStrap-4.0/css/bootstrap.min.css" />
+        <link rel="stylesheet" href="./app/libs/BootStrap-4.0/css/bootstrap.css" />
         <link rel="stylesheet" href="./app/libs/JQuery-ui-1.12.1/jquery-ui.css" />
         <link rel="stylesheet" href="./app/libs/JQuery-ui-1.12.1/jquery-ui.theme.css" />
         <link rel="stylesheet" href="./app/libs/JQuery-ui-1.12.1/jquery-ui.structure.css" />
-        <link rel="stylesheet" href="./app/css/estilo.css" />
         <link rel="stylesheet" href="./app/css/menu.css" />
+        <link rel="stylesheet" href="./app/css/estilo.css" />
         
         <!-- HTML5 shim and Respond.js for IE8 support of HTML5
         elements and media queries -->     <!-- WARNING: Respond.js doesn't work if you
@@ -60,6 +60,7 @@ require_once './app/funcoes/func.inc.php';
                     <li><a href="index.php">Home</a></li>
                     <li><a href="#">Laboratório</a>
                         <ul class="submenu-1">
+                            <li><a href="#" onclick="$('#searchos').slideDown(500);$('#txtBuscaOs').focus();">Consulta por OS</a></li>
                             <li><a href="index.php?ref=laboratorio">Laboratório</a></li>
                             <li><a href="#">Entrada</a></li>
                             <li><a href="#">Saída</a></li>
@@ -78,13 +79,13 @@ require_once './app/funcoes/func.inc.php';
                         <ul class="submenu-1">
                             <li><a href="#">Cadastrar</a>
                                 <ul class="submenu-2">
-                                    <li><a href="#">Categoria</a></li>
+                                    <li><a href="index.php?ref=cadastra/categoria">Categoria</a></li>
                                     <li><a href="index.php?ref=cadastra/equipamento">Equipamento</a></li>
-                                    <li><a href="#">Empresa</a></li>
-                                    <li><a href="#">Localidade</a></li>
-                                    <li><a href="#">Motivo de Entrada</a></li>
-                                    <li><a href="#">Secretaria</a></li>
-                                    <li><a href="#">Status</a></li>
+                                    <li><a href="index.php?ref=cadastra/empresa">Empresa</a></li>
+                                    <li><a href="index.php?ref=cadastra/localidade">Localidade</a></li>
+                                    <li><a href="index.php?ref=cadastra/motivo-entrada">Motivo de Entrada</a></li>
+                                    <li><a href="index.php?ref=cadastra/secretaria">Secretaria</a></li>
+                                    <li><a href="index.php?ref=cadastra/status">Status</a></li>
                                     <li><a href="index.php?ref=cadastra/usuario">Usuario</a></li>                                    
                                     <li><a href="index.php?ref=cadastra/software">Windows/Office</a></li>
                                 </ul>
@@ -123,14 +124,25 @@ require_once './app/funcoes/func.inc.php';
                     </li>
                 </ul> 
                 <form name="formSearch" id="formSearch" class="text-right" onsubmit="return false;">
+                    <input type="hidden" name="acao" value="patrimonio" />
                     <label for="txtBusca">Pesquisar:</label>
                     <input type="search" size="7" placeholder="patrimonio.." name="busca" maxlength="7" id="txtBusca" required="" autofocus="">
-                    <button type="submit" name="btnSearch" id="btnSearch" onclick="buscaPatrimonio($('#txtBusca').val());">Buscar</button>
+                    <button type="submit" name="btnSearch" id="btnSearch">Buscar</button>
                 </form>
             </nav>
             <? endif;?>
         </header>
+        <nav class="navbar" id="searchos">
+                <a></a>
+                <form name="formSearchOs" id="formSearchOs" onsubmit="return false;">
+                     <input type="hidden" name="acao" value="os" />
+                    <label for="txtBusca">Pesquisar:</label>
+                    <input type="search" size="7" placeholder="os..." name="busca" maxlength="7" id="txtBuscaOs" required="" autofocus="">
+                    <button type="submit" name="btnSearch" id="btnSearch">Buscar</button>
+                </form>
+            </nav>
         <main>
+
             <?php
             if (isset($_GET['ref']) && !empty($_GET['ref'])):
                 $includepatch = "./app/sistema/" . strip_tags(trim($_GET['ref']) . '.php');
@@ -176,4 +188,4 @@ require_once './app/funcoes/func.inc.php';
 $html = ob_get_clean ();
 echo preg_replace('/\s+/', ' ', $html);
 
-ob_end_flush();
+#ob_end_flush();

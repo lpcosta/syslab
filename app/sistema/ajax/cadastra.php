@@ -13,7 +13,42 @@ $texto = new Check();
 
 switch ($acao):
     case 'equipamento':
-            print "cadastro de equipamento!";
+            $sqlCons->FullRead("SELECT patrimonio,serie FROM tb_sys004 WHERE patrimonio = :PAT or serie = :SERIE", "PAT="."{$texto->setTexto($patrimonio)}"."&SERIE="."{$texto->setTexto($serie)}"."");
+            if($sqlCons->getRowCount() > 0):
+               if($sqlCons->getResult()[0]['patrimonio'] === $patrimonio):
+                print "<span class=\"alert alert-warning\" role=\"alert\">Consta um registro para esse Patrimônio!</span>";
+                elseif($sqlCons->getResult()[0]['serie'] === $serie):
+                   print "<span class=\"alert alert-warning\" role=\"alert\">Número de serie já esta em uso!</span>";
+                else:
+                    print "<p>error!<br /> não faço idéia de como você veio parar aqui...</p>";
+                endif;
+            else:
+                $sqlCad->ExeCreate("tb_sys004",["patrimonio"    => $texto->setTexto($patrimonio),
+                                                "serie"         => $texto->setTexto($serie),
+                                                "fabricante"    => $texto->setTexto($fabricante),
+                                                "modelo"        => $texto->setTexto($modelo),
+                                                "id_categoria"  => $texto->setTexto($equipamento),
+                                                "tipo"          => $texto->setTexto("a"),
+                                                "id_local"      => $texto->setTexto($localidade),
+                                                "data_cad"      => date('Y-m-d'),
+                                                "ip"            => $texto->setTexto($txtip),
+                                                "so_id"         => $texto->setTexto($so),
+                                                "key_so"        => $texto->setTexto($txtKeySo),
+                                                "office_id"     => $texto->setTexto($office),
+                                                "key_office"    => $texto->setTexto($txtKeyOffice),
+                                                "memoria_ram"   => $texto->setTexto($txtMemoria),
+                                                "hd"            => $texto->setTexto($txtHd),
+                                                "tela"          => $texto->setTexto($txtTela),
+                                                "tipo_tela"     => $texto->setTexto($txtTipoTela),
+                                                "va"            => $texto->setTexto($txtVa),
+                                                "status"        => $texto->setTexto('ativo')
+                                               ]);
+                if($sqlCad->getResult()):
+                    print "<span class=\"alert alert-success\" role=\"alert\">Cadastro Realizado com sucesso!</span>";
+                else:
+                    print "<p>{$sqlCad->getError()}</p>";
+                endif;
+            endif; 
         break;
     case 'software':
         if($tipo == "windows" && !empty($windows) && !empty($VersaoWindows) && !empty($ArquiteturaSo)):
@@ -78,6 +113,59 @@ switch ($acao):
                 print "<p>{$sqlCad->getError()}</p>";
             endif;
         endif;
+        break;
+    case 'secretaria':
+         $sqlCons->FullRead("SELECT nome_secretaria,sigla FROM tb_sys011 WHERE nome_secretaria = :SEC or sigla = :SIGLA", "SEC="."{$texto->setTexto($nomeSecretaria)}"."&SIGLA="."{$texto->setTexto($siglaSecretaria)}"."");
+        if($sqlCons->getRowCount() > 0):
+            if($sqlCons->getResult()[0]['nome_secretaria'] === $nomeSecretaria):
+                print "<span class=\"alert alert-warning\" role=\"alert\">o nome da secretaria já esta em uso!</span>";
+            elseif($sqlCons->getResult()[0]['sigla'] === $siglaSecretaria):
+               print "<span class=\"alert alert-warning\" role=\"alert\">a sigla informada já esta em uso</span>";
+            else:
+                print "<p>error!<br /> não faço idéia de como você veio parar aqui...</p>";
+            endif;
+        else:
+            $sqlCad->ExeCreate("tb_sys011",["nome_secretaria"=>$texto->setTexto($nomeSecretaria),
+                                            "sigla"=>$texto->setTexto($siglaSecretaria)
+                                            ]);
+            if($sqlCad->getResult()):
+                print "<span class=\"alert alert-success\" role=\"alert\">Cadastro Realizado com sucesso!</span>";
+            else:
+                print "<p>{$sqlCad->getError()}</p>";
+            endif;
+        endif;         
+        break;
+    case 'categoria':
+            $sqlCons->FullRead("SELECT descricao FROM tb_sys003 WHERE descricao = :DESC", "DESC="."{$texto->setTexto($nomeCategoria)}"."");
+            if($sqlCons->getRowCount() > 0):
+               print "<span class=\"alert alert-warning\" role=\"alert\">categoria já existe!</span>";
+            else:
+                $sqlCad->ExeCreate("tb_sys003",["descricao"=>$texto->setTexto($nomeCategoria)]);
+                if($sqlCad->getResult()):
+                    print "<span class=\"alert alert-success\" role=\"alert\">Cadastro Realizado com sucesso!</span>";
+                else:
+                    print "<p>{$sqlCad->getError()}</p>";
+                endif;
+            endif; 
+        break;
+    case 'status':
+        $sqlCons->FullRead("SELECT descricao,cor FROM tb_sys002 WHERE descricao = :DESC or cor = :COR", "DESC="."{$texto->setTexto($nomeStatus)}"."&COR="."{$texto->setTexto($corStatus)}"."");
+            if($sqlCons->getRowCount() > 0):
+                if($sqlCons->getResult()[0]['descricao'] === $nomeStatus):
+                 print "<span class=\"alert alert-warning\" role=\"alert\">Status já existe!</span>";
+                elseif($sqlCons->getResult()[0]['cor'] === $corStatus):
+                   print "<span class=\"alert alert-warning\" role=\"alert\">A cor escolhida já esta em uso por outro status</span>";
+                else:
+                    print "<p>error!<br /> não faço idéia de como você veio parar aqui...</p>";
+                endif;
+            else:
+                $sqlCad->ExeCreate("tb_sys002",["descricao"=>$texto->setTexto($nomeStatus),"cor"=>$texto->setTexto($corStatus)]);
+                if($sqlCad->getResult()):
+                    print "<span class=\"alert alert-success\" role=\"alert\">Cadastro Realizado com sucesso!</span>";
+                else:
+                    print "<p>{$sqlCad->getError()}</p>";
+                endif;
+            endif; 
         break;
     default :
           print "<span class=\"alert alert-warning\" role=\"alert\">Erro ao cadastrar! ação nao encontrada!,

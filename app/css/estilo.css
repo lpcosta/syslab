@@ -1,4 +1,5 @@
 *{margin: 0; padding: 0;}
+
 body{margin: 0; padding: 0; width: 100%; height: 100%;}
 
 header > div#div-logo{width: 40px;heigt: 38px;margin: 0;float: left;}
@@ -21,6 +22,7 @@ header > div#div-user-logado{background-color: #B1ABAC;width: 140px;height: 38px
 
 /*ID GLOBAIS*/
 
+#formSearch{float: right;}
 
 /*FIM DOS ID's Globais'*/
 /*#############################################################################*/
@@ -32,9 +34,11 @@ header > div#div-user-logado{background-color: #B1ABAC;width: 140px;height: 38px
 .cursor-pointer:hover{background-color: #ddd;color: #000; font-weight: bolder;}
 .row .col-md h3{text-align: center; border-bottom: 1px solid #09f; padding: 0;}
 .row{margin-bottom: 5px;}
-/*opcoes de pesquisa*/
-.pesquisa{margin: 0; padding: 3px; width: 100%; background-color: #ddd;border-radius: 10px;-moz-border-radius: 10px;}
-/*fim opcoes de pesquisa*/
+.col label{text-transform: capitalize; font-weight: bolder;}
+.tabela-dados{width: 100%;}
+.tabela-dados th{font-size: 9pt; font-weight: bolder; background-color: #ccc;}
+.tabela-dados td{font-size: 9pt; color: #000; font-family: 'verdana';}
+
 
 /* opcoes de cadastro*/
 .form-cadastra label{text-transform: capitalize; font-weight: bolder; margin-right: 5px; width: 120px; display: block;text-align: left;}

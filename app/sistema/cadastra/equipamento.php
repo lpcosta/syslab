@@ -88,11 +88,11 @@ $sql = new Read();
                 <div class="row" >
                     <div class="col form-inline">
                         <label title="Sistema Operacional">S.O</label>
-                        <select class="form-control" id="txtSo" name="txtSo">
+                        <select class="form-control" id="txtSo" name="so">
                             <?php $sql->ExeRead("tb_sys025"); ?>
                             <option selected value="">Selecione...</option>
                             <?php foreach ($sql->getResult() as $res):
-                                print "<option value=".$res['id'].">".ucfirst($res['descricao_so'].' '.$res['versao_so'].' '.$res['arquitetura_so'])."</option>";
+                                print "<option value=".$res['id_so'].">".ucfirst($res['descricao_so'].' '.$res['versao_so'].' '.$res['arquitetura_so'])."</option>";
                             endforeach;
                             ?>
                         </select>
@@ -105,11 +105,11 @@ $sql = new Read();
                 <div class="row" >
                     <div class="col form-inline">
                         <label title="Office">Office</label>
-                        <select class="form-control" id="txtOffice" name="txtOffice">
+                        <select class="form-control" id="txtOffice" name="office">
                             <?php $sql->ExeRead("tb_sys026"); ?>
                             <option selected value="">Selecione...</option>
                             <?php foreach ($sql->getResult() as $res):
-                                print "<option value=".$res['id'].">".ucfirst($res['descricao_office'].' '.$res['versao_office'].' '.$res['arquitetura_office'])."</option>";
+                                print "<option value=".$res['id_office'].">".ucfirst($res['descricao_office'].' '.$res['versao_office'].' '.$res['arquitetura_office'])."</option>";
                             endforeach;
                             ?>
                         </select>

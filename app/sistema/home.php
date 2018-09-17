@@ -2,11 +2,12 @@
 paginaSegura();
 
 $sql = new Read();
+$dt = new Datas();
 
-$dtini = '2018-04-01'; 
-$dtfim = '2018-04-30';
+
+
 ?>
-
+            
 <div class="tabs">
     <ul>
         <li><a href="#home">Home</a></li>
@@ -69,7 +70,7 @@ $dtfim = '2018-04-30';
                         tb_sys003 C ON C.id = EQ.id_categoria
                             JOIN
                         tb_sys005 E ON E.identrada = IE.id_entrada
-                            AND E.data BETWEEN :dtini AND :dtfim GROUP BY C.id", "dtini=". $dtini ."&dtfim=". $dtfim ."");      
+                            AND E.data BETWEEN :dtini AND :dtfim GROUP BY C.id", "dtini=". $dt->geraDatas()[0] ."&dtfim=". $dt->geraDatas()[1] ."");      
                    ?>
                    <script>
                     function graficoEntradasMes() {
@@ -115,7 +116,7 @@ $dtfim = '2018-04-30';
                             tb_sys009 SAIDA ON SAIDA.id_item_entrada = IE.id
                                 JOIN
                             tb_sys007 S ON S.id = SAIDA.id_saida
-                                AND S.data BETWEEN :dtini AND :dtfim GROUP BY C.id", "dtini=". $dtini ."&dtfim=". $dtfim ."");      
+                                AND S.data BETWEEN :dtini AND :dtfim GROUP BY C.id", "dtini=". $dt->geraDatas()[0] ."&dtfim=". $dt->geraDatas()[1] ."");      
                    ?>
                    <script>
                     function graficoSaidasMes() {
