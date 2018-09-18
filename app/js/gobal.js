@@ -144,6 +144,7 @@ $(function() {
         $("#txtCelularUser").mask("(99)99999-9999");
         $("#txtCnpj").mask("99.999.999/9999-99");
         $("#txtContato").mask("(99)9999-9999");
+        $("#txtCep").mask("99.999-999");
     });
    
 /*fim das mascaras de campos*/
@@ -369,6 +370,20 @@ $(document).ready(function(){
     });
 /*FIM DO CADASTRO DE STATUS*/
 });/*fim do document ready*/
+
+/*CADASTRA MOTIVO ENTRADA*/
+    $('#cadastra-motivo').validate({
+       rules:{
+           motivoEntrada            :{required:true},
+           categoriaMotivoEntrada   :{required:true}
+       },
+       submitHandler: function(){
+            cadastra('./app/sistema/ajax/cadastra.php','#cadastra-motivo');
+        }
+    });
+/*FIM DO MOTIVO ENTRADA*/
+
+
 /*FIM DAS FUNCOES QUE VALIDA FOMULARIOS*/
 
 
