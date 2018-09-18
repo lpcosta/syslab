@@ -370,6 +370,20 @@ $(document).ready(function(){
     });
 /*FIM DO CADASTRO DE STATUS*/
 });/*fim do document ready*/
+
+/*CADASTRA MOTIVO ENTRADA*/
+    $('#cadastra-motivo').validate({
+       rules:{
+           motivoEntrada            :{required:true},
+           categoriaMotivoEntrada   :{required:true}
+       },
+       submitHandler: function(){
+            cadastra('./app/sistema/ajax/cadastra.php','#cadastra-motivo');
+        }
+    });
+/*FIM DO MOTIVO ENTRADA*/
+
+
 /*FIM DAS FUNCOES QUE VALIDA FOMULARIOS*/
 
 

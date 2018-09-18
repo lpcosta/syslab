@@ -192,6 +192,19 @@ switch ($acao):
                 endif;
             endif;        
         break;
+    case 'motivo':
+            $sqlCons->FullRead("SELECT motivo FROM tb_sys017 WHERE motivo = :MOTIVO", "MOTIVO="."{$texto->setTexto($motivoEntrada)}"."");
+            if($sqlCons->getRowCount() > 0):
+               print "<span class=\"alert alert-warning\" role=\"alert\">Motivo já Cadastrado!</span>";
+            else:
+                $sqlCad->ExeCreate("tb_sys017",["motivo"=>$texto->setTexto($nomeCategoria),"categoria"=>$texto->setTexto($categoriaMotivoEntrada)]);
+                if($sqlCad->getResult()):
+                    print "<span class=\"alert alert-success\" role=\"alert\">Cadastro Realizado com sucesso!</span>";
+                else:
+                    print "<p>{$sqlCad->getError()}</p>";
+                endif;
+            endif;            
+        break;
     default :
           print "<span class=\"alert alert-warning\" role=\"alert\">Erro ao cadastrar! ação nao encontrada!,
                 Contate o desenvolvedor do sistema 
