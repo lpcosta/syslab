@@ -57,6 +57,44 @@ function getModelos(fab)
             });
 }/*FIM GETMODELOS*/  
 
+function buscaCidade(e)/*essa função busca cidades e preenche um combo com as cidades e cep*/
+{
+   $.post('./app/sistema/ajax/buscacidade.php',
+            {
+                estado: $(e).val()
+            }, function (res)
+    {
+        if (res) {
+            $("#txtCidade").attr('disabled', false);
+            $("#txtCidade").children(".cidades").remove();
+            $("#txtCidade").append(res);
+        } else
+        {
+            $("#txtCidade").attr('disabled', true);
+            $("#txtCep").attr('disabled', true);
+        }
+    });
+}
+
+function buscaCep(c)
+{
+   $.post('./app/sistema/ajax/buscacep.php',
+            {
+                cidade: $(c).val()
+            }, function (res)
+    {
+        if (res) {
+            $("#txtCep").attr('disabled', false);
+            $("#txtCep").val(res);
+        } else
+        {
+            $("#txtCep").attr('disabled', true);
+        }
+    });
+}
+
+
+
 /*MOSTRA E OCUPA CAMPOS OPCIONAIS NO CADASTRO DE EQUIPAMENTO*/
 function setCadEquipamento(e){
    switch(e){
@@ -104,9 +142,61 @@ $(function() {
         $("#txtIp").mask("999.999.999.999");
         $("#txtContatoUser").mask("(99)9999-9999");
         $("#txtCelularUser").mask("(99)99999-9999");
+        $("#txtCnpj").mask("99.999.999/9999-99");
+        $("#txtContato").mask("(99)9999-9999");
     });
-    
+   
 /*fim das mascaras de campos*/
+
+/*valida CNPJ*/
+    function validarCNPJ(cnpj){
+        var cnpj = cnpj;
+        var valida = new Array(6,5,4,3,2,9,8,7,6,5,4,3,2);
+        var dig1= new Number;
+        var dig2= new Number;
+
+        exp = /\.|\-|\//g
+        cnpj = cnpj.toString().replace( exp, "" ); 
+        var digito = new Number(eval(cnpj.charAt(12)+cnpj.charAt(13)));
+
+        for(i = 0; i<valida.length; i++){
+                dig1 += (i>0? (cnpj.charAt(i-1)*valida[i]):0);  
+                dig2 += cnpj.charAt(i)*valida[i];       
+        }
+        dig1 = (((dig1%11)<2)? 0:(11-(dig1%11)));
+        dig2 = (((dig2%11)<2)? 0:(11-(dig2%11)));
+
+        if(((dig1*10)+dig2) != digito){  
+            modal("<span class=\"alert alert-warning\" role=\"alert\">CNPJ Inválido!</span>");
+        }
+    }
+/*fim valida CNPJ*/
+
+/*valida cpf*/
+//valida o CPF digitado
+function ValidarCPF(cpfval){
+        var cpf = cpfval;
+        exp = /\.|\-/g
+        cpf = cpf.toString().replace( exp, "" ); 
+        var digitoDigitado = eval(cpf.charAt(9)+cpf.charAt(10));
+        var soma1=0, soma2=0;
+        var vlr =11;
+
+        for(i=0;i<9;i++){
+                soma1+=eval(cpf.charAt(i)*(vlr-1));
+                soma2+=eval(cpf.charAt(i)*vlr);
+                vlr--;
+        }       
+        soma1 = (((soma1*10)%11)==10 ? 0:((soma1*10)%11));
+        soma2=(((soma2+(2*soma1))*10)%11);
+
+        var digitoGerado=(soma1*10)+soma2;
+        if(digitoGerado!=digitoDigitado)        
+            modal("<span class=\"alert alert-warning\" role=\"alert\">CPF Inválido!</span>");        
+}
+
+/*fim valida cpf*/
+
 
 /*FUNÇÕES QUE VALIDA FORMULARIOS*/
 $(document).ready(function(){
@@ -169,6 +259,25 @@ $(document).ready(function(){
     });
     /*FIM DO CADASTRO DE USUARIO*/
     
+    /*CADASTRO DE EMPRESA*/
+    $('#cadastra-empresa').validate({
+       rules:{
+           txtRazaoSocial   :{required:true},
+           txtCnpj          :{required:true},
+           txtFantasia      :{required:true},
+           txtEstado        :{required:true},
+           txtCidade        :{required:true},
+           txtBairro        :{required:true},
+           txtCep           :{required:true},
+           txtRuaEmpresa    :{required:true},
+           txtEmailEmpresa  :{required:true,email:true},
+           txtContatoEmpresa:{required:true}
+       },
+       submitHandler: function(){
+            cadastra('./app/sistema/ajax/cadastra.php','#cadastra-empresa');
+        }
+    });
+    /*FIM DO CADASTRO DE EMPRESA*/
 
     /*PESQUISA PATRIMONIO*/
     $('#formSearch').validate({
@@ -247,6 +356,8 @@ $(document).ready(function(){
         }
     });
 /*FIM DO CADASTRO DE CATEGORIA*/
+    
+/*CADASTRA STATUS*/
     $('#cadastra-status').validate({
        rules:{
            nomeStatus    :{required:true},
@@ -256,12 +367,15 @@ $(document).ready(function(){
             cadastra('./app/sistema/ajax/cadastra.php','#cadastra-status');
         }
     });
-/*CADASTRA STATUS*/
-
 /*FIM DO CADASTRO DE STATUS*/
 });/*fim do document ready*/
-
 /*FIM DAS FUNCOES QUE VALIDA FOMULARIOS*/
+
+
+
+
+
+
 
 /*FUNCOES DE CADASTRO*/
 
@@ -316,14 +430,10 @@ function modal(html)
         modal       : true,
         minHeight   : 180,
         show    :{effect: "fold",duration:1000},
-        hide    : {effect: "fold",duration:1000},
-        close: function( event, ui ) {window.location.reload(true);}
-        /*
+        hide    : {effect: "fold",duration:1000},      
         buttons: {
-          "Fechar": function() {
-            $( this ).dialog( "close" );
-          }
-    }*/
+          "Ok": function(){$( this ).dialog( "close" );}
+        }
     });
 }
 

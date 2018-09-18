@@ -167,6 +167,31 @@ switch ($acao):
                 endif;
             endif; 
         break;
+    case 'empresa':
+        $sqlCons->FullRead("SELECT cnpj FROM tb_sys012 WHERE cnpj = :CNPJ", "CNPJ="."{$texto->setTexto($txtCnpj)}"."");
+            if($sqlCons->getRowCount() > 0):
+               print "<span class=\"alert alert-warning\" role=\"alert\">CNPJ já Cadastrado!</span>";
+            else:
+                $sqlCad->ExeCreate("tb_sys012",["cnpj"        => $texto->setTexto($txtCnpj),
+                                                "ie"          => $texto->setTexto($txtIe),
+                                                "razaosocial" => $texto->setTexto($txtRazaoSocial),
+                                                "fantasia"    => $texto->setTexto($txtFantasia),
+                                                "estado"      => $texto->setTexto($txtEstado),
+                                                "cidade"      => $texto->setTexto($txtCidade),
+                                                "bairro"      => $texto->setTexto($txtBairro),
+                                                "rua"         => $texto->setTexto($txtRuaEmpresa),
+                                                "telefone"    => $texto->setTexto($txtContatoEmpresa),
+                                                "email"       => $texto->setTexto($txtEmailEmpresa),
+                                                "cep"         => $texto->setTexto($txtCep),
+                                                "site"        => $texto->setTexto($txtSiteEmpresa)
+                                               ]);
+                if($sqlCad->getResult()):
+                    print "<span class=\"alert alert-success\" role=\"alert\">Cadastro Realizado com sucesso!</span>";
+                else:
+                    print "<p>{$sqlCad->getError()}</p>";
+                endif;
+            endif;        
+        break;
     default :
           print "<span class=\"alert alert-warning\" role=\"alert\">Erro ao cadastrar! ação nao encontrada!,
                 Contate o desenvolvedor do sistema 

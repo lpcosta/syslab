@@ -181,7 +181,7 @@ require_once './app/funcoes/func.inc.php';
     <script src="./app/libs/JQuery-Validate/jquery.validate.js"></script>
     <script src="./app/libs/JQuery-Validate/additional-methods.js"></script>
     <script src="./app/libs/JQuery-Validate/localization/messages_pt_BR.js" /></script>
-   <script src="./app/js/gobal.js" /></script>
+    <script src="./app/js/gobal.js" /></script>
     
 </html>
 <?php 
