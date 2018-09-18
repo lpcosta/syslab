@@ -144,6 +144,7 @@ $(function() {
         $("#txtCelularUser").mask("(99)99999-9999");
         $("#txtCnpj").mask("99.999.999/9999-99");
         $("#txtContato").mask("(99)9999-9999");
+        $("#txtCep").mask("99.999-999");
     });
    
 /*fim das mascaras de campos*/

@@ -14,11 +14,19 @@ abstract class Conexao {
     private static $Pass = '@lpc!!@#%*!#@';
     private static $Dbsa = 'lpcos421_syslab';
     */
-    
+    /*
     private static $Host = 'localhost';
     private static $User = 'syslab';
     private static $Pass = '@syslab@001';
     private static $Dbsa = 'db_syslab';
+    */
+    
+    private static $Host = 'localhost';
+    private static $User = 'root';
+    private static $Pass = '@lpc!!@#%*!#@';
+    private static $Dbsa = 'lpcos421_syslab';
+    
+    
     
     /** @var PDO */
     private static $Connect = null;
