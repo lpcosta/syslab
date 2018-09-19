@@ -1,8 +1,6 @@
 <?php
-   paginaSegura();
-    
+    paginaSegura();
     $sql = new Read();
-
 ?>
 <div class="tabs">
     <ul>
@@ -25,7 +23,7 @@
             <div class="row">
                 <div class="col-md form-inline">
                     <label>Endereço</label>
-                    <input type="text" id="txtEndereco" name="txtEndereco" size="40" class="form-control" placeholder="Nome da Localidade..." />
+                    <input type="text" id="txtEndereco" name="txtEndereco" size="40" class="form-control" placeholder="Endereco da Localidade..." />
                 </div>
                 <div class="col-md form-inline">
                     <label>Bairro</label>

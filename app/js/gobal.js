@@ -371,7 +371,8 @@ $(document).ready(function(){
 /*FIM DO CADASTRO DE STATUS*/
 });/*fim do document ready*/
 
-/*CADASTRA MOTIVO ENTRADA*/
+/*VALIDA CADSTRO DE LOCALIDADE*/
+
     $('#cadastra-motivo').validate({
        rules:{
            motivoEntrada            :{required:true},
@@ -381,7 +382,50 @@ $(document).ready(function(){
             cadastra('./app/sistema/ajax/cadastra.php','#cadastra-motivo');
         }
     });
+/*FIM DA VALIDAÇÃO DE CADASTRO DE LOCALIDADE*/
+
+/*CADASTRA MOTIVO ENTRADA*/
+    $('#cadastra-localidade').validate({
+       rules:{
+           nomeLocalidade   :{required:true},
+           crLocalidade     :{required:true,number:true},
+           txtEndereco      :{required:true},
+           txtBairro        :{required:true},
+           txtCep           :{required:true},
+           secretaria       :{required:true},
+           txtRegiao        :{required:true}
+       },
+       submitHandler: function(){
+            cadastra('./app/sistema/ajax/cadastra.php','#cadastra-localidade');
+        }
+    });
 /*FIM DO MOTIVO ENTRADA*/
+
+    $('#form-reseta-login').validate({
+       rules:{
+           txtLogin :{required:true},
+           txtEmail :{required:true,email:true}
+       },
+       submitHandler: function(){
+           var dados = $('#form-reseta-login').serialize();
+            $.ajax({
+                url: './app/sistema/ajax/resetpassword.php',
+                data: dados,
+                type:'POST',
+                dataType:'HTML',
+            beforeSend:function(){
+           $('.frm_load').fadeIn(500);
+            },
+            success: function (res){
+            $('.frm_load').fadeOut(500);
+                $('#error').html(res).slideDown(500);
+            }
+        });
+    return false;
+           
+       }
+          
+    });
 
 
 /*FIM DAS FUNCOES QUE VALIDA FOMULARIOS*/
@@ -453,3 +497,14 @@ function modal(html)
 }
 
 
+function redefineSenha()
+{
+    $("#modal-redefine-login").dialog({
+        width       : "auto",
+        heigth      : "auto",
+        modal       : true,
+        minHeight   : 250,
+        show    :{effect: "fold",duration:1000},
+        hide    : {effect: "fold",duration:1000}      
+    });
+}

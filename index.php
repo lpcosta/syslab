@@ -60,10 +60,18 @@ require_once './app/funcoes/func.inc.php';
                     <li><a href="index.php">Home</a></li>
                     <li><a href="#">Laboratório</a>
                         <ul class="submenu-1">
-                            <li><a href="#" onclick="$('#searchos').slideDown(500);$('#txtBuscaOs').focus();">Consulta por OS</a></li>
                             <li><a href="index.php?ref=laboratorio">Laboratório</a></li>
+                            <li><a href="#" onclick="$('#searchos').slideDown(500);$('#txtBuscaOs').focus();">Consulta por OS</a></li>
                             <li><a href="#">Entrada</a></li>
                             <li><a href="#">Saída</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#">Estoque</a>
+                        <ul class="submenu-1">
+                            <li><a href="#">Entrada de peça</a>
+                            <li><a href="#">Saida de peça</a></li>
+                            <li><a href="#">Nova Peça</a></li>
+                            <li><a href="#">Consulta</a></li>
                         </ul>
                     </li>
                     <li><a href="#">Relatorios</a>

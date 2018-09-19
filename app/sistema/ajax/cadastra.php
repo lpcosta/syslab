@@ -197,7 +197,33 @@ switch ($acao):
             if($sqlCons->getRowCount() > 0):
                print "<span class=\"alert alert-warning\" role=\"alert\">Motivo já Cadastrado!</span>";
             else:
-                $sqlCad->ExeCreate("tb_sys017",["motivo"=>$texto->setTexto($nomeCategoria),"categoria"=>$texto->setTexto($categoriaMotivoEntrada)]);
+                $sqlCad->ExeCreate("tb_sys017",["motivo"=>$texto->setTexto($motivoEntrada),"categoria"=>$texto->setTexto($categoriaMotivoEntrada)]);
+                if($sqlCad->getResult()):
+                    print "<span class=\"alert alert-success\" role=\"alert\">Cadastro Realizado com sucesso!</span>";
+                else:
+                    print "<p>{$sqlCad->getError()}</p>";
+                endif;
+            endif;            
+        break;
+    case 'localidade':
+        $sqlCons->FullRead("SELECT local,cr FROM tb_sys008 WHERE local = :LOCAL or cr = :CR", "LOCAL="."{$texto->setTexto($nomeLocalidade)}"."&CR={$crLocalidade}");
+            if($sqlCons->getRowCount() > 0):
+                if($sqlCons->getResult()[0]['local'] === $nomeLocalidade):
+                    print "<span class=\"alert alert-warning\" role=\"alert\">Localidade já Cadastrada!</span>";
+                elseif($sqlCons->getResult()[0]['cr'] === $crLocalidade):
+                   print "<span class=\"alert alert-warning\" role=\"alert\">CR já Cadastrado!</span>";
+                else:
+                    print "<p>error!<br /> não faço idéia de como você veio parar aqui...</p>";
+                endif;
+            else:
+                $sqlCad->ExeCreate("tb_sys008",["local"         => $texto->setTexto($nomeLocalidade),
+                                                "rua"           => $texto->setTexto($txtEndereco),
+                                                "cep"           => $texto->setTexto($txtCep),
+                                                "bairro"        => $texto->setTexto($txtBairro),
+                                                "regiao_id"     => $texto->setTexto($txtRegiao),
+                                                "cr"            => $texto->setTexto($crLocalidade),
+                                                "secretaria_id" => $texto->setTexto($secretaria)
+                                               ]);
                 if($sqlCad->getResult()):
                     print "<span class=\"alert alert-success\" role=\"alert\">Cadastro Realizado com sucesso!</span>";
                 else:

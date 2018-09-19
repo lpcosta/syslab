@@ -11,7 +11,10 @@ class Login {
     private $Login;
     private $Senha;
     private $Result;
-
+    private $ip;
+    private $host;
+    private $Tentativa;
+    private $isuser;
     /**
      * <b>Efetuar Login:</b> Envelope um array atribuitivo com índices STRING user [email], STRING pass.
      * Ao passar este array na ExeLogin() os dados são verificados e o login é feito!
@@ -20,6 +23,9 @@ class Login {
     public function ExeLogin(array $UserData) {
         $this->Login = (string) strip_tags(trim($UserData['login']));
         $this->Senha = (string) strip_tags(trim($UserData['senha']));
+        $this->ip    = (string) strip_tags(trim($UserData['ip']));
+        $this->host  = (string) strip_tags(trim($UserData['host']));
+        
         $this->setLogin();
     }
 
@@ -39,31 +45,61 @@ class Login {
 
     //Valida os dados e armazena os erros caso existam. Executa o login!
     private function setLogin() {
+        $atualiza = new Update();
+        $log = new Create();
         if (!$this->Login || !$this->Senha):
             $this->Result = 'Informe seu Login e Senha!';
         elseif (!$this->getUser()):
-            $this->Result = 'Login ou senha Inválidos!';
+            if($this->isuser):
+                if($this->Tentativa < 4):
+                    $this->Result = 'Login ou senha Inválidos!';
+                    $atualiza->ExeUpdate("tb_sys001", ["tentativa_login" => $this->Tentativa ], "WHERE login = :LOGIN ", "LOGIN={$this->Login}");
+                    $log->ExeCreate("tb_sys024",["tecnico"=> $this->Login,
+                                                 "data" => date('Y-m-d H:i:s'),
+                                                 "ip" => $this->ip,
+                                                 "host" => $this->host,
+                                                 "acao" =>0,
+                                                 "msg"=>'login falhou'
+                                                ]);
+                else:
+                    $this->Result = "usuario bloqueado! por exceder o numero de tentativas de login!";
+                    $atualiza->ExeUpdate("tb_sys001", ["situacao" =>'b'], "WHERE login = :LOGIN ", "LOGIN={$this->Login}");
+                endif;
+            else:
+                $this->Result = 'Login nao encontrado!';    
+            endif;
         else:
-            $this->Execute();
+            if($this->Tentativa < 3):
+                $this->Execute();
+            else:
+                $this->Result = "usuario bloqueado! por exceder o numero de tentativas de login!";
+                $atualiza->ExeUpdate("tb_sys001", ["situacao" =>'b'], "WHERE login = :LOGIN ", "LOGIN={$this->Login}");
+            endif;
+            
         endif;
     }
 
     //Vetifica usuário e senha no banco de dados!
     private function getUser() {
         $this->Senha = hash('whirlpool',hash('sha512',hash('sha384',hash('sha256',sha1(md5('mjll'.$this->Senha))))));
+        $sql = new Read();      
+        $sql->FullRead("SELECT id,nome,login,situacao,tentativa_login,senha_padrao,grupo_id FROM tb_sys001 WHERE login = :LOGIN AND senha = :SENHA", "LOGIN={$this->Login}&SENHA={$this->Senha}");
 
-        $read = new Read;
-        //$read->ExeRead("tb_sys001", "WHERE login = :LOGIN AND senha = :SENHA", "LOGIN={$this->Login}&SENHA={$this->Senha}");
-        $read->FullRead("SELECT id,nome,login,situacao,tentativa_login,senha_padrao,grupo_id FROM tb_sys001 WHERE login = :LOGIN AND senha = :SENHA", "LOGIN={$this->Login}&SENHA={$this->Senha}");
-
-        if ($read->getResult()):
-            $this->Result = $read->getResult()[0];
+        if ($sql->getResult()):
+            $this->Result = $sql->getResult()[0];
+            $this->Tentativa = $sql->getResult()[0]['tentativa_login'];
             return true;
         else:
+            $sql->ExeRead("tb_sys001", "WHERE login = :LOGIN", "LOGIN={$this->Login}");
+            if($sql->getResult()):
+                $this->Tentativa = ($sql->getResult()[0]['tentativa_login']+1);
+                $this->isuser = true;
+            else:
+                $this->isuser = false;
+            endif;
             return false;
         endif;
     }
-
     //Executa o login armazenando a sessão!
     private function Execute() {
         if (!session_id()):
@@ -71,7 +107,6 @@ class Login {
         endif;
         $_SESSION['UserLogado']=true;
         $_SESSION['UserLogado'] = $this->Result;
-        
         $this->Result = true;
     }
 
