@@ -1,6 +1,47 @@
 <?php
-session_start();
 require_once '../config/config.inc.php';
+
+
+$senha = new Senha();
+
+$sql = new Read();
+
+$atu = new Update();
+
+$post = false;
+
+if(isset($_POST['btnAltera'])):
+   unset($_POST['btnAltera']);
+ extract(filter_input_array(INPUT_POST, FILTER_DEFAULT));
+
+ $pass1 = strip_tags(trim($txtPassword1));
+ $pass2 = strip_tags(trim($txtPassword2));
+ 
+    if($pass1 === $pass2):
+        if(empty($pass1) || empty($pass2) ):
+            $msg = "Voce precisa informar uma Senha";
+        else:
+            if(isset($login) && !empty($login)):
+                $atu->ExeUpdate("tb_sys001", ["hash"=>'',
+                                          "senha"=>$senha->setSenha($pass1),
+                                          "senha_padrao"=>'nao',
+                                          "tentativa_login"=>0,
+                                          "situacao"=>'l'
+                                          ], "WHERE login = :LOGIN", "LOGIN={$login}");
+                if($atu->getResult()):
+                    $msg = "Senha Alterada!<br />"
+                    . "<a href=\"http://localhost/syslab/\">Clique para Logar</a>";          
+                else:
+                    $msg = "Erro ".$atu->getResult();
+                endif;
+            else:
+                $msg= "<h2 class='text-center text-primary'>Token Inválido!</h2><br />";
+            endif;
+            endif;
+    else:
+        $msg = "Senhas Não Conferem!";
+    endif;
+endif;
 ?>
 <!DOCTYPE html> 
 <html lang="pt-br">   
@@ -42,6 +83,46 @@ require_once '../config/config.inc.php';
             
         </header>
         <main>
+            <?php
+                $get = filter_input_array(INPUT_GET,FILTER_DEFAULT);
+                $setGet = array_map("strip_tags", $get);
+                $getHash   = array_map("trim", $setGet);
+                extract($getHash);
+                $hashCompara = md5(sha1(date('d-m-Y')));
+            
+            $sql->FullRead("SELECT nome,login FROM tb_sys001 WHERE hash = :HASH AND login = :LOGIN", "HASH={$hash}&LOGIN="."{$login}"."");
+            
+            if($sql->getRowCount() > 0):?>
+                    <div id="login">
+                        <div class="boxin">
+                            <h1>Altere sua Senha</h1>
+                            <form action="" method="post" form-control>
+                                <input type="hidden" name="login" value="<?=$login?>" />
+                                <label>Nova Senha:</label>
+                                <input type="password" name="txtPassword1" class="form-control" />
+                                <label>Confirme a Senha</label>
+                                <input type="password" name="txtPassword2" class="form-control" />
+                                <?php if(isset($msg)):?>
+                               <br />
+                               <div class="alert alert-info msg">
+                                    <?=$msg;?>
+                               </div>
+                                <?php endif;?>
+                                 <hr />
+                                <input type="submit" name="btnAltera" value="Alterar" style="width: 100%;" />
+                            </form>
+                        </div>
+                    </div>                           
+                 <?php
+                else:?>
+                    <div id="login">
+                        <div class="boxin">
+                            <h1 class="alert alert-info text-uppercase">token inválido</h1>
+                             <a href="<?=HOME?>">VOLTAR</a>
+                        </div>
+                       
+                    </div>
+               <? endif;?>
             
         </main>
     </body>

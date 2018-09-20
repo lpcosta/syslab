@@ -1,7 +1,7 @@
 <div id="login">
     <div class="boxin">
         <h1>Login no Sistema</h1>
-        <div class="j_Aviso" role="alert"></div>
+        <div class="j_Aviso text-center"></div>
         <form name="login" method="post" class="j_Cadastra" action="javascript:void(0)" onkeydown="if(event.keyCode == 13){$('#btnLoga').trigger('click');}" >
             <label>
                 <span>Login:</span>

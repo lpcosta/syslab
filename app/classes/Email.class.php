@@ -1,6 +1,4 @@
 <?php
-require_once '../libs/PHPMailer/src/PHPMailer.php';
-require_once '../libs/PHPMailer/src/SMTP.php';
 
 class Email {
 
@@ -10,9 +8,11 @@ class Email {
     private $destinatario;
     private $mensagem;
     private $error;
+    private $result;
     
     function __construct() {
-        $this->Mail = new PHPMailer\PHPMailer\PHPMailer;
+        $this->Mail = new \PHPMailer\PHPMailer\PHPMailer();
+        
         $this->Mail->IsSMTP();
         $this->Mail->Port = '465';
         $this->Mail->Host = 'br24.hostgator.com.br'; 
@@ -35,7 +35,11 @@ class Email {
         $this->sendMail();
         
     }
-
+    
+    public function getResult() {
+        return $this->result;
+    }
+    
     public function getError() {
         return $this->error;        
     }
@@ -47,7 +51,7 @@ class Email {
         $this->Mail->AddBCC("lpcosta@santoandre.sp.gov.br"); // Envia Cópia Oculta
         $this->Mail->addAddress($this->destinatario); // email do destinatario.
         
-	$this->MailBody = $this->mensagem;
+	$this->Mail->Body = $this->mensagem;
         
 	$this->enviado = $this->Mail->Send();
         
@@ -57,12 +61,12 @@ class Email {
 	// Exibe uma mensagem de resultado se ocorrer erro
 	if ($this->enviado)
         {
-            $this->error = false;
-            return $this->error;
-            
+            $this->result = "Email Enviado!";
+            return $this->result;
         }
         else{
             $this->error = "Não foi possível enviar o e-mail<br /> Informações do erro: <strong>".$this->Mail->ErrorInfo."</strong>";
+            $this->result = false;
             return $this->error;
 	}
     }

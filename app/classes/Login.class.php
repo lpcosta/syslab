@@ -54,13 +54,7 @@ class Login {
                 if($this->Tentativa < 4):
                     $this->Result = 'Login ou senha Inválidos!';
                     $atualiza->ExeUpdate("tb_sys001", ["tentativa_login" => $this->Tentativa ], "WHERE login = :LOGIN ", "LOGIN={$this->Login}");
-                    $log->ExeCreate("tb_sys024",["tecnico"=> $this->Login,
-                                                 "data" => date('Y-m-d H:i:s'),
-                                                 "ip" => $this->ip,
-                                                 "host" => $this->host,
-                                                 "acao" =>0,
-                                                 "msg"=>'login falhou'
-                                                ]);
+                    $log->ExeCreate("tb_sys024",["tecnico"=> $this->Login,"data" =>date('Y-m-d H:i:s'),"ip" => $this->ip,"host" => $this->host,"acao" =>0,"msg"=>'login falhou']);
                 else:
                     $this->Result = "usuario bloqueado! por exceder o numero de tentativas de login!";
                     $atualiza->ExeUpdate("tb_sys001", ["situacao" =>'b'], "WHERE login = :LOGIN ", "LOGIN={$this->Login}");
@@ -70,7 +64,12 @@ class Login {
             endif;
         else:
             if($this->Tentativa < 3):
-                $this->Execute();
+                if($this->Result['situacao']==='l' && $this->Result['senha_padrao']==='sim'):
+                    $hash = md5(sha1(date('d-m-Y')));
+                    $this->Result = "SUA SENHA DEVE SER ALTERADA!<br /><a href=".HOME."/app/reset/index.php?hash=".$hash."&login=".$this->Result['login'].">ALTERAR</a>";
+                else:
+                    $this->Execute();
+                endif;
             else:
                 $this->Result = "usuario bloqueado! por exceder o numero de tentativas de login!";
                 $atualiza->ExeUpdate("tb_sys001", ["situacao" =>'b'], "WHERE login = :LOGIN ", "LOGIN={$this->Login}");
@@ -81,9 +80,9 @@ class Login {
 
     //Vetifica usuário e senha no banco de dados!
     private function getUser() {
-        $this->Senha = hash('whirlpool',hash('sha512',hash('sha384',hash('sha256',sha1(md5('mjll'.$this->Senha))))));
+        $senha = new Senha();
         $sql = new Read();      
-        $sql->FullRead("SELECT id,nome,login,situacao,tentativa_login,senha_padrao,grupo_id FROM tb_sys001 WHERE login = :LOGIN AND senha = :SENHA", "LOGIN={$this->Login}&SENHA={$this->Senha}");
+        $sql->FullRead("SELECT id,nome,login,situacao,tentativa_login,senha_padrao,grupo_id FROM tb_sys001 WHERE login = :LOGIN AND senha = :SENHA", "LOGIN={$this->Login}&SENHA={$senha->setSenha($this->Senha)}");
 
         if ($sql->getResult()):
             $this->Result = $sql->getResult()[0];
@@ -100,6 +99,8 @@ class Login {
             return false;
         endif;
     }
+    
+    
     //Executa o login armazenando a sessão!
     private function Execute() {
         if (!session_id()):

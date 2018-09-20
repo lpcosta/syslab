@@ -1,5 +1,5 @@
 <?php
-require_once '../../config/autoload.inc.php';
+require_once '../../config/config.inc.php';
 $sql = new Read();
 
 extract(filter_input_array(INPUT_POST, FILTER_DEFAULT));

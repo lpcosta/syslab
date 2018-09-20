@@ -27,7 +27,7 @@ function fctLogin()
           success: function (res){
            $('.form_load').fadeOut(1000);
            if(res != 1){
-               $('.j_Aviso').addClass('alert alert-warning').text(res).slideDown(800);
+               $('.j_Aviso').addClass('alert alert-warning').html(res).slideDown(800);
            }else{
                setTimeout(function(){
                    location.href='http://localhost/syslab/index.php?ref=home';

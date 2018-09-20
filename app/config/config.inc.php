@@ -1,27 +1,36 @@
 <?php 
+// TRATAMENTO DE ERROS #####################
+//CSS constantes :: Mensagens de Erro
+define('WS_ACCEPT', 'accept');
+define('WS_INFOR', 'infor');
+define('WS_ALERT', 'alert');
+define('WS_ERROR', 'error');
+define('HOJE',date('d/m/Y'));
+
 // DEFINE IDENTIDADE DO SITE ################
 define('SITENAME', 'Syslab');
 define('SITEDESC', 'Sistema responsavel pelo controle de equipamentos em Laboratorio da prefeitura de santo andre - sp');
 
 // DEFINE A BASE DO SITE ####################
-define('HOME', 'http://localhost/syslab');
+define('HOME', 'https://localhost/syslab');
 //define('THEME', 'cidadeonline');
 
 //define('INCLUDE_PATH', HOME . DIRECTORY_SEPARATOR . 'themes' . DIRECTORY_SEPARATOR . THEME);
 //define('REQUIRE_PATH', 'themes' . DIRECTORY_SEPARATOR . THEME);
 define('REQUIRE_PATH', HOME . DIRECTORY_SEPARATOR .'app' . DIRECTORY_SEPARATOR .'sistema');
 
-
-
 // AUTO LOAD DE CLASSES ####################
 spl_autoload_register(function($class){
-       	$classe = "./app".DIRECTORY_SEPARATOR."classes".DIRECTORY_SEPARATOR.$class.".class.php";
-	if (file_exists(($classe))):
-		require_once($classe);
-        else:
-            echo "<div class=\"alert alert-warning \" role=\"alert\">";
-            print "Não foi possível incluir {$Class}.class.php!";
-            echo "</div>";
-            die;
-        endif;
+    if (file_exists("./app/classes/".$class.".class.php")):
+        require_once("./app/classes/".$class.".class.php");
+    elseif(file_exists("../classes/".$class.".class.php")):
+         require_once("../classes/".$class.".class.php");
+    elseif(file_exists("../../classes/".$class.".class.php")):
+        require_once("../../classes/".$class.".class.php");
+    else:
+        echo "<div class=\"alert alert-warning \" role=\"alert\">"
+            ."Não foi possível incluir $Class.class.php!"
+            ."</div>";
+        die;
+    endif;
 });
