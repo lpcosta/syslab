@@ -1,13 +1,16 @@
 <?php
 require_once '../../config/config.inc.php';
-$sql = new Read();
+require_once '../../config/post.inc.php';
 
-extract(filter_input_array(INPUT_POST, FILTER_DEFAULT));
+$sql        = new Read();
 
-$fab = strip_tags(trim(intval($fabricante)));
-
-if(isset($fab) && !empty($fab)):
-    $sql->FullRead("SELECT * FROM tb_sys022 where fabricante_id = :IDFAB ORDER BY modelo ", "IDFAB={$fab}");
+if(isset($fabricante) && empty($modelo)):
+    $sql->FullRead("SELECT * FROM tb_sys022 where fabricante_id = :IDFAB ORDER BY modelo ", "IDFAB={$fabricante}");
+    foreach ($sql->getResult() as $res):
+        print "<option value=".$res['id_modelo']." class='cmbv_modelos'>".ucfirst($res['modelo'])."</option>";
+    endforeach;
+elseif(isset($modelo)):
+    $sql->FullRead("SELECT * FROM tb_sys022 where fabricante_id = :IDFAB AND id_modelo = :MOD", "IDFAB={$fabricante}&MOD={$modelo}");
     foreach ($sql->getResult() as $res):
         print "<option value=".$res['id_modelo']." class='cmbv_modelos'>".ucfirst($res['modelo'])."</option>";
     endforeach;

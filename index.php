@@ -61,8 +61,8 @@ require_once './app/funcoes/func.inc.php';
                     <li><a href="#">Laboratório</a>
                         <ul class="submenu-1">
                             <li><a href="index.php?ref=laboratorio">Laboratório</a></li>
-                            <li><a href="#" onclick="$('#searchos').slideDown(500);$('#txtBuscaOs').focus();">Consulta por OS</a></li>
-                            <li><a href="#">Entrada</a></li>
+                            <li><a href="#" onclick="$('#searchos').slideDown(500);$('#txtBuscaOs').focus();">Consulta OS</a></li>
+                            <li><a href="index.php?ref=laboratorio/entrada">Entrada</a></li>
                             <li><a href="#">Saída</a></li>
                         </ul>
                     </li>
@@ -103,7 +103,7 @@ require_once './app/funcoes/func.inc.php';
                                     <li><a href="#">Equipamento</a>
                                         <ul class="submenu-3">
                                             <li><a href="#">Cadastrar Modelo</a></li>
-                                            <li><a href="#">Editar</a></li>
+                                            <li><a href="index.php?ref=edita/equipamento">Editar</a></li>
                                             <li><a href="#">Excluir</a></li>
                                         </ul>
                                     </li>
@@ -131,6 +131,12 @@ require_once './app/funcoes/func.inc.php';
                         </ul>
                     </li>
                 </ul> 
+                <form name="formSearchOs" id="formSearchOs" onsubmit="return false;">
+                     <input type="hidden" name="acao" value="os" />
+                    <label for="txtBusca">Pesquisar:</label>
+                    <input type="search" size="7" placeholder="os..." name="busca" maxlength="7" id="txtBuscaOs" required="">
+                    <button type="submit" name="btnSearch" id="btnSearch">Buscar</button>
+                </form>
                 <form name="formSearch" id="formSearch" class="text-right" onsubmit="return false;">
                     <input type="hidden" name="acao" value="patrimonio" />
                     <label for="txtBusca">Pesquisar:</label>
@@ -140,15 +146,6 @@ require_once './app/funcoes/func.inc.php';
             </nav>
             <? endif;?>
         </header>
-        <nav class="navbar" id="searchos">
-                <a></a>
-                <form name="formSearchOs" id="formSearchOs" onsubmit="return false;">
-                     <input type="hidden" name="acao" value="os" />
-                    <label for="txtBusca">Pesquisar:</label>
-                    <input type="search" size="7" placeholder="os..." name="busca" maxlength="7" id="txtBuscaOs" required="" autofocus="">
-                    <button type="submit" name="btnSearch" id="btnSearch">Buscar</button>
-                </form>
-            </nav>
         <main>
 
             <?php

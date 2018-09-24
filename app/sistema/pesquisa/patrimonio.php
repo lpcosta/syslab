@@ -1,6 +1,7 @@
 <?php
-require_once '../../config/autoload.inc.php';
+require_once '../../config/config.inc.php';
 require_once '../../funcoes/func.inc.php';
+
 $sql = new Read();
 extract(filter_input_array(INPUT_POST, FILTER_DEFAULT));
 $busca = strip_tags(trim($busca));

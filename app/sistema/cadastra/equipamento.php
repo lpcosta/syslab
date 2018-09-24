@@ -4,6 +4,7 @@
 $sql = new Read();
 
 ?>
+<script src="../../libs/JQuery-Masked-Input/src/jquery.maskedinput.js"></script>
 <div class="tabs">
     <ul>
         <li><a href="#cad-equipamento">Cadastrar Equipamento</a></li>
@@ -52,7 +53,7 @@ $sql = new Read();
             <div class="row">
                 <div class="col form-inline">
                     <label>patrimônio</label>
-                    <input type="text" id="txtPatrimonio" name="patrimonio" maxlength="7" class="form-control" size="12" placeholder="Patrimônio..." />
+                    <input type="text" id="txtPatrimonio" name="patrimonio" maxlength="7" value="<?if(isset($_GET['p'])){print $_GET['p'];}?>" class="form-control" size="12" placeholder="Patrimônio..." />
                 </div>
    
                 <div class="col form-inline cmb-localidade">

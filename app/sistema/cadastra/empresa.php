@@ -6,9 +6,9 @@
 ?>
 <div class="tabs">
     <ul>
-        <li><a href="#cad-user">Cadastrar Empresa</a></li>
+        <li><a href="#cad-empresa">Cadastrar Empresa</a></li>
     </ul>
-    <div id="cad-user">
+    <div id="cad-empresa">
         <h2 class="text-uppercase">nova empresa</h2>
         <form class="form-cadastra" id="cadastra-empresa" onsubmit="return false;">
             <input type="hidden" name="acao" value="empresa" />

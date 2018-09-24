@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <title>TODO supply a title</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    </head>
+    <body>
+        <div>TODO write content</div>
+        
+        Localidade
+        <!--               <input type="text" id="txtCodLocal" onblur="setaLocalidade(this.value);" onkeyup="if (event.keyCode == 13){$('#txtAndar').focus();}" placeholder="CR" size="3" onfocus="checaCadastroPatrimonio($('#txtPatrimonio').val(););"  />-<select id="txtLocalidade" name="txtLocalidade" onkeydown="if (event.keyCode === 13) {
+                                       $('#txtAndar').focus();
+                                   }" onchange="$('#txtCodLocal').val(this.value);" class="text-capitalize" style="margin-right: 10px;">
+                    <option value="" class="localidade">Selecione</option>                        
+                    <?$sql->FullRead("SELECT id,local FROM tb_sys008 ORDER BY local");foreach($sql->getResult()as$rowlocal):?>
+                    <option value="<?= $rowlocal['id'] ?>" class="localidade"><?= $rowlocal['local']; ?></option>
+                    <?endforeach;?>
+                </select>      -->
+        
+        Fabricante
+        <!--                <select id="txtFabricante" name="txtFabricante" class="text-capitalize" onkeydown="if (event.keyCode === 13){$('#txtModelo').focus();}" onchange="getModelos(this.value);">
+                    <option value="">Selecione</option>
+                    <?$sql->FullRead("SELECT id_fabricante,nome_fabricante FROM tb_sys018 ORDER BY nome_fabricante");foreach ($sql->getResult() as $rowFab):
+                    if ($rowFab['id_fabricante'] == 30):continue;endif;?>
+                        <option value="<?= $rowFab['id_fabricante'] ?>"><?= $rowFab['nome_fabricante']; ?></option>
+                    <?endforeach;?>
+                </select>-->
+        
+        Equipamento
+        <!--                <select id="txtEquipamento" name="txtEquipamento" class="text-capitalize" onkeydown="if(event.keyCode === 13){$('#txtFabricante').focus();}" onchange="pesqEquipEntrada(this.value)" style="min-width:100px;">
+                    <option value="" class="categoria">Selecione</option>                        
+                    <?$sql->FullRead("SELECT id,descricao FROM tb_sys003 ORDER BY descricao");foreach ($sql->getResult() as $rowequip):?>
+                    <option value="<?= $rowequip['id'] ?>" class="categoria"><?=$rowequip['descricao']; ?></option>
+                    <?endforeach;?>
+                </select>        -->
+        
+        
+    </body>
+</html>

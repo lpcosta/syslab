@@ -4,12 +4,7 @@ require_once '../../funcoes/func.inc.php';
 require_once '../../libs/PHPMailer/src/PHPMailer.php';
 require_once '../../libs/PHPMailer/src/Exception.php';
 require_once '../../libs/PHPMailer/src/SMTP.php';
-
-$getPost = filter_input_array(INPUT_POST,FILTER_DEFAULT);
-$setPost = array_map("strip_tags", $getPost);
-$post    = array_map("trim", $setPost);
-extract($post);
-
+require_once '../../config/post.inc.php';
 $sql    = new Read();
 $update = new Update();
 $senha  = new Senha();

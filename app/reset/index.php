@@ -89,7 +89,9 @@ endif;
                 $getHash   = array_map("trim", $setGet);
                 extract($getHash);
                 $hashCompara = md5(sha1(date('d-m-Y')));
-            
+            if(!isset($login)):
+                $login='';
+            endif;
             $sql->FullRead("SELECT nome,login FROM tb_sys001 WHERE hash = :HASH AND login = :LOGIN", "HASH={$hash}&LOGIN="."{$login}"."");
             
             if($sql->getRowCount() > 0):?>

@@ -1,13 +1,6 @@
 /* by Leandro Pereira*/
 
 $( ".tabs" ).tabs({
-      beforeLoad: function( e, ui ) {
-        ui.jqXHR.fail(function() {
-          ui.panel.html(
-            "<div class='text-center'><img src='./app/imagens/loader-lg.gif' alt='carregando...' title='carregando...' /></div>");
-        });
-      },
-      /*event: "mouseover"*/
       show: { 
           effect: "blind", duration: 500
       }
@@ -37,12 +30,14 @@ function fctLogin()
       });
 }/*FIM LOGIN*/
 
+
 /*PEGA OS MODELOS DE EQUIPAMENTO CONFORME O FABRICANTE ESCOLHIDO*/     
-function getModelos(fab)
+function getModelos(fab,mod = null)
 {
     $.post('./app/sistema/ajax/buscamodelos.php',
             {
-                fabricante: fab
+                fabricante  : fab,
+                modelo      : mod
             }, function (res){
                 if(res){
                     $("#txtModelo").attr('disabled', false);
@@ -52,7 +47,7 @@ function getModelos(fab)
                 else{
                     $("#txtModelo").children(".cmbv_modelos").remove();
                     $("#txtModelo").append("<option value='' class='cmbv_modelos'>Selecione..</option>");
-                    $('#txtModelo').attr('disabled',true);
+                    {$('#txtModelo').attr('disabled',true);}
                 }
             });
 }/*FIM GETMODELOS*/  
@@ -93,7 +88,160 @@ function buscaCep(c)
     });
 }
 
+/*####### FUNCOES QUE AUXILIA VALIDA E VERIFICA OS ITENS E AS ENTRADAS */
 
+function verificaEntrada(t){
+    $.post('./app/sistema/ajax/entrada.php',{tecnico: t},function (res)
+        {
+            if ($.isNumeric(res)) {
+               $("#txtTecnico").attr('disabled', true);
+               $('#nentrada').html('Entrada nº' + ' ' + res);
+               $('#iten-entrada').slideDown(500);
+               $('#numeroEntrada').val(res);
+               $('#txtOs').focus();
+               adicionaItemEntrada(t,res);
+            } else
+            {modal(res);}
+        });
+}
+
+function validaItemEntrada(t,e){
+   
+    $('#iten-entrada').validate({
+        rules:{
+            txtOs           :{required:true,number:true},
+            txtPatrimonio   :{required:true,minlength:6,maxlength:7},
+            txtEquipamento  :{required:true},
+            txtFabricante   :{required:true},
+            modelo          :{required:true},
+            txtLocalidade   :{required:true},
+            txtMotivo       :{required:true},
+            txtObservacoes  :{required:true, minWords: 5}
+        },
+        submitHandler: function(){
+           adicionaItemEntrada(t,e);
+        }
+    });
+               
+}
+
+function adicionaItemEntrada(t,e){
+    var dados = $('.entrada').serialize();
+        $.ajax({
+                    type: "POST",
+                    url: "./app/sistema/ajax/add-itens-entrada.php",
+                    data: dados+'&tecnico='+t+'&entrada='+e,
+                    success: function( res )
+                    {
+                        if($.isNumeric(res)){
+                            if(res==1){modal("<span class='alert alert-warning text-primary text-uppercase'>Existe uma entrada em aberto para o <strong>patrimonio</strong> informado!</span>");}
+                            else{modal("<span class='alert alert-warning text-primary text-uppercase'>existe uma entrada em aberto para a <strong>ordem</strong> informada!</span>");}
+                        }
+                        else{
+                            $('#resposta-entrada').html(res); 
+                            $('#txtOs').focus(); 
+                            $("#iten-entrada input,select, textarea").val('');
+                            $("#txtTecnico").val(t);
+                        }
+                    }
+            });
+         return false;
+}
+
+
+/*#######  FIM DAS FUNCOES QUE AUXILIA E VALIDA ITENS E ENTRADAS */
+
+
+
+function setaLocalidade(cr)
+{
+    if(cr == 30 || cr == 31 || cr == 32 || cr == 33){
+        modal("<span class='alert alert-warning text-primary text-uppercase'>para essa localidade é necessário informar o cr do local</span>");
+    }
+    else
+    {
+        options = $('#txtLocalidade option');
+        values = $.map(options, function (option) {
+            return option.value;
+        });
+        if (cr !== '')
+        {
+            if ($.inArray(cr, values) !== -1)
+            {
+                $('#txtLocalidade').val(cr);
+                $("#txtLocalidade").attr('value', cr);
+            }
+            else if (cr.trim()!= '')
+            {
+                $.post('./app/sistema/ajax/checacr.php',
+                {
+                    cr: cr
+                }, function (res)
+                    {
+                    if ($.isNumeric(res)){
+                        $('#txtLocalidade').attr('value', res);
+                        $('#txtLocalidade').val(res);                    
+                    } else
+                    {
+                      $('#txtCodLocal').val('').focus();
+                       modal(res); 
+                    }
+                });
+            } 
+        }
+    }
+}
+
+
+function checaCadastroPatrimonio(p)
+{
+    if($.trim(p)!=''){
+        $.post('./app/sistema/ajax/checa-cadastro-patrimonio.php',
+                {
+                    patrimonio: p
+                }, function (res)
+        {
+            if (!$.isNumeric(res))
+            {
+                dados = res.split(',');
+
+                $("#valEquipamento").attr('value', dados[1]);
+                $('#txtEquipamento').val(dados[0]).attr('readonly',true).css({'background-color':'#EBEBE4'});
+                $('#valLocalidade').attr('value',dados[3]);
+                $('#txtLocalidade').val(dados[2]).attr('readonly',true).css({'background-color':'#EBEBE4'});
+                $("#valFabricante").attr('value', dados[6]);
+                $('#txtFabricante').val(dados[5]).attr('readonly',true).css({'background-color':'#EBEBE4'});
+                $('#txtCr').val(dados[4]).attr('readonly',true).css({'background-color':'#EBEBE4'});
+                $('#txtAndar').val(dados[10]).attr('readonly',true).css({'background-color':'#EBEBE4'});
+                $('#txtSala').val(dados[11]).attr('readonly',true).css({'background-color':'#EBEBE4'});
+                $('#txtModelo').attr('value',dados[1]);
+                $('#txtModelo').val(dados[1]).css({'background-color':'#EBEBE4'});
+                
+                getModelos(dados[6],dados[8]);
+                
+            }
+            else{
+                switch(res){
+                    case '1':
+                        modal("<span class='alert alert-warning text-primary text-uppercase'>Já existe uma entrada com esse patrimônio!</span>");
+                        break;
+                    case '2':
+                        modal("<div class='alert alert-warning text-primary text-uppercase'><p>Já existe uma entrada para O.S informada!</p>");
+                        break;
+                    case '3':
+                         var p = $('#txtPatrimonio').val();
+                        modal("<div class='alert alert-warning text-primary text-uppercase'><p>Patrimônio não Cadastrado!</p>"+
+                               "<p>Deseja Cadastra-lo? <a href='index.php?ref=cadastra/equipamento&p="+p+"'>Sim</a></p></div>");
+                        break;
+                    default:
+                    modal("<p class='alert alert-warning text-primary text-uppercase'>OPS! Não faço a mínima idéia do porque que aconteceu!</p>"+
+                            "<p class='alert alert-warning text-primary text-uppercase'>Por favor feche seu Navegador e tente Novamente!</p>"+
+                            "<p class='alert alert-warning text-primary text-uppercase'>Se o problema persistir... Ferrou!</p>");                   
+                }
+            }
+        });
+    }
+}
 
 /*MOSTRA E OCUPA CAMPOS OPCIONAIS NO CADASTRO DE EQUIPAMENTO*/
 function setCadEquipamento(e){
@@ -226,7 +374,64 @@ $(document).ready(function(){
         }
     });/*FIM CADASTRO OFFICE*/
     
-    
+/*EDITA-QUIPAMENTO*/
+$("#form-edita-equipamento").validate({
+    rules:{
+        patrimonio:{required:true,minlength:6,maxlength:7}
+    },
+    submitHandler: function(){
+        var dados = $("#form-edita-equipamento").serialize();
+            $.ajax({
+                url: './app/sistema/ajax/edita-equipamento.php',
+                data: dados,
+                type:'POST',
+                dataType:'HTML',
+            beforeSend:function(){
+           $('.form_load').fadeIn(500);
+            },
+            success: function (res){
+                if($.isNumeric(res)){
+                   location.href='index.php?ref=edita/equipamento&id='+res;
+                }else{modal("nenhum registro encontrado para o patrimonio informado!");$('.form_load').fadeOut(500);}
+            }
+        });
+        return false;
+    }
+});
+
+$('#edita-equipamento').validate({
+   rules:{
+       patrimonio   :{required:true},
+       numSerie     :{required:true},
+       fabricante   :{required:true},
+       modelo       :{required:true},
+       equipamento  :{required:true}
+   },
+   submitHandler: function(){
+        var dados = $("#edita-equipamento").serialize();
+            $.ajax({
+                url: './app/sistema/ajax/edita-equipamento.php',
+                data: dados,
+                type:'POST',
+                dataType:'HTML',
+            beforeSend:function(){
+           $('.form_load').fadeIn(500);
+            },
+            success: function (res){
+               modal(res);
+            }
+        });
+        return false;
+    }
+});
+/*
+    $('#edita-equipamento').hide();
+    $('.form_load').fadeOut(500);
+    $('.dados-edita').html(res).slideDown(500);
+ 
+ */
+
+/*FIM EDITA-PATRIMONIO*/
     /*CADASTRO DE EQUIPAMENTO*/
     $('#cad-equip').validate({
             rules:{
@@ -429,11 +634,6 @@ $(document).ready(function(){
 
 
 /*FIM DAS FUNCOES QUE VALIDA FOMULARIOS*/
-
-
-
-
-
 
 
 /*FUNCOES DE CADASTRO*/

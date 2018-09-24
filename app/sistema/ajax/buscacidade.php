@@ -1,10 +1,8 @@
 <?php
 require_once '../../config/config.inc.php';
-$sql = new Read();
+require_once '../../config/post.inc.php';
 
-extract(filter_input_array(INPUT_POST, FILTER_DEFAULT));
-
-$estado = strip_tags(trim(intval($estado)));
+$sql        = new Read();
 
 if(!empty($estado)):
 

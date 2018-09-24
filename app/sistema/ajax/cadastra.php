@@ -1,10 +1,7 @@
 <?php
 require_once '../../config/config.inc.php';
 require_once '../../funcoes/func.inc.php';
-$getPost = filter_input_array(INPUT_POST,FILTER_DEFAULT);
-$setPost = array_map("strip_tags", $getPost);
-$post   = array_map("trim", $setPost);
-extract($post);//extraindo os dados
+require_once '../../config/post.inc.php';
 $sqlCad = new Create();
 $sqlCons = new Read();
 $texto = new Check();
