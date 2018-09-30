@@ -12,7 +12,7 @@ $sql = new Read();
                             JOIN tb_sys018 FAB ON FAB.id_fabricante = EQP.fabricante
                             JOIN tb_sys022 MO ON MO.id_modelo = EQP.modelo
                             JOIN tb_sys008 LOC ON LOC.id = EQP.id_local
-                            JOIN tb_sys010 AVA ON AVA.id_item_entrada = I_ENT.id AND I_ENT.status = :STATUS ORDER BY local", "STATUS=4");
+                            JOIN tb_sys010 AVA ON AVA.id_item_entrada = I_ENT.id AND I_ENT.status = :STATUS GROUP BY EQP.patrimonio ORDER BY local", "STATUS=4");
             
 $data = new Datas();
 $dt_fim = date("d/m/Y");
@@ -29,10 +29,7 @@ $dt_fim = date("d/m/Y");
         <th class="text-center">dt.avaliação</th>
         <th>Pendência</th>
     </tr>
-<?php 
-    $result = $sql->getResult();
-    foreach ($result as $row):
-?>
+<?php foreach ($sql->getResult() as $row):?>
     <tr class="text-uppercase">
         <td class="text-center cursor-pointer"><?php print $row['os']?></td>
         <td class="text-center cursor-pointer"><?php print $row['patrimonio']?></td>
@@ -43,5 +40,10 @@ $dt_fim = date("d/m/Y");
         <td class="text-center"><?php print $data->setData($row['dtent'], $dt_fim);?></td>
     </tr>
     <?php endforeach;?>
+    <tr>
+        <th colspan="5">&nbsp;</th>
+        <th class="text-center">Total</th>
+        <th class="text-center"><?=$sql->getRowCount();?></th>
+    </tr>
 </table>
 <?php endif;

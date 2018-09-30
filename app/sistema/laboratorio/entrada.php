@@ -134,7 +134,7 @@
                     <button type="button" onclick="validaItemEntrada($('#txtTecnico').val(),$('#numeroEntrada').val()); $('#iten-entrada').submit();">Adicionar Equipamento</button>
                 </div>
                 <div>
-                    <button type="button" >Finalizar Entrada</button>
+                    <button type="button" onclick="finalizaEntrada($('#numeroEntrada').val());" >Finalizar Entrada</button>
                 </div>
             </div>
         </div>

@@ -7,7 +7,6 @@ $sqlCons = new Read();
 $texto = new Check();
 
 //var_dump($post);
-
 switch ($acao):
     case 'equipamento':
             $sqlCons->FullRead("SELECT patrimonio,serie FROM tb_sys004 WHERE patrimonio = :PAT or serie = :SERIE", "PAT="."{$texto->setTexto($patrimonio)}"."&SERIE="."{$texto->setTexto($serie)}"."");
@@ -227,6 +226,78 @@ switch ($acao):
                     print "<p>{$sqlCad->getError()}</p>";
                 endif;
             endif;            
+        break;
+    case 'modelo':
+        unset($post['acao']);
+        $post['modelo'] = $texto->setTexto($post['modelo']);
+        $sqlCons->FullRead("SELECT modelo FROM tb_sys022 WHERE modelo = :MODELO", "MODELO="."{$post['modelo']}"."");
+        if($sqlCons->getRowCount()==0):
+            $sqlCad->ExeCreate("tb_sys022",$post);
+                if($sqlCad->getResult()):
+                    print "<span class=\"alert alert-success\" role=\"alert\">Cadastro Realizado com sucesso!</span>";
+                else:
+                    print "<p>{$sqlCad->getError()}</p>";
+                endif;
+        else:
+           print "<span class=\"alert alert-warning\" role=\"alert\">Modelo informado já possui cadastro!</span>";
+        endif;
+        break;
+    case 'peca':
+            unset($post['acao']);
+            session_start();
+            $post['dt_cadastro']=date('Y-m-d H:i:s');$post['tec_cad_nome']=$_SESSION['UserLogado']['nome'];$post['ip_cadastro'] = IP;$post['host_cadastro']=HOST;
+            $post['descricao_peca']=$texto->setTexto($post['descricao_peca']);
+            $sqlCons->FullRead("SELECT id_peca FROM tb_sys015 WHERE descricao_peca = :DESCP", "DESCP="."{$post['descricao_peca']}"."");
+            if($sqlCons->getRowCount()== 0):
+                $sqlCad->ExeCreate("tb_sys015",$post);
+                if($sqlCad->getResult()):
+                    $codigoPeca = $sqlCad->getResult();
+                    $sqlCad->ExeCreate("tb_sys027", ["codigo_peca"=>$codigoPeca,"quantidade"=>0]);
+                    print "<span class=\"alert alert-success\" role=\"alert\">Cadastro Realizado com sucesso! <b>Código: </b>{$codigoPeca}</span>";
+                else:
+                    print "<p>{$sqlCad->getError()}</p>";
+                endif;
+            else:    
+                print "<span class=\"alert alert-warning\" role=\"alert\">peça informada já possui cadastro!</span>";
+            endif;
+        break;
+    case 'fornecdor':
+            unset($post['acao']);
+            $post['nome_fornecedor']=$texto->setTexto($post['nome_fornecedor']);
+            $sqlCons->FullRead("SELECT nome_fornecedor FROM tb_sys019 WHERE nome_fornecedor = :FORNE", "FORNE="."{$post['nome_fornecedor']}"."");
+            if($sqlCons->getRowCount()== 0):
+                $sqlCad->ExeCreate("tb_sys019",$post);
+                if($sqlCad->getResult()):
+                    print "<span class=\"alert alert-success\" role=\"alert\">Cadastro Realizado com sucesso!";
+                else:
+                    print "<p>{$sqlCad->getError()}</p>";
+                endif;
+            else:    
+                print "<span class=\"alert alert-warning\" role=\"alert\">Fornecedor já possui cadastro!</span>";
+            endif;
+        break;
+    case 'recebepeca':
+        $data   = new Datas();
+        $atu    = new Update();
+        unset($post['acao']);
+        $post['preco_peca'] = str_replace(",",".",$post['preco_peca']);
+        $post['dt_recebimento'] = $data->setDt($post['dt_recebimento']).' '.date("H:i:s");
+        $post['peca_serie']=$texto->setTexto($post['peca_serie']);
+        $post['observacao']=$texto->setTexto($post['observacao']);
+        $sqlCons->FullRead("SELECT quantidade FROM tb_sys027 WHERE codigo_peca = :CP", "CP={$post['peca_id']}");
+        $sqlCons->FullRead("SELECT peca_serie FROM tb_sys020 WHERE peca_serie = :PECASERIE", "PECASERIE={$post['peca_serie']}");  
+        $quantidade = ((int)$sqlCons->getResult()[0]['quantidade'] + $post['qtde']);
+        if($sqlCons->getRowCount() == 0):
+            $sqlCad->ExeCreate("tb_sys020", $post);
+            if($sqlCad->getResult()):
+                $atu->ExeUpdate("tb_sys027", ["quantidade"=>$quantidade], "WHERE codigo_peca = :CODIGOPECA", "CODIGOPECA={$post['peca_id']}");
+                print "<span class=\"alert alert-success\" role=\"alert\">Recebimento Realizado com sucesso!";
+            else:
+                print "<p>{$sqlCad->getError()}</p>";
+            endif;
+        else:
+            print "Sua entrada nao pode ser feita porque consta um registro com número de série informado! por favor verifique!";
+        endif;
         break;
     default :
           print "<span class=\"alert alert-warning\" role=\"alert\">Erro ao cadastrar! ação nao encontrada!,

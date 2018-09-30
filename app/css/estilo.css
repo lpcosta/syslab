@@ -89,6 +89,7 @@ header > div#div-user-logado{background-color: #B1ABAC;width: 140px;height: 38px
 @media (max-width: 1024px) {
  .tabs .tabela-tab th,td {font-size: 10pt;}
  .grafico-home{width: 300px; height: 300px; margin: 0 auto;}
+ #txtPeca{font-size: 9pt;}
 }
 
 

@@ -25,4 +25,15 @@ function PHPErro($ErrNo, $ErrMsg, $ErrFile, $ErrLine) {
     endif;
 }
 
+function Valor($valor) {
+       $verificaPonto = ".";
+       if(strpos("[".$valor."]", "$verificaPonto")):
+           $valor = str_replace('.','', $valor);
+           $valor = str_replace(',','.', $valor);
+           else:
+             $valor = str_replace(',','.', $valor);   
+       endif;
+
+       return $valor;
+}
 set_error_handler('PHPErro');

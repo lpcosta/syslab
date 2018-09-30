@@ -14,6 +14,8 @@ define('SITEDESC', 'Sistema responsavel pelo controle de equipamentos em Laborat
 // DEFINE A BASE DO SITE ####################
 define('HOME', 'https://localhost/syslab');
 //define('THEME', 'cidadeonline');
+define('IP',$_SERVER['REMOTE_ADDR']);
+define('HOST',gethostbyaddr(IP));
 
 //define('INCLUDE_PATH', HOME . DIRECTORY_SEPARATOR . 'themes' . DIRECTORY_SEPARATOR . THEME);
 //define('REQUIRE_PATH', 'themes' . DIRECTORY_SEPARATOR . THEME);
@@ -28,7 +30,7 @@ spl_autoload_register(function($class){
     elseif(file_exists("../../classes/".$class.".class.php")):
         require_once("../../classes/".$class.".class.php");
     else:
-        echo "<div class=\"alert alert-warning \" role=\"alert\">"
+        echo "<div class=\"alert alert-warning\" role=\"alert\">"
             ."Não foi possível incluir $Class.class.php!"
             ."</div>";
         die;

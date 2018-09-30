@@ -9,7 +9,7 @@ class Datas {
     private $res;
     private $difenca;
     private $dias;
-    
+    private $data;
     public function setData($dt_ini,$dt_fim){
         $this->dtini = str_replace('-', '/',$dt_ini);
         $this->dtfim = str_replace('-','/',$dt_fim);   
@@ -20,6 +20,12 @@ class Datas {
         $data_incio = mktime(0, 0, 0, date('m') , 1 , date('Y'));
         $data_fim = mktime(23, 59, 59, date('m'), date("t"), date('Y'));
         return [date('Y-m-d',$data_incio),date('Y-m-d',$data_fim)];
+     }
+     
+     public function setDt($dt) {
+         $this->data = str_replace("/", "-", $dt);
+         $this->data = date_format(date_create_from_format('d-m-Y', $this->data), 'Y-m-d');
+         return $this->data;
      }
 
     /*FUNÇÕES PRIVADAS*/

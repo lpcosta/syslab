@@ -3,11 +3,12 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/xampp/htdocs/syslab/app/classes/Update.class.php</file>
+            <file>file:/C:/xampp/htdocs/syslab/app/sistema/ajax/add-itens-saida.php</file>
             <file>file:/C:/xampp/htdocs/syslab/app/js/gobal.js</file>
-            <file>file:/C:/xampp/htdocs/syslab/app/sistema/edita/equipamento.php</file>
-            <file>file:/C:/xampp/htdocs/syslab/app/css/estilo.css</file>
-            <file>file:/C:/xampp/htdocs/syslab/app/sistema/ajax/edita-equipamento.php</file>
+            <file>file:/C:/xampp/htdocs/syslab/app/sistema/edita/atualiza-banco.php</file>
+            <file>file:/C:/xampp/htdocs/syslab/app/classes/Conexao.class.php</file>
+            <file>file:/C:/xampp/htdocs/syslab/app/sistema/ajax/finaliza-saida.php</file>
+            <file>file:/C:/xampp/htdocs/syslab/app/sistema/laboratorio/entrada.php</file>
         </group>
     </open-files>
 </project-private>

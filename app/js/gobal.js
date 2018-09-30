@@ -5,6 +5,7 @@ $( ".tabs" ).tabs({
           effect: "blind", duration: 500
       }
    });
+
 /*REALIZA LOGIN*/
 function fctLogin()
 {
@@ -23,13 +24,23 @@ function fctLogin()
                $('.j_Aviso').addClass('alert alert-warning').html(res).slideDown(800);
            }else{
                setTimeout(function(){
-                   location.href='http://localhost/syslab/index.php?ref=home';
+                   location.href='https://localhost/syslab/';
                },1000)
            }
           }
       });
 }/*FIM LOGIN*/
-
+$(".data").datepicker({
+    defaultDate: "getDate()",
+    dateFormat: 'dd/mm/yy',
+    dayNames: ['Domingo','Segunda','Terça','Quarta','Quinta','Sexta','Sábado'],
+    dayNamesMin: ['D','S','T','Q','Q','S','S','D'],
+    dayNamesShort: ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb','Dom'],
+    monthNames: ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'],
+    monthNamesShort: ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'],
+    nextText: 'Próximo',
+    prevText: 'Anterior'
+}).datepicker("setDate", new Date());
 
 /*PEGA OS MODELOS DE EQUIPAMENTO CONFORME O FABRICANTE ESCOLHIDO*/     
 function getModelos(fab,mod = null)
@@ -88,10 +99,10 @@ function buscaCep(c)
     });
 }
 
-/*####### FUNCOES QUE AUXILIA VALIDA E VERIFICA OS ITENS E AS ENTRADAS */
+/*####### FUNCOES QUE AUXILIA VALIDA E VERIFICA OS ITENS E AS ENTRADAS ###### */
 
 function verificaEntrada(t){
-    $.post('./app/sistema/ajax/entrada.php',{tecnico: t},function (res)
+    $.post('./app/sistema/ajax/cria-entrada.php',{tecnico: t},function (res)
         {
             if ($.isNumeric(res)) {
                $("#txtTecnico").attr('disabled', true);
@@ -106,52 +117,126 @@ function verificaEntrada(t){
 }
 
 function validaItemEntrada(t,e){
-   
     $('#iten-entrada').validate({
         rules:{
             txtOs           :{required:true,number:true},
             txtPatrimonio   :{required:true,minlength:6,maxlength:7},
-            txtEquipamento  :{required:true},
-            txtFabricante   :{required:true},
-            modelo          :{required:true},
-            txtLocalidade   :{required:true},
             txtMotivo       :{required:true},
             txtObservacoes  :{required:true, minWords: 5}
         },
         submitHandler: function(){
            adicionaItemEntrada(t,e);
         }
-    });
-               
+    });            
 }
 
 function adicionaItemEntrada(t,e){
     var dados = $('.entrada').serialize();
-        $.ajax({
-                    type: "POST",
-                    url: "./app/sistema/ajax/add-itens-entrada.php",
-                    data: dados+'&tecnico='+t+'&entrada='+e,
-                    success: function( res )
-                    {
-                        if($.isNumeric(res)){
-                            if(res==1){modal("<span class='alert alert-warning text-primary text-uppercase'>Existe uma entrada em aberto para o <strong>patrimonio</strong> informado!</span>");}
-                            else{modal("<span class='alert alert-warning text-primary text-uppercase'>existe uma entrada em aberto para a <strong>ordem</strong> informada!</span>");}
-                        }
-                        else{
-                            $('#resposta-entrada').html(res); 
-                            $('#txtOs').focus(); 
-                            $("#iten-entrada input,select, textarea").val('');
-                            $("#txtTecnico").val(t);
-                        }
+    $.ajax({
+                type: "POST",
+                url: "./app/sistema/ajax/add-itens-entrada.php",
+                data: dados+'&tecnico='+t+'&entrada='+e,
+                success: function( res )
+                {
+                    if($.isNumeric(res)){
+                        if(res==1){modal("<span class='alert alert-warning text-primary text-uppercase'>Existe uma entrada em aberto para o <strong>patrimonio</strong> informado!</span>");}
+                        else{modal("<span class='alert alert-warning text-primary text-uppercase'>existe uma entrada em aberto para a <strong>ordem</strong> informada!</span>");}
                     }
-            });
-         return false;
+                    else{
+                        $('#resposta-entrada').html(res); 
+                        $('#txtOs').focus(); 
+                        $("#iten-entrada input,select, textarea").val('');
+                        $("#txtTecnico").val(t);
+                    }
+                }
+        });
+    return false;
 }
 
+function finalizaEntrada(e){
+    $.ajax({
+            type: "POST",
+            url: "./app/sistema/ajax/finaliza-entrada.php",
+            data: { entrada: e},
+            success: function( res )
+            {modal(res);}
+        });
+    return false;
+}
 
 /*#######  FIM DAS FUNCOES QUE AUXILIA E VALIDA ITENS E ENTRADAS */
 
+/*#### SAIDAS ####*/
+function checaSaida(s){
+    if(s=='tecnico'){
+        $('#txtFunc').hide();
+        $('#txtTecnico').show();
+        $('#chooseSaida').attr('disabled',true);
+    }
+    else if(s=='funcionario'){
+       $('#txtTecnico').hide();
+       $('#txtFunc').show();
+       $('#chooseSaida').attr('disabled',true);
+   }
+   else{
+       $('#txtTecnico').hide();
+       $('#txtFunc').hide();
+       $('#chooseSaida').attr('disabled',true);
+   }
+}
 
+function verificaSaida(t){
+    var dados = $('#form-cria-saida').serialize();
+    $.post('./app/sistema/ajax/cria-saida.php',dados+'&tiposaida='+t,function (res){
+        if($.isNumeric(res)){
+            $('#txtSaida').html('Saída nº'+' '+res);
+            $('#form-cria-saida').slideUp(500);
+            $.post('./app/sistema/ajax/add-itens-saida.php',
+                {saida: res}, function (res){
+                   $('#itens-saida').html(res).slideDown(500);
+                });
+        }
+        else{
+            modal(res);
+        }
+        });
+}
+
+function addItemSaida(){
+
+    $("#add-itens-saida").validate({
+        rules:{
+            patrimonio:{required:true}
+        },
+         messages: {patrimonio: "*" },
+        submitHandler: function(){
+            var dados =  $("#add-itens-saida").serialize();
+            $.ajax({
+                    type: "POST",
+                    url: "./app/sistema/ajax/add-itens-saida.php",
+                    data: dados,
+                    success: function( res )
+                    {
+                        $('#itens-saida').html(res).slideDown(500);
+                    }
+                });
+            return false;
+            }
+    });
+}
+
+function finalizaSaida(s){
+    $.ajax({
+            type: "POST",
+            url: "./app/sistema/ajax/finaliza-saida.php",
+            data: { saida: s},
+            success: function( res )
+            {modal(res);}
+        });
+    return false;
+}
+
+/*#### FIM SAIDAS #####*/
 
 function setaLocalidade(cr)
 {
@@ -189,6 +274,37 @@ function setaLocalidade(cr)
                 });
             } 
         }
+    }
+}
+
+function setaPeca(peca)
+{
+    var options = $('#txtPeca option');
+    values = $.map(options, function (option) {
+        return option.value;
+    });
+    if (peca !== '')
+    {
+        if ($.inArray(peca, values) !== -1)
+        {
+            var d = new Date().getTime();
+            $.post('./app/sistema/ajax/busca-cod-peca.php',
+            {peca:peca}, function (res){
+               if(res){
+                $("div.div-qtde").remove();$("#txtPecaSerie").attr({'value':d,'readonly':true});
+                $("#txtObservacao").before("<div class='col-md form-inline div-qtde'><label>Quantidade </label><input type='text'  name='qtde' class='form-control' onblur='$('#txtQtde').attr('value',this.value)' /></div>" );
+                }
+                else{$("div.div-qtde").remove();$("#txtPecaSerie").attr({'value':'','readonly':false});}
+                });
+            $('#txtCodPeca').val(peca);
+            $('#txtPeca').val(peca);
+            $("#txtPeca").attr('value', peca);
+        }
+        else 
+        {
+           $("#txtPeca").val('');
+           modal("Peça Nao Cadastrada"); 
+        } 
     }
 }
 
@@ -286,15 +402,32 @@ function setCadEquipamento(e){
 /*mascaras de campos*/
 $(function() {
         $.mask.definitions['~'] = "[+-]";
-        $(".m_key").mask("99999-99999-99999-99999-99999");
+        /*$(".m_key").mask("XXXXX-XXXXX-XXXXX-XXXXX-XXXXX");*/
         $("#txtIp").mask("999.999.999.999");
         $("#txtContatoUser").mask("(99)9999-9999");
         $("#txtCelularUser").mask("(99)99999-9999");
         $("#txtCnpj").mask("99.999.999/9999-99");
         $("#txtContato").mask("(99)9999-9999");
         $("#txtCep").mask("99.999-999");
+        $(".data").mask("99/99/9999");
     });
    
+   
+function maskKey(el)/*mascara para chave key de windows e office */
+{
+    var e = $(el).val();
+    if (event.keyCode != 8)
+    {
+        if (e.length === 5)
+            $(el).val(e + '-');
+        if (e.length === 11)
+            $(el).val(e + '-');
+        if (e.length === 17)
+            $(el).val(e + '-');
+        if (e.length === 23)
+            $(el).val(e + '-');
+    }
+}
 /*fim das mascaras de campos*/
 
 /*valida CNPJ*/
@@ -390,6 +523,7 @@ $("#form-edita-equipamento").validate({
            $('.form_load').fadeIn(500);
             },
             success: function (res){
+                $('.form_load').fadeOut(500);
                 if($.isNumeric(res)){
                    location.href='index.php?ref=edita/equipamento&id='+res;
                 }else{modal("nenhum registro encontrado para o patrimonio informado!");$('.form_load').fadeOut(500);}
@@ -418,18 +552,40 @@ $('#edita-equipamento').validate({
            $('.form_load').fadeIn(500);
             },
             success: function (res){
+               $('.form_load').fadeOut(500);
                modal(res);
             }
         });
         return false;
     }
 });
-/*
-    $('#edita-equipamento').hide();
-    $('.form_load').fadeOut(500);
-    $('.dados-edita').html(res).slideDown(500);
- 
- */
+
+
+$('#baixa-peca').validate({
+   rules:{
+       peca_id          :{required:true},
+       ordem_servico    :{required:true}
+   },
+   submitHandler: function(){
+        var dados = $("#baixa-peca").serialize();
+            $.ajax({
+                url: './app/sistema/ajax/baixa-peca-estoque.php',
+                data: dados,
+                type:'POST',
+                dataType:'HTML',
+            beforeSend:function(){
+           $('.form_load').fadeIn(500);
+            },
+            success: function (res){
+            $('.form_load').fadeOut(500);
+               modal(res);
+            }
+        });
+        return false;
+    }
+});
+
+
 
 /*FIM EDITA-PATRIMONIO*/
     /*CADASTRO DE EQUIPAMENTO*/
@@ -632,6 +788,48 @@ $('#edita-equipamento').validate({
           
     });
 
+$("#cadastra-modelo-equipamento").validate({
+    rules:{
+        modelo          :{required:true},
+        fabricante_id   :{required:true}
+    },
+    submitHandler: function(){
+        cadastra('./app/sistema/ajax/cadastra.php','#cadastra-modelo-equipamento');
+    }
+});
+
+
+$("#cadastra-peca").validate({
+    rules:{
+        descricao_peca :{required:true},
+        categoria_id   :{required:true}
+    },
+    submitHandler: function(){
+        cadastra('./app/sistema/ajax/cadastra.php','#cadastra-peca');
+    }
+});
+
+$("#cadastra-fornecdor").validate({
+    rules:{
+        nome_fornecedor :{required:true}
+    },
+    submitHandler: function(){
+        cadastra('./app/sistema/ajax/cadastra.php','#cadastra-fornecdor');
+    }
+});
+
+$("#recebe-peca").validate({
+    rules:{
+        dt_recebimento  :{required:true},
+        peca_id         :{required:true},
+        peca_serie      :{required:true},
+        fornecedor_id   :{required:true},
+        preco_peca      :{required:true}
+    },
+    submitHandler: function(){
+        cadastra('./app/sistema/ajax/cadastra.php','#recebe-peca');
+    }
+});
 
 /*FIM DAS FUNCOES QUE VALIDA FOMULARIOS*/
 
@@ -688,8 +886,8 @@ function modal(html)
         heigth      : "auto",
         modal       : true,
         minHeight   : 180,
-        show    :{effect: "fold",duration:1000},
-        hide    : {effect: "fold",duration:1000},      
+        show    :{effect: "slideDown",duration:1000},
+        hide    : {effect: "slideUp",duration:1000},      
         buttons: {
           "Ok": function(){$( this ).dialog( "close" );}
         }
@@ -704,7 +902,7 @@ function redefineSenha()
         heigth      : "auto",
         modal       : true,
         minHeight   : 250,
-        show    :{effect: "fold",duration:1000},
-        hide    : {effect: "fold",duration:1000}      
+        show    :{effect: "slideDown",duration:1000},
+        hide    : {effect: "slideUp",duration:1000}      
     });
 }

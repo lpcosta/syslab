@@ -157,7 +157,7 @@ endif;
                     </div>
                     <div class="col form-inline">
                         <label>Key S.O</label>
-                        <input type="text" id="txtKeySo" name="key_so" value="<?=$sql->getResult()[0]['key_so']?>" class="m_key text-capitalize " size="26" placeholder="Chave de Ativação do Windows" />
+                        <input type="text" id="txtKeySo" name="key_so" value="<?=$sql->getResult()[0]['key_so']?>" class="text-capitalize " size="26" placeholder="Chave de Ativação do Windows" onkeyup="maskKey(this)" onkeypress="maskKey(this)" />
                     </div>
                     
                 </div>
@@ -183,7 +183,7 @@ endif;
                     </div>
                     <div class="col form-inline">
                         <label>Key Office</label>
-                        <input type="text" id="txtKeyOffice" name="key_office" class="m_key text-capitalize" size="26" placeholder="Chave de Ativação do Office" />
+                        <input type="text" id="txtKeyOffice" name="key_office" class="text-capitalize" size="26" placeholder="Chave de Ativação do Office" onkeyup="maskKey(this)" onkeypress="maskKey(this)" />
                     </div>
                 </div>
                 <div class="row">
@@ -237,8 +237,8 @@ endif;
                         <label>Status</label>
                         <select name="status">
                             <option selected value="<?=$sql->getResult()[0]['status']?>"><?=$sql->getResult()[0]['status']?></option>
-                            <option value="ativo">Normal</option>
-                            <option value="baixado">WideScreen</option>
+                            <option value="ativo">ativo</option>
+                            <option value="baixado">baixado</option>
                         </select>
                     </div>
                     <div class="col form-inline">

@@ -51,7 +51,7 @@ require_once './app/funcoes/func.inc.php';
                 <?php if(isset($_SESSION['UserLogado'])):?>
                 <img src="app/imagens/icons/avatar.png" alt="Avatar" title="<?= ucfirst($_SESSION['UserLogado']['nome'])?>" />
                 <p title="<?= ucfirst($_SESSION['UserLogado']['nome'])?>"><?=$_SESSION['UserLogado']['login']; ?></p>
-                <p><a href="index.php?ref=logoff">sair</a></p>
+                <p><a href="index.php?pg=logoff">sair</a></p>
                 <? endif;?>
             </div>
             <?php if(isset($_SESSION['UserLogado'])):?>
@@ -60,17 +60,21 @@ require_once './app/funcoes/func.inc.php';
                     <li><a href="index.php">Home</a></li>
                     <li><a href="#">Laboratório</a>
                         <ul class="submenu-1">
-                            <li><a href="index.php?ref=laboratorio">Laboratório</a></li>
-                            <li><a href="#" onclick="$('#searchos').slideDown(500);$('#txtBuscaOs').focus();">Consulta OS</a></li>
-                            <li><a href="index.php?ref=laboratorio/entrada">Entrada</a></li>
-                            <li><a href="#">Saída</a></li>
+                            <li><a href="index.php?pg=laboratorio">Laboratório</a></li>
+                            <li><a href="index.php?pg=laboratorio/entrada">Entrada</a></li>
+                            <li><a href="index.php?pg=laboratorio/saida">Saída</a></li>
                         </ul>
                     </li>
                     <li><a href="#">Estoque</a>
                         <ul class="submenu-1">
-                            <li><a href="#">Entrada de peça</a>
-                            <li><a href="#">Saida de peça</a></li>
-                            <li><a href="#">Nova Peça</a></li>
+                            <li><a href="#">Peça</a>
+                                <ul class="submenu-2">
+                                    <li><a href="index.php?pg=laboratorio/estoque/recebimento">Receber</a></li>
+                                    <li><a href="index.php?pg=laboratorio/estoque/baixa">Baixar</a></li>
+                                    <li><a href="index.php?pg=cadastra/peca">Cadastrar</a></li>
+                                </ul>
+                            </li>
+                            <li><a href="#">Termos</a></li>
                             <li><a href="#">Consulta</a></li>
                         </ul>
                     </li>
@@ -87,23 +91,25 @@ require_once './app/funcoes/func.inc.php';
                         <ul class="submenu-1">
                             <li><a href="#">Cadastrar</a>
                                 <ul class="submenu-2">
-                                    <li><a href="index.php?ref=cadastra/categoria">Categoria</a></li>
-                                    <li><a href="index.php?ref=cadastra/equipamento">Equipamento</a></li>
-                                    <li><a href="index.php?ref=cadastra/empresa">Empresa</a></li>
-                                    <li><a href="index.php?ref=cadastra/localidade">Localidade</a></li>
-                                    <li><a href="index.php?ref=cadastra/motivo-entrada">Motivo de Entrada</a></li>
-                                    <li><a href="index.php?ref=cadastra/secretaria">Secretaria</a></li>
-                                    <li><a href="index.php?ref=cadastra/status">Status</a></li>
-                                    <li><a href="index.php?ref=cadastra/usuario">Usuario</a></li>                                    
-                                    <li><a href="index.php?ref=cadastra/software">Windows/Office</a></li>
+                                    <li><a href="index.php?pg=cadastra/categoria">Categoria</a></li>
+                                    <li><a href="index.php?pg=cadastra/equipamento">Equipamento</a></li>
+                                    <li><a href="index.php?pg=cadastra/empresa">Empresa</a></li>
+                                    <li><a href="index.php?pg=cadastra/localidade">Localidade</a></li>
+                                    <li><a href="index.php?pg=cadastra/motivo-entrada">Motivo de Entrada</a></li>
+                                    <li><a href="index.php?pg=cadastra/secretaria">Secretaria</a></li>
+                                    <li><a href="index.php?pg=cadastra/status">Status</a></li>
+                                    <li><a href="index.php?pg=cadastra/usuario">Usuario</a></li>                                    
+                                    <li><a href="index.php?pg=cadastra/software">Windows/Office</a></li>
+                                    <li><a href="index.php?pg=cadastra/fornecedor">Fornecedor</a></li>
+                                   
                                 </ul>
                             </li>
                             <li><a href="#">Gerenciar</a>
                                 <ul class="submenu-2">
                                     <li><a href="#">Equipamento</a>
                                         <ul class="submenu-3">
-                                            <li><a href="#">Cadastrar Modelo</a></li>
-                                            <li><a href="index.php?ref=edita/equipamento">Editar</a></li>
+                                            <li><a href="index.php?pg=cadastra/modelo-equipamento">Cadastrar Modelo</a></li>
+                                            <li><a href="index.php?pg=edita/equipamento">Editar</a></li>
                                             <li><a href="#">Excluir</a></li>
                                         </ul>
                                     </li>
@@ -128,6 +134,7 @@ require_once './app/funcoes/func.inc.php';
                             <li><a href="#">Backup</a></li>
                             <li><a href="#">Logs</a></li>
                             <li><a href="#">Tabelas de Apoio</a></li>
+                            <li><a href="index.php?pg=edita/atualiza-banco">Atualizar Banco</a></li>
                         </ul>
                     </li>
                 </ul> 
@@ -149,8 +156,8 @@ require_once './app/funcoes/func.inc.php';
         <main>
 
             <?php
-            if (isset($_GET['ref']) && !empty($_GET['ref'])):
-                $includepatch = "./app/sistema/" . strip_tags(trim($_GET['ref']) . '.php');
+            if (isset($_GET['pg']) && !empty($_GET['pg'])):
+                $includepatch = "./app/sistema/" . strip_tags(trim($_GET['pg']) . '.php');
             else:
                 $includepatch = "./app/sistema/home.php";
             endif;
@@ -161,12 +168,13 @@ require_once './app/funcoes/func.inc.php';
             elseif(isset($_SESSION['UserLogado'])&& file_exists($includepatch)):
                 
                     require_once("{$includepatch}");
-            elseif(isset($_SESSION['UserLogado']) && !isset($_GET['ref'])):
+            elseif(isset($_SESSION['UserLogado']) && !isset($_GET['pg'])):
                    require_once("{$includepatch}");
             else:
-                echo "<div class=\"alert alert-warning \" role=\"alert\">";
-                print "Erro ao incluir tela {$_GET['ref']}.php!";
+                echo "<div class=\"alert alert-warning text-center \" role=\"alert\">";
+                print "Erro ao incluir tela";
                 echo "</div>";
+                include_once './app/sistema/404.php';
             endif;
             ?>
         </main>
