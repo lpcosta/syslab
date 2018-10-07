@@ -261,7 +261,7 @@ switch ($acao):
                 print "<span class=\"alert alert-warning\" role=\"alert\">peça informada já possui cadastro!</span>";
             endif;
         break;
-    case 'fornecdor':
+    case 'fornecedor':
             unset($post['acao']);
             $post['nome_fornecedor']=$texto->setTexto($post['nome_fornecedor']);
             $sqlCons->FullRead("SELECT nome_fornecedor FROM tb_sys019 WHERE nome_fornecedor = :FORNE", "FORNE="."{$post['nome_fornecedor']}"."");
@@ -279,14 +279,16 @@ switch ($acao):
     case 'recebepeca':
         $data   = new Datas();
         $atu    = new Update();
-        unset($post['acao']);
+        
         $post['preco_peca'] = str_replace(",",".",$post['preco_peca']);
         $post['dt_recebimento'] = $data->setDt($post['dt_recebimento']).' '.date("H:i:s");
         $post['peca_serie']=$texto->setTexto($post['peca_serie']);
         $post['observacao']=$texto->setTexto($post['observacao']);
         $sqlCons->FullRead("SELECT quantidade FROM tb_sys027 WHERE codigo_peca = :CP", "CP={$post['peca_id']}");
-        $sqlCons->FullRead("SELECT peca_serie FROM tb_sys020 WHERE peca_serie = :PECASERIE", "PECASERIE={$post['peca_serie']}");  
         $quantidade = ((int)$sqlCons->getResult()[0]['quantidade'] + $post['qtde']);
+        $sqlCons->FullRead("SELECT peca_serie FROM tb_sys020 WHERE peca_serie = :PECASERIE", "PECASERIE={$post['peca_serie']}");  
+        unset($post['acao']);
+        unset($post['qtde']);
         if($sqlCons->getRowCount() == 0):
             $sqlCad->ExeCreate("tb_sys020", $post);
             if($sqlCad->getResult()):

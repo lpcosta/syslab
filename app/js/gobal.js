@@ -1,11 +1,10 @@
 /* by Leandro Pereira*/
 
 $( ".tabs" ).tabs({
-      show: { 
-          effect: "blind", duration: 500
-      }
+      /*show: { 
+          effect: "blind", duration: 5
+      }*/
    });
-
 /*REALIZA LOGIN*/
 function fctLogin()
 {
@@ -321,19 +320,29 @@ function checaCadastroPatrimonio(p)
             {
                 dados = res.split(',');
 
-                $("#valEquipamento").attr('value', dados[1]);
                 $('#txtEquipamento').val(dados[0]).attr('readonly',true).css({'background-color':'#EBEBE4'});
-                $('#valLocalidade').attr('value',dados[3]);
                 $('#txtLocalidade').val(dados[2]).attr('readonly',true).css({'background-color':'#EBEBE4'});
-                $("#valFabricante").attr('value', dados[6]);
                 $('#txtFabricante').val(dados[5]).attr('readonly',true).css({'background-color':'#EBEBE4'});
                 $('#txtCr').val(dados[4]).attr('readonly',true).css({'background-color':'#EBEBE4'});
                 $('#txtAndar').val(dados[10]).attr('readonly',true).css({'background-color':'#EBEBE4'});
                 $('#txtSala').val(dados[11]).attr('readonly',true).css({'background-color':'#EBEBE4'});
-                $('#txtModelo').attr('value',dados[1]);
                 $('#txtModelo').val(dados[1]).css({'background-color':'#EBEBE4'});
                 
                 getModelos(dados[6],dados[8]);
+                
+                switch(dados[1]){
+                    case '1':
+                        $('#txtObservacoes').attr('placeholder','Obs: NÃO ESQUECER DE Informar se a Impressora veio com com ou sem toner e se a mesma é usada na rede ou via cabo usb.');
+                        break;
+                    case '5':
+                        $('#txtObservacoes').attr('placeholder','Obs: NÃO ESQUECER DE Informar se veio FONTE!');
+                        break;
+                    case '17':
+                        $('#txtObservacoes').attr('placeholder','Obs: NÃO ESQUECER DE Informar se veio FONTE!');
+                        break;
+                    default:
+                        false;
+                }
                 
             }
             else{
@@ -481,8 +490,7 @@ function ValidarCPF(cpfval){
 
 
 /*FUNÇÕES QUE VALIDA FORMULARIOS*/
-$(document).ready(function(){
-    $('#searchos').hide();
+
     /*CADASTRA WINDOWS*/
     $('#cadastra-windows').validate({
         rules:{
@@ -525,13 +533,14 @@ $("#form-edita-equipamento").validate({
             success: function (res){
                 $('.form_load').fadeOut(500);
                 if($.isNumeric(res)){
-                   location.href='index.php?ref=edita/equipamento&id='+res;
+                   location.href='index.php?pg=edita/equipamento&id='+res;
                 }else{modal("nenhum registro encontrado para o patrimonio informado!");$('.form_load').fadeOut(500);}
             }
         });
         return false;
     }
 });
+
 
 $('#edita-equipamento').validate({
    rules:{
@@ -560,6 +569,54 @@ $('#edita-equipamento').validate({
     }
 });
 
+$("#form-edita-peca").validate({
+    rules:{
+        id_peca:{required:true,number:true}
+    },
+     submitHandler: function(){
+        var dados = $("#form-edita-peca").serialize();
+            $.ajax({
+                url: './app/sistema/ajax/edita-peca.php',
+                data: dados,
+                type:'POST',
+                dataType:'HTML',
+            beforeSend:function(){
+           $('.form_load').fadeIn(500);
+            },
+            success: function (res){
+                $('.form_load').fadeOut(500);
+                if($.isNumeric(res)){
+                   location.href='index.php?pg=edita/peca&id='+res;
+                }else{modal("nenhum registro encontrado para o codigo informado!");$('.form_load').fadeOut(500);}
+            }
+        });
+        return false;
+    }
+});
+
+$("#edita-peca").validate({
+    rules:{
+        categoria_id:{required:true},
+        descricao_peca:{required:true}
+    },
+   submitHandler: function(){
+        var dados = $("#edita-peca").serialize();
+            $.ajax({
+                url: './app/sistema/ajax/edita-peca.php',
+                data: dados,
+                type:'POST',
+                dataType:'HTML',
+            beforeSend:function(){
+           $('.form_load').fadeIn(500);
+            },
+            success: function (res){
+               $('.form_load').fadeOut(500);
+               modal(res);
+            }
+        });
+        return false;
+    }
+});
 
 $('#baixa-peca').validate({
    rules:{
@@ -585,7 +642,18 @@ $('#baixa-peca').validate({
     }
 });
 
-
+function baixaPeca(peca,os,id){
+    $.ajax({
+            url: './app/sistema/ajax/baixa-peca-estoque.php',
+            data: {peca_id:peca,ordem_servico:os,bancada:id},
+            type:'POST',
+            dataType:'HTML',
+            success: function (res){
+                $('#btnAvalia').trigger('click');
+               modal(res);
+            }
+        });
+}
 
 /*FIM EDITA-PATRIMONIO*/
     /*CADASTRO DE EQUIPAMENTO*/
@@ -653,7 +721,7 @@ $('#baixa-peca').validate({
                     onkeyup:false
                 }
                 },
-            messages: {busca:"Patrimonio Inválido"},
+            messages: {busca:"*"},
             submitHandler: function(form){
                 var dados = $(form).serialize();
                 $.ajax({
@@ -681,6 +749,7 @@ $('#baixa-peca').validate({
                     onkeyup:false
                 }
                 },
+            messages: {busca:"*"},
             submitHandler: function(form){
                 var dados = $(form).serialize();
                 $.ajax({
@@ -730,7 +799,7 @@ $('#baixa-peca').validate({
         }
     });
 /*FIM DO CADASTRO DE STATUS*/
-});/*fim do document ready*/
+
 
 /*VALIDA CADSTRO DE LOCALIDADE*/
 
@@ -831,6 +900,57 @@ $("#recebe-peca").validate({
     }
 });
 
+
+$("#form-bancada-search").validate({
+    onfocusout: false,
+    onkeyup: false,
+    rules:{
+        patrimonio:{required:true,minlength:5,maxlength:7}
+    },
+    submitHandler: function(){
+        $.post('./app/sistema/ajax/avalia.php',
+                {
+                    busca: $("#txtPatrimonio").val()
+                }, function (res)
+                {  
+                    if($.isNumeric(res))
+                    {avaliaEquipamento(res);}
+                    else{modal(res);}
+                });
+    }
+});
+function avaliaEquipamento(id){
+    $.ajax({
+        url: './app/sistema/ajax/avalia.php',
+        data:{ id:id},
+        type:'POST',
+        dataType:'HTML',
+        success: function (res){
+           /*show_modal('#modal-avalia',res);*/
+           $(".conteudo-bancada").html(res);
+           $("#txtPatrimonio").val($("#valPatrimonio").val());
+        }
+    });
+}
+
+
+function validaAvaliacao(s,e,id)/*s=status,e=equipamento e p=patrimonio*/
+{
+    $.ajax({
+        url: './app/sistema/ajax/valida-avaliacao.php',
+        data:{equipamento:e,id:id},
+        type:'POST',
+        dataType:'HTML',
+        beforeSend:function(){
+           $('.frm_load').fadeIn(500);
+        },
+        success: function (res){
+           $('.frm_load').fadeOut(500);
+           modal(res);
+        }
+    });
+}
+
 /*FIM DAS FUNCOES QUE VALIDA FOMULARIOS*/
 
 
@@ -864,17 +984,22 @@ function show_modal(id,html)
     var winW = $(window).width();
     $(id).show();$(id).html(html);
     $(id).dialog({
-      resizable: false,
-      height: (winH / 1.1),
-      width: (winW / 1.1),
-      modal: true,
-      show    :{effect: "slideDown",duration:800},
-      hide    : {effect: "slideUp",duration:800},
-      buttons: {
-           Fechar: function() {
-            $( this ).dialog( "close" );
+        resizable: false,
+        height: (winH / 1.1),
+        width: (winW / 1.1),
+        modal: true,
+        show    :{effect: "slideDown",duration:800},
+        hide    : {effect: "slideUp",duration:800},
+        buttons: {
+          Fechar: function(){$( this ).dialog( "close" );}
         }
-      }
+        /*close: function() {
+            if(bancada){
+                $( this ).dialog( "close" );
+                 
+                  history.go(0);
+              }
+          }*/
     });
 }
 

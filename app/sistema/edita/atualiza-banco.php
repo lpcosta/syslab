@@ -4,7 +4,7 @@
     $ver = new Read();
     $cria = new Create();
     
-    $sql->ExeRead("tb_sys015");
+    $sql->ExeRead("tb_sys005");
     $pecas = 0;
     
     
@@ -26,3 +26,10 @@
       print "Peça ".$peca['id_peca']." Preço ".$peca['preco']." Atualizado com sucesso"."<br />";
     endforeach;
      */
+    $atu = new Update();
+    foreach ($sql->getResult() as $res):
+        $ver->ExeRead("tb_sys001 WHERE id = {$res['id_tecnico']}");
+        $atu->ExeUpdate("tb_sys005", ["nome_responsavel"=>$ver->getResult()[0]['nome']], "WHERE identrada = :ID", "ID={$res['identrada']}");
+        print "Entrada ".$res['identrada']."atualizada"."<br/>";
+    endforeach;
+    

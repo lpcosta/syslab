@@ -10,10 +10,11 @@
     </ul>
     <div id="baixa">
         <form class="form-cadastra" id="baixa-peca" onsubmit="return false;">
+            <input type="hidden" name="bancada" value="0" />
             <div class="row">
                 <div class="col-md form-inline">
                     <label>Peça</label>
-                    <input type="text" id="txtCodPeca" class="form-control" onblur="setaPeca(this.value);" onkeyup="if (event.keyCode == 13){$('#txtOrdem').focus();}" placeholder="Código..." size="3" autofocus="" />-<select id="txtPeca" name="peca_id" onkeydown="if (event.keyCode === 13) {
+                    <input type="text" id="txtCodPeca" class="form-control" onblur="setaPeca(this.value,'true');" onkeyup="if (event.keyCode == 13){$('#txtOrdem').focus();}" placeholder="Código..." size="3" autofocus="" />-<select id="txtPeca" name="peca_id" onkeydown="if (event.keyCode === 13) {
                                        $('#txtAndar').focus();
                                    }" onchange="setaPeca(this.value)" class="text-capitalize form-control" style="width: 60%; min-width: 300px;">
                     <option value="" class="localidade">Selecione</option>                        

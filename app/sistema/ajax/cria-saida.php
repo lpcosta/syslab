@@ -26,11 +26,12 @@ if($sql->getRowCount() == 0):
     print $cria->getResult();
 
 else:
+    
     if($sql->getResult()[0]['data']== $hoje):
         print $sql->getResult()[0]['id'];
     else:
         $saida = $sql->getResult()[0]['id'];
-        $sql->FullRead("SELECT id,id_saida FROM tb_sys009 WHERE id_saida = :ID", "ID:{$saida}");
+        $sql->FullRead("SELECT id_saida FROM tb_sys009 WHERE id_saida = :ID", "ID={$saida}");
         if($sql->getRowCount() > 0):
             $atu->ExeUpdate("tb_sys007", ['id_status'=>3], "WHERE id = :IDSAIDA", "IDSAIDA={$saida}");
             $cria->ExeCreate("tb_sys007", ["id_tecnico"=>$id_tecnico,

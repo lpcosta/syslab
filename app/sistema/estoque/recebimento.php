@@ -12,7 +12,7 @@
         
         <form class="form-cadastra" id="recebe-peca" action="javascript:void(0)" >
             <input type="hidden" name="acao" value="recebepeca" />
-            <input type="hidden" id="txtQtde" name="qtde" value=1 />
+            <input type="hidden" id="txtQtde" name="qtde" value='1' />
             <div class="row">
                 <div class="col-md form-inline">
                     <label>Data do Recebimento</label>

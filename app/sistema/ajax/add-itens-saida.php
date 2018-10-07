@@ -8,9 +8,6 @@ $cria = new Create();
 $atu  = new Update();
 $sql->FullRead("select T.nome,S.data from tb_sys001 T join tb_sys007 S ON S.id_tecnico = T.id and S.id = :ID", "ID={$saida}");
 ?>
-<script>
-    $('#txtPat').focus();
-</script>
 <div>
     <form id="add-itens-saida" class="form-cadastra" onsubmit="return false">
         <input type="hidden" id="txtNumSaida" name="saida" value="<?=$saida?>" />
@@ -26,15 +23,15 @@ $sql->FullRead("select T.nome,S.data from tb_sys001 T join tb_sys007 S ON S.id_t
         </div>
         <hr />
         <div class="row">
-            <div class="col form-inline">
-                <label>&nbsp;</label>
-                <input type="submit" class="btn btn-primary" onclick="finalizaSaida(<?=$saida?>)" value="Finalizar Saída" />
-            </div>
-            <div class="col form-inline">
-                <label>Patrimonio / OS &nbsp;</label>
+             <div class="col form-inline">
+                <label>Patrimonio/OS</label>
                 <input type="text" name="patrimonio"  size="10" class="form-control" autofocus="" />
                 &nbsp;
                 <input type="submit" class="btn btn-primary" id="txtPat" onclick="addItemSaida()" value="Realizar Saída" />
+            </div>
+            <div class="col form-inline">
+                <label>&nbsp;</label>
+                <input type="submit" class="btn btn-primary" onclick="finalizaSaida(<?=$saida?>)" value="Finalizar Saída" />
             </div>
         </div>
         <hr />

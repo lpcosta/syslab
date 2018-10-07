@@ -4,7 +4,7 @@ require_once '../../funcoes/func.inc.php';
 
 $sql = new Read();
 
-            $sql->FullRead("SELECT I_ENT.os_sti os,EQP.patrimonio,CAT.descricao equipamento,LOC.local,ENT.data dtent,ENT.hora hrent,AVA.data dtava,AVA.hora hrava,FAB.nome_fabricante fabricante,MO.modelo
+            $sql->FullRead("SELECT I_ENT.os_sti os,EQP.patrimonio,EQP.sala,EQP.andar,CAT.descricao equipamento,LOC.local,LOC.rua endereco,ENT.data dtent,ENT.hora hrent,AVA.data dtava,AVA.hora hrava,FAB.nome_fabricante fabricante,MO.modelo
                             FROM tb_sys004 EQP
                             JOIN tb_sys006 I_ENT ON I_ENT.patrimonio = EQP.patrimonio
                             JOIN tb_sys005 ENT ON ENT.identrada = I_ENT.id_entrada
@@ -25,6 +25,7 @@ $dt_fim = date("d/m/Y");
         <th class="tab-tam-min-pat text-center cursor-pointer">patrimônio</th>
         <th>equipamento</th>
         <th>localidade</th>
+        <th>Endereço</th>
         <th class="text-center">dt.entrada</th>
         <th class="text-center">dt.avaliação</th>
         <th>Pendência</th>
@@ -35,6 +36,7 @@ $dt_fim = date("d/m/Y");
         <td class="text-center cursor-pointer"><?php print $row['patrimonio']?></td>
         <td><?php print $row['equipamento']." ".$row['fabricante']." ".$row['modelo']?></td>
         <td><?php print $row['local']?></td>
+        <td><?php print $row['endereco'].' '.$row['andar'].' '.$row['sala']?></td>
         <td class="text-center"><?php print date("d/m/Y",strtotime($row['dtent']))."<span class=\"hide\" > ".date("H:i:s", strtotime($row['hrent']))."</span>"?></td>
         <td class="text-center"><?php print date("d/m/Y",strtotime($row['dtava']))."<span class=\"hide\" > ".date("H:i:s", strtotime($row['hrava']))."</span>"?></td>
         <td class="text-center"><?php print $data->setData($row['dtent'], $dt_fim);?></td>

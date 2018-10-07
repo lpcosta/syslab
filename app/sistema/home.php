@@ -1,11 +1,7 @@
 <?php
 paginaSegura();
-
 $sql = new Read();
-$dt = new Datas();
-
-
-                       
+$dt = new Datas();                 
 ?>
             
 <div class="tabs">

@@ -35,7 +35,6 @@
                         <input type="text" name="nome_fun"   placeholder="Nome Completo..." />
                         <input type="button" value="ok" style="height: 25px; padding: 0; width: 30px; border: 1px solid #09f;" onclick="verificaSaida(<?=$_SESSION['UserLogado']['id']?>);" />
                     </span>
-                   
                 </div>
             </div>
         </form>     

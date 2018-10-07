@@ -1,0 +1,264 @@
+<?php
+require_once '../../config/config.inc.php';
+require_once '../../funcoes/func.inc.php';
+require_once '../../config/post.inc.php';
+
+$sql        = new Read();
+$cria       = new Create();
+$texto      = new Check();
+$atu        = new Update();
+
+if(isset($busca)):
+    $sql->FullRead("SELECT id,status FROM tb_sys006 WHERE patrimonio =:PAT ORDER BY id DESC limit 1","PAT="."{$busca}"."");
+    if($sql->getRowCount() > 0):
+        if($sql->getResult()[0]['status'] != 3):
+            print intval($sql->getResult()[0]['id']);
+        else:
+            print "<div class='text-uppercase alert alert-info'>equipamento nao pode ser avaliado!</p>
+                <p><b>Motivo:</b> Não existe entrada em aberto</div>";
+        endif;
+    else:
+        $sql->FullRead("SELECT id,status FROM tb_sys006 WHERE os_sti =:OS ","OS="."{$busca}"."");
+        if($sql->getRowCount() > 0):
+            if($sql->getResult()[0]['status'] != 3):
+                print intval($sql->getResult()[0]['id']);
+            else:
+                print "<div class='text-uppercase alert alert-info'>equipamento nao pode ser avaliado!</p>
+                <p><b>Motivo:</b> Não existe entrada em aberto</div>";
+            endif;
+        else:
+         print "<div class='text-uppercase alert alert-info'>equipamento nao pode ser avaliado!</p>
+                <p><b>Motivo:</b>nenhum registro de entrada encontrado!</div>";   
+        endif;
+    endif;
+    elseif(isset($id)):
+        $sql->FullRead("SELECT 
+                        IE.id,
+                        IE.status,
+                        E.identrada entrada,
+                        E.data,
+                        E.nome_responsavel responsavel,
+                        T.id idTecnicoEntrada,
+                        T.nome tecnico,
+                        C.id categoria,
+                        C.descricao equipamento,
+                        F.nome_fabricante fabricante,
+                        M.modelo,
+                        IE.motivo,
+                        IE.observacao,
+                        IE.os_sti os,
+                        L.local,
+                        EQ.patrimonio,
+                        EQ.serie,
+                        EQ.id id_equipamento,
+                        EQ.so_id,
+                        EQ.office_id,
+                        EQ.key_so,
+                        EQ.key_office,
+                        EQ.memoria_ram,
+                        EQ.hd
+                    FROM tb_sys004 EQ
+                        JOIN tb_sys006 IE ON IE.patrimonio = EQ.patrimonio
+                        JOIN tb_sys022 M ON M.id_modelo = EQ.modelo
+                        JOIN tb_sys005 E ON E.identrada = IE.id_entrada
+                        JOIN tb_sys001 T ON T.id = E.id_tecnico
+                        JOIN tb_sys008 L ON L.id = EQ.id_local
+                        JOIN tb_sys003 C ON C.id = EQ.id_categoria
+                        JOIN tb_sys018 F ON F.id_fabricante = EQ.fabricante AND IE.id = :ID", "ID={$id}");
+    $categorias=[2,5,17,22,23,26];
+   if($sql->getResult()):?>
+<div class="avalia">
+<!--    <p class="text-capitalize">infomações da entrada</p>-->
+    <div class="row">
+        <div class="col form-inline">
+            <label>Entrada</label>
+            <input type="text" value="<?=$sql->getResult()[0]['entrada']?>" class="text-capitalize" disabled="" />
+        </div>
+        <div class="col form-inline">
+            <label>Feita Por</label>
+            <input type="text" value="<?=$sql->getResult()[0]['responsavel']?>" class="  text-capitalize" disabled=""/>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col form-inline">
+            <label>Data</label>
+            <input type="text" value="<?=date("d/m/Y",strtotime($sql->getResult()[0]['data']))?>" class="text-capitalize" disabled="" />
+        </div>
+        <div class="col form-inline">
+            <label>Técnico</label>
+            <input type="text" value="<?=$sql->getResult()[0]['tecnico']?>" class="text-capitalize" disabled=""/>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col form-inline">
+            <label>O.S</label>
+            <input type="text" value="<?=$sql->getResult()[0]['os']?>" disabled=""/>
+        </div>
+        <div class="col form-inline">
+            <label>Motivo</label>
+            <input type="text" value="<?=$sql->getResult()[0]['motivo']?>" class="text-capitalize" disabled=""/>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col form-inline">
+            <label>Patrimônio</label>
+            <input type="text" id="valPatrimonio" value="<?=$sql->getResult()[0]['patrimonio']?>" class="text-capitalize" disabled="" />
+        </div>
+        <div class="col form-inline">
+            <label>Equipamento</label>
+            <input type="text" value="<?=$sql->getResult()[0]['equipamento'].' '.$sql->getResult()[0]['fabricante'].' '.$sql->getResult()[0]['modelo']?>" class="text-capitalize" disabled=""/>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col form-inline">
+            <label>Nº de Série</label>
+            <input type="text" id="valPatrimonio" value="<?=$sql->getResult()[0]['serie']?>" class="text-capitalize" disabled="" />
+        </div>
+        <div class="col form-inline">
+            <label>Localidade</label>
+            <input type="text" value="<?=$sql->getResult()[0]['local']?>" class="text-capitalize" disabled=""  />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col form-inline">
+            <label  style="border-right: none; height: 60px;" >Observação</label>
+            <textarea disabled=""><?= ucfirst($sql->getResult()[0]['observacao'])?></textarea>
+        </div>
+    </div>
+    <?php if(in_array($sql->getResult()[0]['categoria'],$categorias)):
+        $sqlSo = new Read();
+        $sqlSo->ExeRead("tb_sys025 WHERE id_so = {$sql->getResult()[0]['so_id']}");
+        $sqlOf = new Read();
+        $sqlOf->ExeRead("tb_sys026 WHERE id_office = {$sql->getResult()[0]['office_id']}");
+        
+    ?>
+
+    <p class="text-capitalize">infomações adicionais do equipamento</p>
+    <div class="row">
+        <div class="col form-inline">
+            <label>S.O</label>
+            <input type="text" value="<?=$sqlSo->getResult()[0]['descricao_so'].' '.$sqlSo->getResult()[0]['versao_so'].' '.$sqlSo->getResult()[0]['arquitetura_so']?>" class="text-capitalize" style="min-width: 250px;" disabled="" />
+        </div>
+        <div class="col form-inline">
+            <label>Chave S.O</label>
+            <input type="text" value="<?=$sql->getResult()[0]['key_so']?>" class="text-uppercase" disabled=""/>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col form-inline">
+            <label>Office</label>
+            <input type="text" value="<?=$sqlOf->getResult()[0]['descricao_office'].' '.$sqlOf->getResult()[0]['versao_office'].' '.$sqlOf->getResult()[0]['arquitetura_office']?>" class="text-capitalize" style="min-width: 250px;" disabled="" />
+        </div>
+        <div class="col form-inline">
+            <label>Chave office</label>
+            <input type="text" value="<?=$sql->getResult()[0]['key_office']?>" class="text-uppercase" disabled=""/>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col form-inline">
+            <label>memoria Ram</label>
+            <input type="text" value="<?=$sql->getResult()[0]['memoria_ram']?>" class="text-capitalize" style="min-width: 250px;" disabled="" />
+        </div>
+        <div class="col form-inline">
+            <label>HD</label>
+            <input type="text" value="<?=$sql->getResult()[0]['hd']?>" class="text-capitalize" disabled=""/>
+        </div>
+    </div>
+    <?php endif;
+    if($sql->getResult()[0]['status']==5):
+    $agpeca = new Read();
+    $agpeca->FullRead("SELECT 
+                            T.nome tecnico,
+                            A.data,
+                            A.avaliacao,
+                            S.descricao status,
+                            P.descricao_peca,
+                            P.id_peca
+                        FROM
+                            tb_sys010 A 
+                            JOIN tb_sys001 T ON T.id = A.id_tecnico_bancada
+                            JOIN tb_sys002 S ON S.id = A.id_status
+                            JOIN tb_sys015 P ON P.id_peca = A.peca_id AND A.id_item_entrada = :ID AND A.id_status = :STS", "ID={$id}&STS=5");
+    endif;
+    $avaBancada = new Read();
+    $avaBancada->FullRead("SELECT
+                                T.nome tecnico,
+                                S.descricao status,
+                                A.data,
+                                A.hora,
+                                A.avaliacao,
+                                A.dt_last_update
+                            FROM tb_sys010 A
+                                JOIN
+                                tb_sys001 T ON T.id = A.id_tecnico_bancada
+                                JOIN
+                                tb_sys002 S ON S.id = A.id_status AND A.id_item_entrada = :ID AND A.id_status != :STS ","ID={$id}&STS=5");
+  if(isset($agpeca) || $avaBancada->getRowCount() > 0):?>
+    <p class="text-center text-capitalize">histórico de bancada</p>
+    <?if($agpeca->getRowCount() > 0):?>
+    <table class="table-hover">
+        <tr class="text-capitalize">
+            <th style="min-width: 150px;">técnico</th>
+            <th class="text-center">data</th>
+            <th class="text-center"style="min-width: 120px;">status</th>
+            <th>avaliação</th>
+            <th style="min-width: 200px;">peça</th>
+            <th>&nbsp;</th>
+        </tr>
+        <?foreach ($agpeca->getResult() as $agp):?>
+        <tr>
+            <td  class="text-capitalize"><?=$agp['tecnico']?></td>
+            <td class="text-center"><?=date("d/m/Y",strtotime($agp['data']))?></td>
+            <td class="text-center text-capitalize"><?=$agp['status']?></td>
+            <td><?= ucfirst($agp['avaliacao'])?></td>
+            <td  class="text-capitalize"><?=$agp['id_peca'].' - '.$agp['descricao_peca']?></td>
+            <?if($agp['status'] != 'fechado'):?>
+            <td><button onclick="baixaPeca(<?=$agp['id_peca']?>,<?=$sql->getResult()[0]['os']?>,<?=$sql->getResult()[0]['id']?>);">Baixar</button></td>
+            <?endif;?>
+        </tr>
+        <?endforeach;?>
+    </table>
+    <?endif;?>
+    <!-- outras avaliações de bancada-->
+    <hr />
+    <?if($avaBancada->getRowCount() > 0):?>
+    <table class="table-hover">
+        <tr class="text-capitalize">
+            <th style="min-width: 150px;">técnico</th>
+            <th class="text-center">data</th>
+            <th class="text-center"style="min-width: 120px;">status</th>
+            <th>avaliação</th>
+            <th>Atualização</th>
+        </tr>
+        <?foreach ($avaBancada->getResult() as $ava):?>
+        <tr class="text-left">
+            <td class="text-capitalize"><?=$ava['tecnico']?></td>
+            <td class="text-center"><?=date("d/m/Y",strtotime($ava['data']))?></td>
+            <td class="text-capitalize text-center"><?=$ava['status']?></td>
+            <td><?= ucfirst($ava['avaliacao'])?></td>
+            <td><?= date("d/m/Y H:i:s",strtotime($ava['dt_last_update']))?></td>
+        </tr>
+        <?endforeach;?>
+    </table>
+        <?endif;
+        endif;
+    endif;?><!-- fim outras avaliações de bancada-->
+    <hr />
+    <div class="row">
+        <div class="col form-inline">
+            <select id="txtStatus" class="text-capitalize"
+               onchange="validaAvaliacao(this.value,<?=$sql->getResult()[0]['categoria']?>,<?=$sql->getResult()[0]['id_equipamento']?>);">
+                <option value="">Avaliar...</option>
+                <?$sql->ExeRead("tb_sys002");
+                foreach ($sql->getResult() as $res):
+                    if($res['id'] <= 3):
+                        continue;
+                    else:?>
+                    <option value="<?= $res['id'] ?>"><?=$res['descricao']?></option>
+                <? endif;endforeach;?>
+            </select>  &nbsp;
+            <img src="./app/imagens/load.gif" class="form_load"  alt="[CARREGANDO...]" title="CARREGANDO.." /> 
+        </div>
+    </div>
+</div>
+ <?endif;

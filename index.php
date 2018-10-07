@@ -60,6 +60,7 @@ require_once './app/funcoes/func.inc.php';
                     <li><a href="index.php">Home</a></li>
                     <li><a href="#">Laboratório</a>
                         <ul class="submenu-1">
+                            <li><a href="index.php?pg=bancada">Bancada</a></li>
                             <li><a href="index.php?pg=laboratorio">Laboratório</a></li>
                             <li><a href="index.php?pg=laboratorio/entrada">Entrada</a></li>
                             <li><a href="index.php?pg=laboratorio/saida">Saída</a></li>
@@ -69,13 +70,19 @@ require_once './app/funcoes/func.inc.php';
                         <ul class="submenu-1">
                             <li><a href="#">Peça</a>
                                 <ul class="submenu-2">
-                                    <li><a href="index.php?pg=laboratorio/estoque/recebimento">Receber</a></li>
-                                    <li><a href="index.php?pg=laboratorio/estoque/baixa">Baixar</a></li>
+                                    <li><a href="index.php?pg=estoque/recebimento">Receber</a></li>
+                                    <li><a href="index.php?pg=estoque/baixa">Baixar</a></li>
                                     <li><a href="index.php?pg=cadastra/peca">Cadastrar</a></li>
+                                    <li><a href="index.php?pg=edita/peca">Editar</a></li>
                                 </ul>
                             </li>
-                            <li><a href="#">Termos</a></li>
-                            <li><a href="#">Consulta</a></li>
+                            <li><a href="index.php?pg=estoque/estoque">Estoque Lorac</a></li>
+                            <li><a href="#">Relatórios</a>
+                                <ul class="submenu-2">
+                                    <li><a href="#">Entrada</a></li>
+                                    <li><a href="#">Saida</a></li>
+                                </ul>
+                            </li>
                         </ul>
                     </li>
                     <li><a href="#">Relatorios</a>
@@ -138,16 +145,16 @@ require_once './app/funcoes/func.inc.php';
                         </ul>
                     </li>
                 </ul> 
-                <form name="formSearchOs" id="formSearchOs" onsubmit="return false;">
+                <form name="formSearchOs" id="formSearchOs" onsubmit="return false;" style="max-width: 300px !important;">
                      <input type="hidden" name="acao" value="os" />
                     <label for="txtBusca">Pesquisar:</label>
                     <input type="search" size="7" placeholder="os..." name="busca" maxlength="7" id="txtBuscaOs" required="">
                     <button type="submit" name="btnSearch" id="btnSearch">Buscar</button>
                 </form>
-                <form name="formSearch" id="formSearch" class="text-right" onsubmit="return false;">
+                <form name="formSearch" id="formSearch" class="text-right" onsubmit="return false;" style="max-width: 300px !important;">
                     <input type="hidden" name="acao" value="patrimonio" />
                     <label for="txtBusca">Pesquisar:</label>
-                    <input type="search" size="7" placeholder="patrimonio.." name="busca" maxlength="7" id="txtBusca" required="" autofocus="">
+                    <input type="search" size="7" placeholder="patrimonio.." name="busca" maxlength="7" id="txtBusca" required="">
                     <button type="submit" name="btnSearch" id="btnSearch">Buscar</button>
                 </form>
             </nav>

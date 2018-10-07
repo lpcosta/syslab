@@ -21,6 +21,7 @@ if($sql->getRowCount() > 0):
                             eq.status,
                             eq.andar,
                             eq.sala,
+                            eq.ip,
                                     eq.sala FROM tb_sys004 eq
                                     JOIN tb_sys003 c ON c.id = eq.id_categoria
                                     JOIN tb_sys022 m ON m.id_modelo = eq.modelo

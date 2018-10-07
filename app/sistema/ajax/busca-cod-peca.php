@@ -4,7 +4,7 @@ require_once '../../config/post.inc.php';
 
 $sql        = new Read();
 
- $sql->FullRead("SELECT * FROM db_syslab.tb_sys015 where categoria_id = :ID and id_peca = :PECA", "ID=0&PECA={$post['peca']}");
+ $sql->FullRead("SELECT * FROM tb_sys015 WHERE categoria_id = :ID AND id_peca = :PECA", "ID=0&PECA={$peca}");
    
 if($sql->getResult()):
     print $sql->getResult()[0]['id_peca'];

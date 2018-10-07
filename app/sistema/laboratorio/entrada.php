@@ -65,6 +65,35 @@
             </div>
             
         </div>
+<!--        <div class="row mostra-dados-printer" style="display: none;">
+            <div class="col form-inline">
+                <label>USB/IP</label>
+                <select name="ip" id="txtIp">
+                     <option selected value="">Selecione...</option>
+                     <option value="ip">Rede</option>
+                     <option value="usb">Usb</option>
+                 </select>
+            </div>
+            <div class="col form-inline">
+                 <label>Veio Toner?</label>
+                 <select>
+                     <option selected value="">Selecione...</option>
+                     <option value="sim">Sim</option>
+                     <option value="nao">Não</option>
+                 </select>
+            </div>
+        </div>
+        <div class="row mostra-dados-mobile" style="display: none;">
+            <div class="col form-inline">
+                <label>Veio Fonte?</label>
+                <select>
+                     <option selected value="">Selecione...</option>
+                     <option value="sim">Sim</option>
+                     <option value="nao">Não</option>
+                 </select>
+            </div>
+           
+        </div>-->
         <div class="row">
             <div class="col form-inline">
                <label>Localidade</label>
@@ -131,7 +160,7 @@
      
             <div class="col btn-entrada">
                 <div>
-                    <button type="button" onclick="validaItemEntrada($('#txtTecnico').val(),$('#numeroEntrada').val()); $('#iten-entrada').submit();">Adicionar Equipamento</button>
+                    <button type="button" onclick="validaItemEntrada($('#txtTecnico').val(),$('#numeroEntrada').val(),$('#txtEquipamento').val()); $('#iten-entrada').submit();">Adicionar Equipamento</button>
                 </div>
                 <div>
                     <button type="button" onclick="finalizaEntrada($('#numeroEntrada').val());" >Finalizar Entrada</button>
