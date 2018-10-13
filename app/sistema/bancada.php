@@ -32,57 +32,59 @@ $dt  = new Datas();
                     &nbsp;
                     <input type="submit" class="btn btn-primary" id="btnAvalia" name="btnBancada" value="Avaliar Equipamento" />&nbsp;
                     <input type="button" class="btn btn-primary" name="btnBancada" value="Carregar" onclick="history.go(0);" />
+                    &nbsp;
                 </div>
             </div>
             <hr />
         </form>
     </div>
-    <?php foreach ($sqlEqpmt->getResult() as $res): ?>
-    <div id="<?=$checa->Url($res['equipamento'])?>" class="conteudo-bancada">
-        <table class="table-responsive-sm tabela-tab table-hover">
-            <tr class="text-capitalize">
-                <th class="text-left text-capitalize">Modelo</th>
-                <th class="text-center">Patrimonio</th>
-                <th class="text-center">O.S</th>
-                <th>Motivo</th>
-                <th>Localidade</th>
-                <th class="text-center">Dt.Entrada</th>
-                <th class="text-center">Pendência</th>
-            </tr>
-        <?php $sql->FullRead("SELECT
-                                    IE.id,
-                                    IE.os_sti os,
-                                    EQ.patrimonio,
-                                    IE.motivo,
-                                    L.local localidade,
-                                    E.data dtentrada,
-                                    M.modelo
-                                FROM
-                                    tb_sys006 IE
+    <div class="dados-avalia"></div>
+    <?php $form=0; foreach ($sqlEqpmt->getResult() as $res): ?>
+        <div id="<?=$checa->Url($res['equipamento'])?>" class="conteudo-bancada">
+            <table class="table-responsive-sm tabela-tab table-hover">
+                <tr class="text-capitalize">
+                    <th class="text-left text-capitalize">Modelo</th>
+                    <th class="text-center">Patrimonio</th>
+                    <th class="text-center">O.S</th>
+                    <th>Motivo</th>
+                    <th>Localidade</th>
+                    <th class="text-center">Dt.Entrada</th>
+                    <th class="text-center">Pendência</th>
+                </tr>
+            <?php $sql->FullRead("SELECT
+                                        IE.id,
+                                        IE.os_sti os,
+                                        EQ.patrimonio,
+                                        IE.motivo,
+                                        L.local localidade,
+                                        E.data dtentrada,
+                                        M.modelo
+                                    FROM
+                                        tb_sys006 IE
+                                            JOIN
+                                        tb_sys004 EQ ON EQ.patrimonio = IE.patrimonio
                                         JOIN
-                                    tb_sys004 EQ ON EQ.patrimonio = IE.patrimonio
-                                    JOIN
-                                    tb_sys003 C ON C.id = EQ.id_categoria
-                                    JOIN
-                                    tb_sys022 M ON M.id_modelo = EQ.modelo
-                                    JOIN
-                                    tb_sys008 L ON L.id = EQ.id_local
-                                    JOIN
-                                    tb_sys005 E ON E.identrada = IE.id_entrada AND IE.status = :STS AND C.id = :CATEG", "STS=1&CATEG={$res['id']}"); 
-           foreach($sql->getResult() as $row):
-        ?>
-            <tr style="cursor:pointer;" onclick="avaliaEquipamento(<?=$row['id']?>);">
-                <td class="text-left text-capitalize"><?=$row['modelo']?></td>
-                <td class="text-center"><?=$row['patrimonio']?></td>
-                <td class="text-center"><?=$row['os']?></td>
-                <td class="text-capitalize"><?=$row['motivo']?></td>
-                <td class="text-capitalize "><?=$row['localidade']?></td>
-                <td class="text-center"><?=date("d/m/Y",strtotime($row['dtentrada']))?></td>
-                <td class="text-center"><?=$dt->setData($row['dtentrada'], HOJE) ?></td>
-            </tr>
-            <?php endforeach?>
-        </table>
-    </div>
-    <? endforeach;?> 
-    
+                                        tb_sys003 C ON C.id = EQ.id_categoria
+                                        JOIN
+                                        tb_sys022 M ON M.id_modelo = EQ.modelo
+                                        JOIN
+                                        tb_sys008 L ON L.id = EQ.id_local
+                                        JOIN
+                                        tb_sys005 E ON E.identrada = IE.id_entrada AND IE.status = :STS AND C.id = :CATEG", "STS=1&CATEG={$res['id']}"); 
+               foreach($sql->getResult() as $row):
+            ?>
+                <tr style="cursor:pointer;" onclick="avaliaEquipamento(<?=$row['id']?>);">
+                    <td class="text-left text-capitalize"><?=$row['modelo']?></td>
+                    <td class="text-center"><?=$row['patrimonio']?></td>
+                    <td class="text-center"><?=$row['os']?></td>
+                    <td class="text-capitalize"><?=$row['motivo']?></td>
+                    <td class="text-capitalize "><?=$row['localidade']?></td>
+                    <td class="text-center"><?=date("d/m/Y",strtotime($row['dtentrada']))?></td>
+                    <td class="text-center"><?=$dt->setData($row['dtentrada'], HOJE) ?></td>
+                </tr>
+                <?php endforeach?>
+            </table>
+        </div>
+    <?$form++; endforeach;?> 
+    <div style="width: 40px; margin: 0 auto;"><img src="./app/imagens/load.gif" class="form_load"  alt="[CARREGANDO...]" title="CARREGANDO.." /></div>
 </div>

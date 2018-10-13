@@ -52,7 +52,7 @@ endif;
                         <select name="fabricante" class="text-capitalize" onchange="getModelos(this.value);" onblur="getModelos(this.value);">
                             <? $combo->FullRead("SELECT nome_fabricante FROM tb_sys018 WHERE id_fabricante =:FAB", "FAB={$sql->getResult()[0]['fabricante']}") ?>
                             <option selected value="<?=$sql->getResult()[0]['fabricante']?>"><?=$combo->getResult()[0]['nome_fabricante']?></option>
-                            <?php $combo->FullRead("SELECT FAB.id_fabricante,FAB.nome_fabricante FROM tb_sys022 MDL JOIN tb_sys018 FAB ON FAB.id_fabricante = MDL.fabricante_id GROUP BY FAB.id_fabricante");
+                            <?php $combo->FullRead("SELECT FAB.id_fabricante,FAB.nome_fabricante FROM tb_sys022 MDL JOIN tb_sys018 FAB ON FAB.id_fabricante = MDL.fabricante_id GROUP BY FAB.id_fabricante ORDER BY FAB.nome_fabricante");
                             foreach ($combo->getResult() as $res):
                                 if($sql->getResult()[0]['fabricante'] == $res['id_fabricante']):
                                     continue;
@@ -206,11 +206,11 @@ endif;
                 <div class="row">
                      <div class="col form-inline">
                         <label>Tela</label>
-                        <input type="text" name="tela" value="<?=$sql->getResult()[0]['tela']?>"/>
+                        <input type="text" name="tela" value="<?=$sql->getResult()[0]['tela']?>" <?if($sql->getResult()[0]['id_categoria'] != 4){print "disabled";}?>>
                     </div>
                     <div class="col form-inline">
                         <label>Tipo Tela</label>
-                        <select name="tipo_tela">
+                        <select name="tipo_tela" <?if($sql->getResult()[0]['id_categoria'] != 4){print "disabled";}?>>
                             <option selected value="<?=$sql->getResult()[0]['tipo_tela']?>"><?=$sql->getResult()[0]['tipo_tela']?></option>
                             <option value="normal">Normal</option>
                             <option value="wide">WideScreen</option>
@@ -229,7 +229,7 @@ endif;
                 <div class="row">
                      <div class="col form-inline">
                         <label>V.A)</label>
-                        <input type="text" name="va" value="<?=$sql->getResult()[0]['va']?>"/>
+                        <input type="text" name="va" value="<?=$sql->getResult()[0]['va']?>" <?if($sql->getResult()[0]['id_categoria'] != 3 || $sql->getResult()[0]['id_categoria'] != 8 ){print "disabled";}?>>
                     </div>
                     <div class="col form-inline">
                         <label>Status</label>

@@ -5,7 +5,7 @@ class Email {
     private $Mail;
     private $enviado;
     private $assunto;
-    private $destinatario;
+    private $destinatarios;
     private $mensagem;
     private $error;
     private $result;
@@ -27,13 +27,13 @@ class Email {
         $this->Mail->CharSet = 'UTF-8';
     }
     
-    public function enviaMail($assunto,$destinatario,$mensagem){
-        $this->assunto = (string) $assunto;
-        $this->destinatario = (string) $destinatario;
-        $this->mensagem = (string) $mensagem;
+    public function enviaMail($assunto, array $destinatarios,$mensagem){
+        $this->assunto          = (string) $assunto;
+        $this->destinatarios    = $destinatarios;
+        $this->mensagem         = (string) $mensagem;
         
         $this->sendMail();
-        
+       
     }
     
     public function getResult() {
@@ -48,8 +48,12 @@ class Email {
 
     private function sendMail() {
         $this->Mail->Subject = $this->assunto;
-        $this->Mail->AddBCC("lpcosta@santoandre.sp.gov.br"); // Envia Cópia Oculta
-        $this->Mail->addAddress($this->destinatario); // email do destinatario.
+        //$this->Mail->AddBCC("lpcosta@santoandre.sp.gov.br"); // Envia Cópia Oculta
+        foreach ($this->destinatarios as $chave => $valor):
+            
+         $this->Mail->addAddress($valor); // email dos destinatarios.
+ 
+        endforeach;
         
 	$this->Mail->Body = $this->mensagem;
         

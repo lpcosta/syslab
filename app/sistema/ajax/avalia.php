@@ -2,7 +2,7 @@
 require_once '../../config/config.inc.php';
 require_once '../../funcoes/func.inc.php';
 require_once '../../config/post.inc.php';
-
+session_start();
 $sql        = new Read();
 $cria       = new Create();
 $texto      = new Check();
@@ -11,42 +11,55 @@ $atu        = new Update();
 if(isset($busca)):
     $sql->FullRead("SELECT id,status FROM tb_sys006 WHERE patrimonio =:PAT ORDER BY id DESC limit 1","PAT="."{$busca}"."");
     if($sql->getRowCount() > 0):
-        if($sql->getResult()[0]['status'] != 3):
-            print intval($sql->getResult()[0]['id']);
-        else:
-            print "<div class='text-uppercase alert alert-info'>equipamento nao pode ser avaliado!</p>
-                <p><b>Motivo:</b> Não existe entrada em aberto</div>";
-        endif;
+        $busca = intval($sql->getResult()[0]['id']);
     else:
         $sql->FullRead("SELECT id,status FROM tb_sys006 WHERE os_sti =:OS ","OS="."{$busca}"."");
         if($sql->getRowCount() > 0):
-            if($sql->getResult()[0]['status'] != 3):
-                print intval($sql->getResult()[0]['id']);
-            else:
-                print "<div class='text-uppercase alert alert-info'>equipamento nao pode ser avaliado!</p>
-                <p><b>Motivo:</b> Não existe entrada em aberto</div>";
-            endif;
+            $busca = intval($sql->getResult()[0]['id']);
         else:
-         print "<div class='text-uppercase alert alert-info'>equipamento nao pode ser avaliado!</p>
-                <p><b>Motivo:</b>nenhum registro de entrada encontrado!</div>";   
+         $busca = "<div class='text-uppercase alert alert-info'><p>Equipamento nao pode ser avaliado!</p>
+                    <p><b>Motivo:</b>nenhum registro de entrada encontrado!</p></div>";   
         endif;
     endif;
-    elseif(isset($id)):
+    if($sql->getResult()):
+        switch ($sql->getResult()[0]['status']):
+             case 2:
+                    print "<span class='text-uppercase alert alert-info'>EQUIPAMENTO BLOQUEADO! POR FAVOR VERIFIQUE!</span>";
+                    break;
+                case 3:
+                    print "<span class='text-uppercase alert alert-info'>NÃO EXISTE ENTRADA EM ABERTO PARA O PATRIMONIO E/OU ORDEM INFORMADO!</span>";
+                    break;
+                case 4:
+                    print "<span class='text-uppercase alert alert-info'>EQUIPAMENTO JÁ FOI AVALIADO!</span>";
+                    break;
+                case 7:
+                    print "<span class='text-uppercase alert alert-info'>BEM INSERVÍVEL!</span>";
+                    break;
+            default :
+                print $busca;
+        endswitch;
+    else:
+        print $busca;
+    endif;
+endif;
+
+if(isset($id)):
         $sql->FullRead("SELECT 
                         IE.id,
                         IE.status,
+                        IE.motivo,
+                        IE.observacao,
+                        IE.os_sti os,
                         E.identrada entrada,
                         E.data,
                         E.nome_responsavel responsavel,
                         T.id idTecnicoEntrada,
                         T.nome tecnico,
+                        T.email,
                         C.id categoria,
                         C.descricao equipamento,
                         F.nome_fabricante fabricante,
                         M.modelo,
-                        IE.motivo,
-                        IE.observacao,
-                        IE.os_sti os,
                         L.local,
                         EQ.patrimonio,
                         EQ.serie,
@@ -126,18 +139,24 @@ if(isset($busca)):
         </div>
     </div>
     <?php if(in_array($sql->getResult()[0]['categoria'],$categorias)):
-        $sqlSo = new Read();
-        $sqlSo->ExeRead("tb_sys025 WHERE id_so = {$sql->getResult()[0]['so_id']}");
-        $sqlOf = new Read();
-        $sqlOf->ExeRead("tb_sys026 WHERE id_office = {$sql->getResult()[0]['office_id']}");
-        
+       
+        if($sql->getResult()[0]['so_id'] !=0):
+            $sqlSo = new Read();
+            $sqlSo->ExeRead("tb_sys025 WHERE id_so = {$sql->getResult()[0]['so_id']}");
+        endif;
+        if($sql->getResult()[0]['office_id'] !=0):
+            $sqlOf = new Read();
+            $sqlOf->ExeRead("tb_sys026 WHERE id_office = {$sql->getResult()[0]['office_id']}");
+        endif;
     ?>
 
     <p class="text-capitalize">infomações adicionais do equipamento</p>
     <div class="row">
         <div class="col form-inline">
             <label>S.O</label>
-            <input type="text" value="<?=$sqlSo->getResult()[0]['descricao_so'].' '.$sqlSo->getResult()[0]['versao_so'].' '.$sqlSo->getResult()[0]['arquitetura_so']?>" class="text-capitalize" style="min-width: 250px;" disabled="" />
+            <?if(isset($sqlSo)):?>
+                <input type="text" value="<?=$sqlSo->getResult()[0]['descricao_so'].' '.$sqlSo->getResult()[0]['versao_so'].' '.$sqlSo->getResult()[0]['arquitetura_so']?>" class="text-capitalize" style="min-width: 250px;" disabled="" />
+            <?else:print "<input type='text' disabled='' style=\"min-width: 250px;\" />";endif;?>
         </div>
         <div class="col form-inline">
             <label>Chave S.O</label>
@@ -147,7 +166,9 @@ if(isset($busca)):
     <div class="row">
         <div class="col form-inline">
             <label>Office</label>
-            <input type="text" value="<?=$sqlOf->getResult()[0]['descricao_office'].' '.$sqlOf->getResult()[0]['versao_office'].' '.$sqlOf->getResult()[0]['arquitetura_office']?>" class="text-capitalize" style="min-width: 250px;" disabled="" />
+            <?if(isset($sqlOf)):?>
+                <input type="text" value="<?=$sqlOf->getResult()[0]['descricao_office'].' '.$sqlOf->getResult()[0]['versao_office'].' '.$sqlOf->getResult()[0]['arquitetura_office']?>" class="text-capitalize" style="min-width: 250px;" disabled="" />
+           <?else:print "<input type='text' disabled='' style=\"min-width: 250px;\" />";endif;?>
         </div>
         <div class="col form-inline">
             <label>Chave office</label>
@@ -180,6 +201,11 @@ if(isset($busca)):
                             JOIN tb_sys002 S ON S.id = A.id_status
                             JOIN tb_sys015 P ON P.id_peca = A.peca_id AND A.id_item_entrada = :ID AND A.id_status = :STS", "ID={$id}&STS=5");
     endif;
+    if(isset($agpeca)):
+        $pecas = $agpeca->getRowCount();
+    else:
+        $pecas = 0;
+    endif;
     $avaBancada = new Read();
     $avaBancada->FullRead("SELECT
                                 T.nome tecnico,
@@ -193,9 +219,10 @@ if(isset($busca)):
                                 tb_sys001 T ON T.id = A.id_tecnico_bancada
                                 JOIN
                                 tb_sys002 S ON S.id = A.id_status AND A.id_item_entrada = :ID AND A.id_status != :STS ","ID={$id}&STS=5");
+    
   if(isset($agpeca) || $avaBancada->getRowCount() > 0):?>
     <p class="text-center text-capitalize">histórico de bancada</p>
-    <?if($agpeca->getRowCount() > 0):?>
+    <?if(isset($agpeca)):?>
     <table class="table-hover">
         <tr class="text-capitalize">
             <th style="min-width: 150px;">técnico</th>
@@ -218,7 +245,7 @@ if(isset($busca)):
         </tr>
         <?endforeach;?>
     </table>
-    <?endif;?>
+    <?endif;?><!-- fim aguardo de peça -->
     <!-- outras avaliações de bancada-->
     <hr />
     <?if($avaBancada->getRowCount() > 0):?>
@@ -242,23 +269,49 @@ if(isset($busca)):
     </table>
         <?endif;
         endif;
-    endif;?><!-- fim outras avaliações de bancada-->
+    endif;//fim outras avaliações de bancada?>
     <hr />
-    <div class="row">
-        <div class="col form-inline">
-            <select id="txtStatus" class="text-capitalize"
-               onchange="validaAvaliacao(this.value,<?=$sql->getResult()[0]['categoria']?>,<?=$sql->getResult()[0]['id_equipamento']?>);">
-                <option value="">Avaliar...</option>
-                <?$sql->ExeRead("tb_sys002");
-                foreach ($sql->getResult() as $res):
-                    if($res['id'] <= 3):
-                        continue;
-                    else:?>
-                    <option value="<?= $res['id'] ?>"><?=$res['descricao']?></option>
-                <? endif;endforeach;?>
-            </select>  &nbsp;
-            <img src="./app/imagens/load.gif" class="form_load"  alt="[CARREGANDO...]" title="CARREGANDO.." /> 
+    <form id="form-avalia-equipamento" onsubmit="return false;" >
+        <input type="hidden" name="id_item_entrada" value="<?=$sql->getResult()[0]['id']?>" />
+        <input type="hidden" name="id_tecnico_bancada" value="<?=$_SESSION['UserLogado']['id']?>" />
+        <input type="hidden" name="email_tecnico_entrada" value="<?=$sql->getResult()[0]['email']?>" />
+        <div class="row">
+            <div class="col form-inline">
+                <select id="txtStatus" name="id_status" class="text-capitalize" onchange="validaAvaliacao(this.value,<?=$sql->getResult()[0]['categoria']?>,<?=$sql->getResult()[0]['id_equipamento']?>,<?=$pecas?>)" >
+                    <option value="">Avaliar...</option>
+                    <?$sql->ExeRead("tb_sys002");
+                    foreach ($sql->getResult() as $res):
+                        if($res['id'] <= 3):
+                            continue;
+                        else:?>
+                        <option value="<?= $res['id'] ?>"><?=$res['descricao']?></option>
+                    <? endif;endforeach;?>
+                </select>
+            </div>
+             <div class="col form-inline aguardo-peca" style="display: none">
+                <label>Peça</label>
+                <input type="text" id="txtCodPeca" onblur="setaPeca(this.value,'true');" onkeyDown="if (event.keyCode == 13){$('#txtAvalia').focus();}" placeholder="Código..." size="3" autofocus="" style="max-width: 190px;"/>
+                    <select id="txtPeca" name="peca_id" onkeydown="if (event.keyCode === 13) {
+                                       $('#txtAndar').focus();
+                                   }" onchange="setaPeca(this.value);$('#txtAvalia').focus();" class="text-capitalize" style="width: 60%; min-width: 300px;">
+                        <option value="" class="localidade">Selecione</option>                        
+                        <?$sql->FullRead("SELECT id_peca,descricao_peca FROM tb_sys015 ORDER BY descricao_peca");foreach($sql->getResult()as $peca):?>
+                        <option value="<?= $peca['id_peca'] ?>" class="localidade"><?= $peca['descricao_peca']; ?></option>
+                        <?endforeach;?>
+                    </select>
+            </div>
+            <div class="col form-inline avaliacao" style="display: none">
+                <label  style="border-right: none; height: 60px;" >Avaliação</label>
+                <textarea id="txtAvalia" name="avaliacao"></textarea>
+            </div>
         </div>
-    </div>
+        <div class="row text-center">
+            <div class="col btn-avalia" style="display: none;margin: 0 auto;">
+                <button type="button" class="btn btn-primary" onclick="avalia($('#txtStatus').val(),$('#txtAvalia').val(),$('#txtPeca').val())">Avaliar Equipamento</button>
+
+               <button class="btn btn-primary" onclick="window.location.reload();">Cancelar Avaliação</button>
+            </div>
+        </div>
+    </form>
 </div>
  <?endif;

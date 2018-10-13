@@ -28,11 +28,8 @@ endif;
                     <img src="./app/imagens/load.gif" class="form_load" alt="[CARREGANDO...]" title="CARREGANDO.." /> 
                 </div>
             </div>
-           
         </form>
-         <hr />
-    </div>
-    <?php elseif(isset($id)):?>
+     <?php elseif(isset($id) && $sql->getRowCount() > 0):?>
     <div class="dados-edita">
         <hr />
         <form class="form-cadastra entrada" id="edita-peca" onsubmit="return false" style="width: 98%;">
@@ -54,6 +51,13 @@ endif;
                     ?>
                     </select>
                 </div>
+                <div class="col form-inline">
+                    <label>Flag</label>
+                    <select name="flag" >
+                        <option selected="0">Não Marcado</option>
+                        <option value="1">Marcado</option>
+                    </select>
+                </div>
             </div>
             <div class="row" >
                 <div class="col form-inline">
@@ -67,4 +71,5 @@ endif;
         </form>
     </div>
     <?endif;?>
+    </div>
 </div>

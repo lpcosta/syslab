@@ -23,7 +23,7 @@ $sql->FullRead("SELECT login,email,nome,email FROM tb_sys001 WHERE login = :LOGI
             
             $mail = new Email();  
             
-            $mail->enviaMail("Redefinição de Senha do Syslab",$email,
+            $mail->enviaMail("Redefinição de Senha do Syslab",[$email],
                     "Usuario do syslab redefinido clique no link abaixo para desbloquer seu usuário!<br /><br />"
                     . "<a href='".HOME."/app/reset/index.php?hash={$hash}&login={$txtLogin}'>"
                     . "Desbloquer Usuário</a><br /><br />"
@@ -38,5 +38,3 @@ $sql->FullRead("SELECT login,email,nome,email FROM tb_sys001 WHERE login = :LOGI
         print "login e/ou E-mail iformado nao conferem!";
     endif;
 
-
-/*c00706f7a179940ec887e434303785dafc450ae8fb87b5d2cd7a1eb56ed7129d81c10aa0d5d55cfedfa970fd26829645d9acfb2f4b6110bd6aeabc08d98dfb07*/

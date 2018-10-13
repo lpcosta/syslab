@@ -277,15 +277,19 @@ switch ($acao):
             endif;
         break;
     case 'recebepeca':
+        session_start();
         $data   = new Datas();
         $atu    = new Update();
-        
-        $post['preco_peca'] = str_replace(",",".",$post['preco_peca']);
-        $post['dt_recebimento'] = $data->setDt($post['dt_recebimento']).' '.date("H:i:s");
-        $post['peca_serie']=$texto->setTexto($post['peca_serie']);
-        $post['observacao']=$texto->setTexto($post['observacao']);
+        if(isset($post['qtde'])):
+            $post['quantidade']=$post['qtde'];
+        endif;
+        $post['preco_peca']     = str_replace(",",".",$post['preco_peca']);
+        $post['dt_recebimento'] = $data->setDt($post['dt_recebimento']);
+        $post['peca_serie']     = $texto->setTexto($post['peca_serie']);
+        $post['observacao']     = $texto->setTexto($post['observacao']);
+        $post['responsavel']    = $_SESSION['UserLogado']['nome'];
         $sqlCons->FullRead("SELECT quantidade FROM tb_sys027 WHERE codigo_peca = :CP", "CP={$post['peca_id']}");
-        $quantidade = ((int)$sqlCons->getResult()[0]['quantidade'] + $post['qtde']);
+        $quantidade = ((int)$sqlCons->getResult()[0]['quantidade'] + $post['quantidade']);
         $sqlCons->FullRead("SELECT peca_serie FROM tb_sys020 WHERE peca_serie = :PECASERIE", "PECASERIE={$post['peca_serie']}");  
         unset($post['acao']);
         unset($post['qtde']);

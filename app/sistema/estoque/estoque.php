@@ -2,7 +2,18 @@
    paginaSegura();
     
     $sql = new Read();
-    $sql->FullRead("SELECT * FROM tb_sys015 JOIN tb_sys027 ON id_peca = codigo_peca ORDER BY quantidade DESC");
+    $sql->FullRead("SELECT 
+                        P.id_peca,
+                        P.descricao_peca,
+                        E.quantidade,
+                        C.descricao equipamento
+                    FROM
+                        tb_sys015 P
+                            JOIN
+                        tb_sys027 E ON E.codigo_peca = P.id_peca
+                            JOIN
+                        tb_sys003 C ON C.id = P.categoria_id
+                    ORDER BY quantidade DESC");
     $pecas = new Read();
     $pecas->FullRead("select sum(quantidade)total from tb_sys027");
     
@@ -30,7 +41,7 @@
                 <td class="text-center"><?=$peca['id_peca']?></a></td>
                 <td><?=$peca['descricao_peca']?></td>
                 <td><?=$peca['quantidade']?></td>
-                <td class="text-center"><?=$peca['categoria_id']?></td>
+                <td class="text-center text-capitalize"><?=$peca['equipamento']?></td>
             </tr>
             <?php endforeach;?>
         </table>  

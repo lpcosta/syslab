@@ -144,6 +144,7 @@ $dt = new Datas();
                 </div>
             </div>
     </div><!-- div home -->
+   
 </div><!-- div tabs-->
 <script>
     google.charts.load('current', {'packages':['corechart']});

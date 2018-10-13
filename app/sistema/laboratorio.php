@@ -72,7 +72,7 @@ $pendentes = new Read();
                 <tr class="text-capitalize">
                     <td class="text-left"><?=$rowEquipamento['localidade'].' '.$rowEquipamento['andar'];if(!empty($rowEquipamento['sala'])){print " - Sala ".$rowEquipamento['sala'];}?></td>
                      <?php if($res['id']==4):
-                    print "<td class=\"text-left\">" . $rowEquipamento['endereco'] .' '. $rowEquipamento['andar']."</td>";
+                    print "<td class=\"text-left\">" . $rowEquipamento['endereco'] ."</td>";
                     else:
                     print "<td class=\"text-left\">".$rowEquipamento['tecnico']."</td>";
                     endif;?>   

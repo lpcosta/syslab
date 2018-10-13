@@ -79,15 +79,16 @@ require_once './app/funcoes/func.inc.php';
                             <li><a href="index.php?pg=estoque/estoque">Estoque Lorac</a></li>
                             <li><a href="#">Relatórios</a>
                                 <ul class="submenu-2">
-                                    <li><a href="#">Entrada</a></li>
+                                    <li><a href="index.php?pg=estoque/relatorio/entrada">Entrada</a></li>
                                     <li><a href="#">Saida</a></li>
+                                    <li><a href="index.php?pg=estoque/relatorio/pecas-faltantes">Peças Faltantes</a></li>
                                 </ul>
                             </li>
                         </ul>
                     </li>
                     <li><a href="#">Relatorios</a>
                         <ul class="submenu-1">
-                            <li><a href="#">Relatorio001</a></li>
+                            <li><a href="index.php?pg=relatorio/saida">Saídas</a></li>
                             <li><a href="#">Relatorio002</a></li>
                             <li><a href="#">Relatorio003</a></li>
                             <li><a href="#">Relatorio004</a></li>
@@ -201,6 +202,7 @@ require_once './app/funcoes/func.inc.php';
     <script src="./app/libs/JQuery-Validate/jquery.validate.js"></script>
     <script src="./app/libs/JQuery-Validate/additional-methods.js"></script>
     <script src="./app/libs/JQuery-Validate/localization/messages_pt_BR.js" /></script>
+    <script src="./app/libs/PrintArea/demo/jquery.PrintArea.js"></script>
     <script src="./app/js/gobal.js" /></script>
     
 </html>

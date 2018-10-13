@@ -20,7 +20,12 @@ define('HOST',gethostbyaddr(IP));
 //define('INCLUDE_PATH', HOME . DIRECTORY_SEPARATOR . 'themes' . DIRECTORY_SEPARATOR . THEME);
 //define('REQUIRE_PATH', 'themes' . DIRECTORY_SEPARATOR . THEME);
 define('REQUIRE_PATH', HOME . DIRECTORY_SEPARATOR .'app' . DIRECTORY_SEPARATOR .'sistema');
+if(isset($_SESSION['UserLogado']))
+{
+    define ('ID_TECNICO',  intval($_SESSION['UserLogado']['id']));//ID DO TÉCNICO LOGADO
+    define ('GRUPO', intval($_SESSION['UserLogado']['grupo_id']));//GRUPO DE ACESSO A RECURSOS
 
+}
 // AUTO LOAD DE CLASSES ####################
 spl_autoload_register(function($class){
     if (file_exists("./app/classes/".$class.".class.php")):
@@ -36,3 +41,12 @@ spl_autoload_register(function($class){
         die;
     endif;
 });
+
+/*DEFINICOES DO CLIENTE*/
+define('LOGO_PSA'   ,'./app/imagens/logos/logo_psa.bmp');
+define('LOGO_LORAC' ,'./app/imagens/logos/logo_lorac.png');
+define('LOGO_SYSLAB','./app/imagens/logos/syslab_logo.PNG');
+define('PREFEITURA' ,'prefeitura de santo andré');
+define('SECRETARIA' ,'sia - secretaria de inovação e modernização');
+define('DIRETORIA'  ,'dti - departamente de tecnologia e inovação');
+define('GERENCIA'   ,'gsti - gerência de suporte técnico em informática');

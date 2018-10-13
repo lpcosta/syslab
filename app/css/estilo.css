@@ -61,7 +61,8 @@ header > div#div-user-logado{background-color: #B1ABAC;width: 140px;height: 38px
 .form-edita input[type='submit']{border: 1px solid #09f; min-width: 100px; height: 30px;}
 
 .bancada-top{height: 40px;width: 100%; margin-top: 5px;}
-.conteudo-bancada{margin-top:30px;}
+.conteudo-bancada{margin-top: -30px;}
+.dados-avalia{width: 98%;margin-top: 50px; margin-bottom: 20px;}
 
 /*classes de tela de avaliação em bancada*/
 .avalia label{width:110px; text-align: left; display: block;height: 20px;border: 1px solid #09f;padding-left: 5px;font-size: 10pt;}
@@ -70,8 +71,16 @@ header > div#div-user-logado{background-color: #B1ABAC;width: 140px;height: 38px
 .avalia textarea{resize: none; border: 1px solid #09f; width: calc(100% - 112px);padding-left: 5px;color: #000; height: 60px;}
 .avalia p{border-bottom: 1px solid #000; font-weight: 500; color: #000; text-align: center;}
 .avalia table{width: 100%;}
-/*fim das classes de tela de avaliação em bancada*/
 
+.form-avalia-equipamento label.error{float: right; border: none; width: calc(100% - 112px)}
+/*fim das classes de tela de avaliação em bancada*/
+.header-report label{margin-right: 5px;}
+.header-report input[type='text']{max-width: 120px;}
+.relatorio table{min-width: 800px; max-width: 1991px; margin: 0 auto;}
+.relatorio table table{width: 100%;}
+.relatorio table table tr{font-size: 10pt;}
+.printTable{width: 100%;margin: 0px;padding: 0px;top: 0px;left: 0px;bottom: 0px;right: 0px;}
+table.printer{margin-bottom: 20px;}
 /*FIM CLASSES GLOBAIS*/
 
 /*TABS*/
