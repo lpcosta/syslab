@@ -30,7 +30,7 @@ $stsEquipamento = $sql->getResult();
     <div id="home">
         <div class="row">
             <div class="col-md">
-                <table class="table-responsive-sm tabela-tab table-hover">
+                <table class="table-responsive-sm tabela-tab">
                     <tr class="text-primary">
                         <th class="text-uppercase text-center" colspan="2">equipamentos no laboratório</th>
                     </tr>
@@ -51,7 +51,7 @@ $stsEquipamento = $sql->getResult();
                 </table>
             </div>
              <div class="col-md">
-               <table class="table-responsive-sm tabela-tab table-hover">
+               <table class="table-responsive-sm tabela-tab">
                     <tr class="text-primary">
                         <th class="text-uppercase text-center" colspan="2">entregas</th>
                     </tr>
@@ -72,7 +72,7 @@ $stsEquipamento = $sql->getResult();
                 </table>
             </div>
              <div class="col-md">
-                <table class="table-responsive-sm tabela-tab table-hover">
+                <table class="table-responsive-sm tabela-tab">
                     <tr class="text-primary">
                         <th class="text-uppercase text-center" colspan="2">status</th>
                     </tr>
@@ -93,147 +93,76 @@ $stsEquipamento = $sql->getResult();
                 <?endforeach;?>
                 </table>
             </div>
-        </div>
-        <h2 class="text-capitalize">laboratório</h2>
-        <div class="row home-charts">
-                <div class="col-md">
-<!--          <h3>Laboratorio</h3>-->
-                  <?php
-                  
-                   $sql->FullRead("SELECT 
-                        C.descricao equipamento, COUNT(*) total
-                    FROM
-                        tb_sys003 C
-                            JOIN
-                        tb_sys004 EQ ON EQ.id_categoria = C.id
-                            JOIN
-                        tb_sys006 IE ON IE.patrimonio = EQ.patrimonio
-                            AND IE.status != :S
-                    GROUP BY C.id
-                    ORDER BY total DESC", "S=3");
-                   
-                  ?>
-                  <script>
+        </div><!-- primeira linha -->
+        <div class="row"><!-- segunda linha -->
+            <div class="col-md">
+                <script>
                     function graficoTotalEquipamento() {
-                      
-                      var grafico = google.visualization.arrayToDataTable([
+                        var grafico = google.visualization.arrayToDataTable([
+                          ['Lab', 'STI'],
+                          <?
+                          foreach ($equipamentos as $row) {
+                                  print "['" . ucwords($row['equipamento']) . "'," . $row['total'] . "],";
+                          }
+                          ?>
+                        ]);
+                        var options = {
+                          is3D: true
+                        };
+                        var graficoeqpmt = new google.visualization.PieChart(document.getElementById('graficoequipamentos'));
+                        graficoeqpmt.draw(grafico, options);
+                    }
+                </script>
+                <div id="graficoequipamentos" class="grafico-home" > </div> 
+            </div>
+            <div class="col-md">
+                <script>
+                    function graficoEntregas() {
+                        var grafico = google.visualization.arrayToDataTable([
+                            ['Lab', 'STI'],
+                        <?
+                            foreach ($entregas as $row) {
+                                 print "['" . ucwords($row['equipamento']) . "'," . $row['total'] . "],";
+                         }
+                         ?>
+                            ]);
+                            var options = {
+                                is3D: true
+                            };
+                            var graficoentrega = new google.visualization.PieChart(document.getElementById('graficoentregas'));
+                            graficoentrega.draw(grafico, options);
+                    }
+                </script>
+                <div id="graficoentregas" class="grafico-home"> </div>         
+            </div>
+            <div class="col-md">
+                <script>
+                    function graficoStatus() {
+                        var grafico = google.visualization.arrayToDataTable([
                         ['Lab', 'STI'],
                         <?
-                        $totalentradas = 0;
-                        foreach ($sql->getResult() as $row) {
-                                print "['" . ucwords($row['equipamento']) . "'," . $row['total'] . "],";
-                                $totalentradas += $row['total'];
+                        foreach ($stsEquipamento as $row) {
+                        print "['" . ucwords($row['descricao']) . "'," . $row['total'] . "],";
                         }
                         ?>
-                      ]);
-                      var options = {
-                        title: 'Equipamentos' + ' ' + <?=$totalentradas?>+'',
-                        is3D: true
-                      };
-                      var grafico_eqp = new google.visualization.PieChart(document.getElementById('piechart'));
-                      grafico_eqp.draw(grafico, options);
-                    }
-                   
-                </script>
-                <div id="piechart" class="grafico-home" > </div> 
-                </div>
-                <div class="col-md ">
-<!--                  <h3>Entradas do Mês</h3>-->
-                   <?php
-                   
-                   $sql->FullRead("SELECT 
-                        C.descricao equipamento, COUNT(*) total
-                    FROM
-                        tb_sys004 EQ
-                            JOIN
-                        tb_sys006 IE ON IE.patrimonio = EQ.patrimonio
-                            JOIN
-                        tb_sys003 C ON C.id = EQ.id_categoria
-                            JOIN
-                        tb_sys005 E ON E.identrada = IE.id_entrada
-                            AND E.data BETWEEN :dtini AND :dtfim GROUP BY C.id", "dtini=". $dt->geraDatas()[0] ."&dtfim=". $dt->geraDatas()[1] ."");      
-                   ?>
-                   <script>
-                    function graficoEntradasMes() {
-                       
-                        var grafico = google.visualization.arrayToDataTable([
-                        ['Lab', 'STI'],
-                        <?
-                           
-                    $totalentradas = 0;
-                    foreach ($sql->getResult() as $row) {
-                       
-                        print "['" . ucwords($row['equipamento']) . "'," . $row['total'] . "],";
-                        $totalentradas += $row['total'];
-                }
-                ?>
                         ]);
-
                         var options = {
-                            title: 'Entradas desse Mês ' +<?= $totalentradas; ?> + '',
                             is3D: true
                         };
 
-                        var chart = new google.visualization.PieChart(document.getElementById('piechart1'));
-                        chart.draw(grafico, options);
+                        var graficostatus = new google.visualization.PieChart(document.getElementById('graficostatus'));
+                        graficostatus.draw(grafico, options);
                     }
-                    
                 </script>
-                <div id="piechart1" class="grafico-home"> </div> 
-                </div>
-                <div class="col-md">
-<!--                   <h3>Saídas do Mês</h3>-->
-                    <?php
-                   
-                   $sql->FullRead("SELECT 
-                            C.descricao equipamento, COUNT(*) total
-                        FROM
-                            tb_sys004 EQ
-                                JOIN
-                            tb_sys006 IE ON IE.patrimonio = EQ.patrimonio
-                                JOIN
-                            tb_sys003 C ON C.id = EQ.id_categoria
-                                JOIN
-                            tb_sys009 SAIDA ON SAIDA.id_item_entrada = IE.id
-                                JOIN
-                            tb_sys007 S ON S.id = SAIDA.id_saida
-                                AND S.data BETWEEN :dtini AND :dtfim GROUP BY C.id", "dtini=". $dt->geraDatas()[0] ."&dtfim=". $dt->geraDatas()[1] ."");      
-                   ?>
-                   <script>
-                    function graficoSaidasMes() {
-                      
-                        var grafico = google.visualization.arrayToDataTable([
-                        ['Lab', 'STI'],
-                        <?
-                           
-                    $totalentradas = 0;
-                    foreach ($sql->getResult() as $row) {
-                       
-                        print "['" . ucwords($row['equipamento']) . "'," . $row['total'] . "],";
-                        $totalentradas += $row['total'];
-                }
-                ?>
-                        ]);
-
-                        var options = {
-                            title: 'Saídas desse Mês ' +<?= $totalentradas; ?> + '',
-                            is3D: true
-                        };
-
-                        var chart = new google.visualization.PieChart(document.getElementById('piechart2'));
-                        chart.draw(grafico, options);
-                    }
-                    
-                </script>
-                <div id="piechart2" class="grafico-home" > </div> 
-                </div>
+                <div id="graficostatus" class="grafico-home" > </div> 
             </div>
+        </div><!-- segunda linha -->
     </div><!-- div home -->
    
 </div><!-- div tabs-->
 <script>
     google.charts.load('current', {'packages':['corechart']});
     google.charts.setOnLoadCallback(graficoTotalEquipamento);  
-    google.charts.setOnLoadCallback(graficoSaidasMes);
-    google.charts.setOnLoadCallback(graficoEntradasMes);
+    google.charts.setOnLoadCallback(graficoEntregas);
+    google.charts.setOnLoadCallback(graficoStatus);
 </script>

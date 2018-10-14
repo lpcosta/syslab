@@ -29,7 +29,7 @@ header > div#div-user-logado{background-color: #B1ABAC;width: 140px;height: 38px
 /*FIM DOS ID's Globais'*/
 /*#############################################################################*/
 /*CLASSES GLOBAIS*/
-.grafico-home{width: 590px; height: 400px; margin: 0 auto;}
+.grafico-home{width: 590px; height: 400px; margin-left: -50px;}
 .form_load{display: none; vertical-align: middle;}
 .j_Aviso{display: none; vertical-align: middle; color: #f00;}
 .cursor-pointer{cursor: pointer;}
@@ -75,13 +75,16 @@ header > div#div-user-logado{background-color: #B1ABAC;width: 140px;height: 38px
 
 .form-avalia-equipamento label.error{float: right; border: none; width: calc(100% - 112px)}
 /*fim das classes de tela de avaliação em bancada*/
+
+/*ESTILOS DE RELATÓRIOS*/
 .header-report label{margin-right: 5px;}
-.header-report input[type='text']{max-width: 120px;}
+.header-report input[type='text']{max-width: 100px;border: 1px solid #09f;padding-left: 5px;height: 30px;}
 .relatorio table{min-width: 800px; max-width: 1991px; margin: 0 auto;}
 .relatorio table table{width: 100%;}
 .relatorio table table tr{font-size: 10pt;}
 .printTable{width: 100%;margin: 0px;padding: 0px;top: 0px;left: 0px;bottom: 0px;right: 0px;}
 table.printer{margin-bottom: 20px;}
+/*FIM DOS ESTILSO DE RELATORIOS*/
 /*FIM CLASSES GLOBAIS*/
 
 /*TABS*/
@@ -98,12 +101,12 @@ table.printer{margin-bottom: 20px;}
 
 @media (max-width: 1680px) {
  .tabs .tabela-tab th,td {font-size: 10pt;}
- .grafico-home{width: 490px; height: 400px; margin: 0 auto;}
+ .grafico-home{width: 490px; height: 400px;}
 }
 
 @media (max-width: 1440px) {
  .tabs .tabela-tab th,td {font-size: 10pt;}
- .grafico-home{width: 410px; height: 340px; margin: 0 auto;}
+ .grafico-home{width: 430px; height: 360px; margin-left: -50px;}
 }
 
 @media (max-width: 1360px){
@@ -113,7 +116,7 @@ table.printer{margin-bottom: 20px;}
 
 @media (max-width: 1024px) {
  .tabs .tabela-tab th,td {font-size: 10pt;}
- .grafico-home{width: 290px; height: 300px; margin: 0 auto;}
+ .grafico-home{width: 290px; height: 300px;}
  #txtPeca{font-size: 9pt;}
 }
 

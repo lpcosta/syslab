@@ -78,7 +78,7 @@ $pendentes = new Read();
                     endif;?>   
                     <td class="text-left"><?= $rowEquipamento['equipamento'] . ' ' . $rowEquipamento['fabricante'] . ' ' . $rowEquipamento['modelo'] ?></td>
                     <td class="text-center"><?= $rowEquipamento['os'] ?></td>
-                    <td class="text-center"><?= $rowEquipamento['patrimonio'] ?></td>
+                    <td class="text-center cursor-pointer" onclick="mostraModal(<?= $rowEquipamento['patrimonio'] ?>)"><?= $rowEquipamento['patrimonio'] ?></td>
                     <td class="text-center"><?= date('d/m/Y', strtotime($rowEquipamento['data']));?></td>
                     <td class="text-center"><?= date('d/m/Y', strtotime($rowEquipamento['dtava']));?></td>
                     <td class="text-center"><?=$dt->setData($rowEquipamento['data'], HOJE) ?></td>
@@ -92,7 +92,7 @@ $pendentes = new Read();
             <tr class="text-uppercase text-primary">
                 <th class="text-left">LOCAL</th>
                 <th class="text-left">EQUIPAMENTO</th>
-                <th class="text-center cursor-pointer">OS</th>
+                <th class="text-center">OS</th>
                 <th class="text-center cursor-pointer">PATRIMONIO</th>
                 <th class="text-center">DT.ENTRADA</th>
                 <th class="text-center">SECRETARIA</th>
@@ -113,8 +113,8 @@ $pendentes = new Read();
             <tr class="text-capitalize">
                 <td class="text-left"><?=$pendente['local']?></td>
                 <td class="text-left"><?=$pendente['equipamento'].' '.$pendente['fabricante'].' '.$pendente['modelo']?></td>
-                <td class="text-center cursor-pointer"><?=$pendente['os']?></td>
-                <td class="text-center cursor-pointer"><?=$pendente['patrimonio']?></td>
+                <td class="text-center"><?=$pendente['os']?></td>
+                <td class="text-center cursor-pointer" onclick="mostraModal(<?= $pendente['patrimonio'] ?>)"><?=$pendente['patrimonio']?></td>
                 <td class="text-center"><?=date("d/m/Y",strtotime($pendente['dtent']));?></td>
                 <td class="text-center text-uppercase"><?=$pendente['sigla']?></td>
                 <td class="text-center"><?=$dt->setData($pendente['dtent'], $dt_fim)?></td>

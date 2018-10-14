@@ -33,6 +33,7 @@ session_start();
             <div class="col form-inline">
                 <label>&nbsp;</label>
                 <input type="submit" class="btn btn-primary" onclick="finalizaSaida(<?=$saida?>,'<?=$_SESSION['UserLogado']['email']?>','<?=$_SESSION['UserLogado']['nome']?>')" value="Finalizar Saída" />
+                 &nbsp;
                 <img src="./app/imagens/load.gif" class="form_load" alt="[CARREGANDO...]" title="CARREGANDO.." /> 
             </div>
         </div>

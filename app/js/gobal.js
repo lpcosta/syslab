@@ -376,6 +376,74 @@ function setaPeca(peca)
     }
 }
 
+function setaTipoRel(val){
+    switch(val){
+        case 'codigo':
+            $(".tecnico-rel").hide().val('');
+            $(".periodo-rel").hide().val('');
+            $(".cod-rel").show();
+            break;
+        case 'tecnico':
+            $(".cod-rel").hide();
+            $(".periodo-rel").hide();
+            $(".tecnico-rel").show();
+            break;
+        case 'periodo':
+            $(".cod-rel").hide();
+            $(".tecnico-rel").hide();
+            $(".periodo-rel").show();
+            break;
+        default:
+            $(".cod-rel").show();
+            $(".tecnico-rel").hide();
+            $(".periodo-rel").show();
+    }
+}
+
+function validaRelatorio(t,idfrm){
+    if(t=='saida'){
+        switch($('#tipoRel').val()){
+            case 'codigo':
+                if($.trim($('#txtCodSaida').val())=='')
+                {modal('informe um numero de saída');}
+                else{geraRelatorio(idfrm);}
+                break;
+            case 'tecnico':
+                if($('#txtTecnico').val()=='')
+                {modal('Selecione um Técnico');}
+                else{geraRelatorio(idfrm);}
+            break;
+            case 'periodo':
+                if($('#dtInicial').val()== '' && $('#dtFinal').val()=='' )
+                {modal('informe pelo menos uma Data');}
+                else{geraRelatorio(idfrm);}
+            break;
+            default:
+                return false;
+        }
+    }else if(t=='entrada'){
+        
+    }
+}
+
+function geraRelatorio(frm){
+    var dados =  $(frm).serialize();
+        $.ajax({
+            type: "POST",
+            url: "./app/sistema/ajax/relatorio.php",
+            data: dados,
+            dataType:'HTML',
+            beforeSend:function(){
+             $('.form_load').fadeIn(500);
+            },
+            success: function(res)
+            {$('.form_load').fadeOut(500);
+               $(".relatorio").html(res);
+               $('.btnPrinter').show();
+            }
+        });
+}
+
 
 function checaCadastroPatrimonio(p)
 {
@@ -809,7 +877,10 @@ function baixaPeca(peca,os,id){
         }
     });
     /*FIM DA PESQUISA DE PATRIMONIO*/
-
+function mostraModal(p){
+    $("#txtBusca").val(p);
+    $("#formSearch").submit();
+}
     /*PESQUISA OS*/
     $('#formSearchOs').validate({
         onfocusout: false,
