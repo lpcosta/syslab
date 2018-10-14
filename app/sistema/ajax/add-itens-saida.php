@@ -7,6 +7,7 @@ $sql  = new Read();
 $cria = new Create();
 $atu  = new Update();
 $sql->FullRead("select T.nome,S.data from tb_sys001 T join tb_sys007 S ON S.id_tecnico = T.id and S.id = :ID", "ID={$saida}");
+session_start();
 ?>
 <div>
     <form id="add-itens-saida" class="form-cadastra" onsubmit="return false">
@@ -31,7 +32,8 @@ $sql->FullRead("select T.nome,S.data from tb_sys001 T join tb_sys007 S ON S.id_t
             </div>
             <div class="col form-inline">
                 <label>&nbsp;</label>
-                <input type="submit" class="btn btn-primary" onclick="finalizaSaida(<?=$saida?>)" value="Finalizar Saída" />
+                <input type="submit" class="btn btn-primary" onclick="finalizaSaida(<?=$saida?>,'<?=$_SESSION['UserLogado']['email']?>','<?=$_SESSION['UserLogado']['nome']?>')" value="Finalizar Saída" />
+                <img src="./app/imagens/load.gif" class="form_load" alt="[CARREGANDO...]" title="CARREGANDO.." /> 
             </div>
         </div>
         <hr />

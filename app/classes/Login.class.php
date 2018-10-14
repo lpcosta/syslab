@@ -82,7 +82,7 @@ class Login {
     private function getUser() {
         $senha = new Senha();
         $sql = new Read();      
-        $sql->FullRead("SELECT id,nome,login,situacao,tentativa_login,senha_padrao,grupo_id FROM tb_sys001 WHERE login = :LOGIN AND senha = :SENHA", "LOGIN={$this->Login}&SENHA={$senha->setSenha($this->Senha)}");
+        $sql->FullRead("SELECT id,nome,email,login,situacao,tentativa_login,senha_padrao,grupo_id FROM tb_sys001 WHERE login = :LOGIN AND senha = :SENHA", "LOGIN={$this->Login}&SENHA={$senha->setSenha($this->Senha)}");
 
         if ($sql->getResult()):
             $this->Result = $sql->getResult()[0];

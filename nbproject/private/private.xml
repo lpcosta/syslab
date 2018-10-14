@@ -3,9 +3,12 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/xampp/htdocs/syslab/app/sistema/ajax/valida-avaliacao.php</file>
+            <file>file:/C:/xampp/htdocs/syslab/app/sistema/ajax/finaliza-entrada.php</file>
+            <file>file:/C:/xampp/htdocs/syslab/app/classes/Email.class.php</file>
+            <file>file:/C:/xampp/htdocs/syslab/app/sistema/ajax/checa-cadastro-patrimonio.php</file>
             <file>file:/C:/xampp/htdocs/syslab/app/js/gobal.js</file>
-            <file>file:/C:/xampp/htdocs/syslab/app/sistema/ajax/avalia.php</file>
+            <file>file:/C:/xampp/htdocs/syslab/app/sistema/ajax/finaliza-saida.php</file>
+            <file>file:/C:/xampp/htdocs/syslab/app/sistema/laboratorio/entrada.php</file>
         </group>
     </open-files>
 </project-private>

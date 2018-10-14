@@ -173,15 +173,39 @@ function adicionaItemEntrada(t,e){
     return false;
 }
 
-function finalizaEntrada(e){
+function finalizaEntrada(e,mail,resp){
     $.ajax({
             type: "POST",
             url: "./app/sistema/ajax/finaliza-entrada.php",
-            data: { entrada: e},
-            success: function( res )
-            {modal(res);}
-        });
-    return false;
+            data: { entrada: e,mailResp:mail,responsavel:resp},
+            dataType:'HTML',
+            beforeSend:function(){
+             $('.form_load').fadeIn(500);
+            },
+            success: function(res)
+            {$('.form_load').fadeOut(500);
+               if($.isNumeric(res)){
+                    $("#dialog").html("<div class=\"alert alert-success text-center\">Entrada Finalizada com Sucesso! <br /> Deseja Gerar relatorio?</div>");
+                    $("#dialog").dialog({
+                    width       : "auto",
+                    heigth      : "auto",
+                    modal       : true,
+                    minHeight   : 180,
+                    show    :{effect: "slideDown",duration:1000},
+                    hide    : {effect: "slideUp",duration:1000},      
+                buttons:
+                        {"SIM": function (){$(this).dialog("close");
+                                location.href = 'index.php?pg=relatorio/entrada&id=' + res;
+                            },
+                        "NÃO": function (){
+                                $(this).dialog("close");
+                                location.href = 'index.php?pg=laboratorio/entrada';
+                            }
+                        }
+                    });
+                }else{modal(res);}
+            }
+    });
 }
 
 /*#######  FIM DAS FUNCOES QUE AUXILIA E VALIDA ITENS E ENTRADAS */
@@ -245,15 +269,39 @@ function addItemSaida(){
     });
 }
 
-function finalizaSaida(s){
+function finalizaSaida(s,mail,resp){
     $.ajax({
             type: "POST",
             url: "./app/sistema/ajax/finaliza-saida.php",
-            data: { saida: s},
-            success: function( res )
-            {modal(res);}
-        });
-    return false;
+            data: { saida: s,mailResp:mail,responsavel:resp},
+            dataType:'HTML',
+            beforeSend:function(){
+             $('.form_load').fadeIn(500);
+            },
+            success: function(res)
+            {$('.form_load').fadeOut(500);
+               if($.isNumeric(res)){
+                    $("#dialog").html("<div class=\"alert alert-success text-center\">Saída Finalizada com Sucesso! <br /> Deseja Gerar relatorio?</div>");
+                    $("#dialog").dialog({
+                    width       : "auto",
+                    heigth      : "auto",
+                    modal       : true,
+                    minHeight   : 180,
+                    show    :{effect: "slideDown",duration:1000},
+                    hide    : {effect: "slideUp",duration:1000},      
+                buttons:
+                        {"SIM": function (){$(this).dialog("close");
+                                location.href = 'index.php?pg=relatorio/saida&id=' + res;
+                            },
+                        "NÃO": function (){
+                                $(this).dialog("close");
+                                location.href = 'index.php?pg=laboratorio/saida';
+                            }
+                        }
+                    });
+                }else{modal(res);}
+            }
+    });
 }
 
 /*#### FIM SAIDAS #####*/
@@ -379,10 +427,13 @@ function checaCadastroPatrimonio(p)
                         modal("<div class='alert alert-warning text-primary text-uppercase'><p>Patrimônio não Cadastrado!</p>"+
                                "<p>Deseja Cadastra-lo? <a href='index.php?ref=cadastra/equipamento&p="+p+"'>Sim</a></p></div>");
                         break;
+                    case '4':
+                        modal("<div class='alert alert-warning text-primary text-uppercase'>Consta um registro de baixa desse Patrimônio!<br /> Por favor verifique e tenta Novamente!</div>");
+                        break;
                     default:
-                    modal("<p class='alert alert-warning text-primary text-uppercase'>OPS! Não faço a mínima idéia do porque que aconteceu!</p>"+
-                            "<p class='alert alert-warning text-primary text-uppercase'>Por favor feche seu Navegador e tente Novamente!</p>"+
-                            "<p class='alert alert-warning text-primary text-uppercase'>Se o problema persistir... Ferrou!</p>");                   
+                    modal("<div class='alert alert-warning text-primary text-uppercase'>OPS! Não faço a mínima idéia do porque que aconteceu!<br />"+
+                            "Por favor feche seu Navegador e tente Novamente!<br />"+
+                            "Se o problema persistir... Ferrou!</div>");                   
                 }
             }
         });

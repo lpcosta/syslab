@@ -1,8 +1,8 @@
 <?php
    paginaSegura();
-   $sql = new Read();
-   if($_SESSION['UserLogado']['grupo_id'] != 4):
-       header("location:".HOME."");
+    if(GRUPO != 4):
+       header("Location:".HOME."");
+       exit();
    endif;
 ?>
 <div class="tabs">

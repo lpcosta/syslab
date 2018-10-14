@@ -4,9 +4,7 @@
 ?>
 <div class="tabs">
     <ul>
-        <li><a href="#cad-entrada" id="nentrada">
-                Entrada de Equipamento
-            </a></li>
+        <li><a href="#cad-entrada" id="nentrada">Entrada de Equipamento</a></li>
     </ul>
     <div id="cad-entrada">
         <form class="form-cadastra titulo-entrada entrada" onsubmit="return false;">
@@ -31,7 +29,6 @@
         </form>     
     <form class="form-cadastra entrada" id="iten-entrada" onsubmit="return false;" style="display: none;">
         <hr />
-            <h2>Entrada de Equipamento</h2>
         <div class="row">
             <div class="col form-inline">
                 <label>O.S</label>
@@ -65,35 +62,6 @@
             </div>
             
         </div>
-<!--        <div class="row mostra-dados-printer" style="display: none;">
-            <div class="col form-inline">
-                <label>USB/IP</label>
-                <select name="ip" id="txtIp">
-                     <option selected value="">Selecione...</option>
-                     <option value="ip">Rede</option>
-                     <option value="usb">Usb</option>
-                 </select>
-            </div>
-            <div class="col form-inline">
-                 <label>Veio Toner?</label>
-                 <select>
-                     <option selected value="">Selecione...</option>
-                     <option value="sim">Sim</option>
-                     <option value="nao">Não</option>
-                 </select>
-            </div>
-        </div>
-        <div class="row mostra-dados-mobile" style="display: none;">
-            <div class="col form-inline">
-                <label>Veio Fonte?</label>
-                <select>
-                     <option selected value="">Selecione...</option>
-                     <option value="sim">Sim</option>
-                     <option value="nao">Não</option>
-                 </select>
-            </div>
-           
-        </div>-->
         <div class="row">
             <div class="col form-inline">
                <label>Localidade</label>
@@ -163,7 +131,8 @@
                     <button type="button" onclick="validaItemEntrada($('#txtTecnico').val(),$('#numeroEntrada').val(),$('#txtEquipamento').val()); $('#iten-entrada').submit();">Adicionar Equipamento</button>
                 </div>
                 <div>
-                    <button type="button" onclick="finalizaEntrada($('#numeroEntrada').val());" >Finalizar Entrada</button>
+                    <button type="button" onclick="finalizaEntrada($('#numeroEntrada').val(),'<?=$_SESSION['UserLogado']['email']?>','<?=$_SESSION['UserLogado']['nome']?>');" >Finalizar Entrada</button>
+                    <img src="./app/imagens/load.gif" class="form_load" alt="[CARREGANDO...]" title="CARREGANDO.." /> 
                 </div>
             </div>
         </div>

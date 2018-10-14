@@ -155,7 +155,7 @@ endif;
                     </div>
                     <div class="col form-inline">
                         <label>Key S.O</label>
-                        <input type="text" id="txtKeySo" name="key_so" value="<?=$sql->getResult()[0]['key_so']?>" class="text-capitalize m_key " size="26" placeholder="Chave de Ativação do Windows" onkeyup="maskKey(this)" onkeypress="maskKey(this)" <?if(!in_array($sql->getResult()[0]['id_categoria'],$categorias)){print "disabled";}?> />
+                        <input type="text" id="txtKeySo" name="key_so" value="<?=$sql->getResult()[0]['key_so']?>" class="text-capitalize m_key " size="26" placeholder="Chave de Ativação do Windows" <?if(!in_array($sql->getResult()[0]['id_categoria'],$categorias)){print "disabled";}?> />
                     </div>
                     
                 </div>
@@ -181,7 +181,7 @@ endif;
                     </div>
                     <div class="col form-inline">
                         <label>Key Office</label>
-                        <input type="text" id="txtKeyOffice" name="key_office" class="text-capitalize" size="26" placeholder="Chave de Ativação do Office" onkeyup="maskKey(this)" onkeypress="maskKey(this)" maxlength="30" <?if(!in_array($sql->getResult()[0]['id_categoria'],$categorias)){print "disabled";}?>/>
+                        <input type="text" id="txtKeyOffice" name="key_office" class="text-capitalize m_key" size="26" placeholder="Chave de Ativação do Office" maxlength="30" <?if(!in_array($sql->getResult()[0]['id_categoria'],$categorias)){print "disabled";}?>/>
                     </div>
                 </div>
                 <div class="row">
@@ -242,7 +242,7 @@ endif;
                     <div class="col form-inline">
                         <button type="submit" style="margin-right: 10px;">Salvar</button>
                      
-                        <button type="button" onclick="history.back();">Cancelar</button>
+                        <button type="button" onclick="history.back();">Voltar</button>
                     </div>
                 </div>
             </form>

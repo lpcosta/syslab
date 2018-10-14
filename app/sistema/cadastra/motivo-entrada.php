@@ -1,6 +1,9 @@
 <?php
    paginaSegura();
-    
+    if(GRUPO >= 3):
+       header("Location:".HOME."");
+       exit();
+   endif;
     $sql = new Read();
 
 ?>

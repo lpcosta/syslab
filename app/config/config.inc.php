@@ -20,12 +20,14 @@ define('HOST',gethostbyaddr(IP));
 //define('INCLUDE_PATH', HOME . DIRECTORY_SEPARATOR . 'themes' . DIRECTORY_SEPARATOR . THEME);
 //define('REQUIRE_PATH', 'themes' . DIRECTORY_SEPARATOR . THEME);
 define('REQUIRE_PATH', HOME . DIRECTORY_SEPARATOR .'app' . DIRECTORY_SEPARATOR .'sistema');
-if(isset($_SESSION['UserLogado']))
-{
+if(isset($_SESSION['UserLogado'])):
+
     define ('ID_TECNICO',  intval($_SESSION['UserLogado']['id']));//ID DO TÉCNICO LOGADO
     define ('GRUPO', intval($_SESSION['UserLogado']['grupo_id']));//GRUPO DE ACESSO A RECURSOS
-
-}
+else:
+    define("GRUPO", 0);
+    define("ID_TECNICO", 0);
+endif;
 // AUTO LOAD DE CLASSES ####################
 spl_autoload_register(function($class){
     if (file_exists("./app/classes/".$class.".class.php")):

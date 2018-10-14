@@ -60,9 +60,10 @@ header > div#div-user-logado{background-color: #B1ABAC;width: 140px;height: 38px
 .form-edita input,select{padding: 3px; border: 1px solid #09f; height: 30px;}
 .form-edita input[type='submit']{border: 1px solid #09f; min-width: 100px; height: 30px;}
 
-.bancada-top{height: 40px;width: 100%; margin-top: 5px;}
+.bancada-top{border-bottom: 2px solid #09f; margin-top: 1px;padding-top: 3px;}
+.bancada-top label{text-transform: capitalize; font-weight: bolder; margin-right: 3px; width: 120px; display: block;text-align: left;}
+.dados-avalia{width: 98%;margin-bottom: 20px; margin-top: 3px;}
 .conteudo-bancada{margin-top: -30px;}
-.dados-avalia{width: 98%;margin-top: 50px; margin-bottom: 20px;}
 
 /*classes de tela de avaliação em bancada*/
 .avalia label{width:110px; text-align: left; display: block;height: 20px;border: 1px solid #09f;padding-left: 5px;font-size: 10pt;}
@@ -114,7 +115,6 @@ table.printer{margin-bottom: 20px;}
  .tabs .tabela-tab th,td {font-size: 10pt;}
  .grafico-home{width: 300px; height: 300px; margin: 0 auto;}
  #txtPeca{font-size: 9pt;}
- .conteudo-bancada{margin-top: 5%;}
 }
 
 

@@ -23,19 +23,17 @@ $dt  = new Datas();
         <? endforeach;?>
     </ul>
     <div class="bancada-top">
-        <form class="form-cadastra" id="form-bancada-search" onsubmit="return false;" style="width: 98%;">
-            <hr />
+        <form id="form-bancada-search" onsubmit="return false;" style="width: 98%;">
             <div class="row">
                 <div class="col-lg form-inline">
                     <label>Patrimonio/OS</label>
                     <input type="text" name="patrimonio" class="form-control auto-focus" id="txtPatrimonio" autofocus="" />
                     &nbsp;
-                    <input type="submit" class="btn btn-primary" id="btnAvalia" name="btnBancada" value="Avaliar Equipamento" />&nbsp;
+                    <input type="submit" class="btn btn-primary" id="btnAvalia" name="btnBancada" value="Pesquisar" />&nbsp;
                     <input type="button" class="btn btn-primary" name="btnBancada" value="Carregar" onclick="history.go(0);" />
                     &nbsp;
                 </div>
             </div>
-            <hr />
         </form>
     </div>
     <div class="dados-avalia"></div>
@@ -73,7 +71,7 @@ $dt  = new Datas();
                                         tb_sys005 E ON E.identrada = IE.id_entrada AND IE.status = :STS AND C.id = :CATEG", "STS=1&CATEG={$res['id']}"); 
                foreach($sql->getResult() as $row):
             ?>
-                <tr style="cursor:pointer;" onclick="avaliaEquipamento(<?=$row['id']?>);">
+                <tr style="cursor:pointer;" onclick="avaliaEquipamento(<?=$row['id']?>);" title="Clique para Avaliar">
                     <td class="text-left text-capitalize"><?=$row['modelo']?></td>
                     <td class="text-center"><?=$row['patrimonio']?></td>
                     <td class="text-center"><?=$row['os']?></td>

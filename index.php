@@ -10,7 +10,6 @@ session_start();
 require_once './app/composer/vendor/autoload.php';
 require_once './app/config/config.inc.php';
 require_once './app/funcoes/func.inc.php';
-
 ?>
 
 <!DOCTYPE html> 
@@ -66,6 +65,7 @@ require_once './app/funcoes/func.inc.php';
                             <li><a href="index.php?pg=laboratorio/saida">Saída</a></li>
                         </ul>
                     </li>
+                    <?if(GRUPO == 4):?>
                     <li><a href="#">Estoque</a>
                         <ul class="submenu-1">
                             <li><a href="#">Peça</a>
@@ -86,6 +86,7 @@ require_once './app/funcoes/func.inc.php';
                             </li>
                         </ul>
                     </li>
+                    <?endif;?>
                     <li><a href="#">Relatorios</a>
                         <ul class="submenu-1">
                             <li><a href="index.php?pg=relatorio/saida">Saídas</a></li>
@@ -99,17 +100,19 @@ require_once './app/funcoes/func.inc.php';
                         <ul class="submenu-1">
                             <li><a href="#">Cadastrar</a>
                                 <ul class="submenu-2">
-                                    <li><a href="index.php?pg=cadastra/categoria">Categoria</a></li>
                                     <li><a href="index.php?pg=cadastra/equipamento">Equipamento</a></li>
-                                    <li><a href="index.php?pg=cadastra/empresa">Empresa</a></li>
                                     <li><a href="index.php?pg=cadastra/localidade">Localidade</a></li>
+                                    <li><a href="index.php?pg=cadastra/software">Windows/Office</a></li>
+                                <?if(GRUPO >= 3):?>    
                                     <li><a href="index.php?pg=cadastra/motivo-entrada">Motivo de Entrada</a></li>
                                     <li><a href="index.php?pg=cadastra/secretaria">Secretaria</a></li>
                                     <li><a href="index.php?pg=cadastra/status">Status</a></li>
-                                    <li><a href="index.php?pg=cadastra/usuario">Usuario</a></li>                                    
-                                    <li><a href="index.php?pg=cadastra/software">Windows/Office</a></li>
+                                    <li><a href="index.php?pg=cadastra/empresa">Empresa</a></li>
+                                <?if(GRUPO == 4):?>    
+                                    <li><a href="index.php?pg=cadastra/categoria">Categoria</a></li>
                                     <li><a href="index.php?pg=cadastra/fornecedor">Fornecedor</a></li>
-                                   
+                                    <li><a href="index.php?pg=cadastra/usuario">Usuario</a></li>  
+                                <?endif;endif;?>
                                 </ul>
                             </li>
                             <li><a href="#">Gerenciar</a>
@@ -118,21 +121,29 @@ require_once './app/funcoes/func.inc.php';
                                         <ul class="submenu-3">
                                             <li><a href="index.php?pg=cadastra/modelo-equipamento">Cadastrar Modelo</a></li>
                                             <li><a href="index.php?pg=edita/equipamento">Editar</a></li>
+                                        <?if(GRUPO == 4):?>    
                                             <li><a href="#">Excluir</a></li>
+                                        <?endif;?>
                                         </ul>
                                     </li>
                                     <li><a href="#">Windows/Office</a>
                                         <ul class="submenu-3">
                                             <li><a href="#">Editar Windows</a></li>
+                                        <?if(GRUPO == 4):?>
                                             <li><a href="#">Excluir Windows</a></li>
+                                        <?endif;?>
                                             <li><a href="#">Editar Office</a></li>
+                                        <?if(GRUPO == 4):?>
                                             <li><a href="#">Excluir Office</a></li>
+                                        <?endif;?>
                                         </ul>
                                     </li>
                                     <li><a href="#">Localidade</a>
                                         <ul class="submenu-3">
                                             <li><a href="#">Editar</a></li>
+                                        <?if(GRUPO == 4):?>    
                                             <li><a href="#">Excluir</a></li>
+                                        <?endif;?>
                                         </ul>
                                     </li>
                                     <li><a href="#">Usuario</a></li>

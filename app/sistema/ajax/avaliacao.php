@@ -26,7 +26,7 @@ endif;
 unset($post['email_tecnico_entrada']);   
 $cria->ExeCreate("tb_sys010", $post);
 if($cria->getResult()):
-    $data_avaliacao = date('d-m-Y H:i');
+    $data_avaliacao = date('d/m/Y H:i');
     $atu->ExeUpdate("tb_sys006", ["status"=>$id_status], "WHERE id = :ID","ID={$id_item_entrada}");
     $sql->FullRead("SELECT T.nome,
                            EQ.patrimonio,

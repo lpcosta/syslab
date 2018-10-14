@@ -48,7 +48,7 @@ class Email {
 
     private function sendMail() {
         $this->Mail->Subject = $this->assunto;
-        //$this->Mail->AddBCC("lpcosta@santoandre.sp.gov.br"); // Envia Cópia Oculta
+        $this->Mail->AddBCC("lpcosta@santoandre.sp.gov.br"); // Envia Cópia Oculta
         foreach ($this->destinatarios as $chave => $valor):
             
          $this->Mail->addAddress($valor); // email dos destinatarios.

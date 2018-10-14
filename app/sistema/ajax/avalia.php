@@ -79,6 +79,7 @@ if(isset($id)):
                         JOIN tb_sys003 C ON C.id = EQ.id_categoria
                         JOIN tb_sys018 F ON F.id_fabricante = EQ.fabricante AND IE.id = :ID", "ID={$id}");
     $categorias=[2,5,17,22,23,26];
+    $categoria = $sql->getResult()[0]['categoria'];
    if($sql->getResult()):?>
 <div class="avalia">
 <!--    <p class="text-capitalize">infomações da entrada</p>-->
@@ -138,7 +139,7 @@ if(isset($id)):
             <textarea disabled=""><?= ucfirst($sql->getResult()[0]['observacao'])?></textarea>
         </div>
     </div>
-    <?php if(in_array($sql->getResult()[0]['categoria'],$categorias)):
+    <?php if(in_array($categoria,$categorias)):
        
         if($sql->getResult()[0]['so_id'] !=0):
             $sqlSo = new Read();
@@ -277,7 +278,7 @@ if(isset($id)):
         <input type="hidden" name="email_tecnico_entrada" value="<?=$sql->getResult()[0]['email']?>" />
         <div class="row">
             <div class="col form-inline">
-                <select id="txtStatus" name="id_status" class="text-capitalize" onchange="validaAvaliacao(this.value,<?=$sql->getResult()[0]['categoria']?>,<?=$sql->getResult()[0]['id_equipamento']?>,<?=$pecas?>)" >
+                <select id="txtStatus" name="id_status" class="text-capitalize" onchange="validaAvaliacao(this.value,<?=$categoria?>,<?=$sql->getResult()[0]['id_equipamento']?>,<?=$pecas?>)" >
                     <option value="">Avaliar...</option>
                     <?$sql->ExeRead("tb_sys002");
                     foreach ($sql->getResult() as $res):
@@ -295,7 +296,7 @@ if(isset($id)):
                                        $('#txtAndar').focus();
                                    }" onchange="setaPeca(this.value);$('#txtAvalia').focus();" class="text-capitalize" style="width: 60%; min-width: 300px;">
                         <option value="" class="localidade">Selecione</option>                        
-                        <?$sql->FullRead("SELECT id_peca,descricao_peca FROM tb_sys015 ORDER BY descricao_peca");foreach($sql->getResult()as $peca):?>
+                        <?$sql->FullRead("SELECT id_peca,descricao_peca FROM tb_sys015 WHERE categoria_id = :CATEG ORDER BY descricao_peca","CATEG={$categoria}");foreach($sql->getResult()as $peca):?>
                         <option value="<?= $peca['id_peca'] ?>" class="localidade"><?= $peca['descricao_peca']; ?></option>
                         <?endforeach;?>
                     </select>
