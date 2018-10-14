@@ -21,7 +21,7 @@ $pendentes = new Read();
     else:?>
     <div id="<?=$checa->Url($res['descricao'])?>" class="conteudo-bancada">
         <table class="table-responsive-sm tabela-tab table-hover">
-            <tr class="text-uppercase">
+            <tr class="text-uppercase text-primary">
                 <th class="text-left">localidade</th>
                  <?php if($res['id']==4):
                     print "<th class=\"text-left\">endereço</th>";
@@ -89,7 +89,7 @@ $pendentes = new Read();
     <?php endif;endforeach;?> 
     <div id="pendente">
         <table class="table-responsive-sm tabela-tab table-hover">
-            <tr class="text-uppercase">
+            <tr class="text-uppercase text-primary">
                 <th class="text-left">LOCAL</th>
                 <th class="text-left">EQUIPAMENTO</th>
                 <th class="text-center cursor-pointer">OS</th>

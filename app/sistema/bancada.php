@@ -40,8 +40,8 @@ $dt  = new Datas();
     <?php $form=0; foreach ($sqlEqpmt->getResult() as $res): ?>
         <div id="<?=$checa->Url($res['equipamento'])?>" class="conteudo-bancada">
             <table class="table-responsive-sm tabela-tab table-hover">
-                <tr class="text-capitalize">
-                    <th class="text-left text-capitalize">Modelo</th>
+                <tr class="text-uppercase text-primary">
+                    <th class="text-left">Modelo</th>
                     <th class="text-center">Patrimonio</th>
                     <th class="text-center">O.S</th>
                     <th>Motivo</th>

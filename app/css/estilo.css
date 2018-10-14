@@ -29,7 +29,7 @@ header > div#div-user-logado{background-color: #B1ABAC;width: 140px;height: 38px
 /*FIM DOS ID's Globais'*/
 /*#############################################################################*/
 /*CLASSES GLOBAIS*/
-.grafico-home{width: 600px; height: 400px; margin: 0 auto;}
+.grafico-home{width: 590px; height: 400px; margin: 0 auto;}
 .form_load{display: none; vertical-align: middle;}
 .j_Aviso{display: none; vertical-align: middle; color: #f00;}
 .cursor-pointer{cursor: pointer;}
@@ -98,12 +98,12 @@ table.printer{margin-bottom: 20px;}
 
 @media (max-width: 1680px) {
  .tabs .tabela-tab th,td {font-size: 10pt;}
- .grafico-home{width: 500px; height: 400px; margin: 0 auto;}
+ .grafico-home{width: 490px; height: 400px; margin: 0 auto;}
 }
 
 @media (max-width: 1440px) {
  .tabs .tabela-tab th,td {font-size: 10pt;}
- .grafico-home{width: 420px; height: 340px; margin: 0 auto;}
+ .grafico-home{width: 410px; height: 340px; margin: 0 auto;}
 }
 
 @media (max-width: 1360px){
@@ -113,7 +113,7 @@ table.printer{margin-bottom: 20px;}
 
 @media (max-width: 1024px) {
  .tabs .tabela-tab th,td {font-size: 10pt;}
- .grafico-home{width: 300px; height: 300px; margin: 0 auto;}
+ .grafico-home{width: 290px; height: 300px; margin: 0 auto;}
  #txtPeca{font-size: 9pt;}
 }
 
