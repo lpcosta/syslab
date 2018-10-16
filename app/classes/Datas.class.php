@@ -10,6 +10,7 @@ class Datas {
     private $difenca;
     private $dias;
     private $data;
+    
     public function setData($dt_ini,$dt_fim){
         $this->dtini = str_replace('-', '/',$dt_ini);
         $this->dtfim = str_replace('-','/',$dt_fim);   
@@ -27,7 +28,16 @@ class Datas {
          $this->data = date_format(date_create_from_format('d-m-Y', $this->data), 'Y-m-d');
          return $this->data;
      }
-
+     
+    public function validarData($dt) {
+        $data = explode("/","$dt"); // fatia a string $data em pedados, usando / como referência
+	$dia = $data[0];
+	$mes = $data[1];
+	$ano = $data[2];
+	$this->res = checkdate($mes,$dia,$ano);
+        if ($this->res == 1){return true;}
+        else{return false;}
+     }
     /*FUNÇÕES PRIVADAS*/
     private function getDias()
             {

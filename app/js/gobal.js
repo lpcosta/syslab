@@ -439,7 +439,6 @@ function geraRelatorio(frm){
             success: function(res)
             {$('.form_load').fadeOut(500);
                $(".relatorio").html(res);
-               $('.btnPrinter').show();
             }
         });
 }

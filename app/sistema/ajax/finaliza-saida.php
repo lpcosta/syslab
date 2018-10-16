@@ -26,19 +26,19 @@ if($sql->getRowCount() > 0):
                 <th colspan=\"6\" style=\"text-align: center;\">STI - SAÍDA DE EQUIPAMENTO DO LABORATÓRIO</th>
             </tr>
             <tr>
-                <th style=\"width:120px;\">SAIDA Nº</th>
+                <th style=\"width:120px;text-align:left;\">SAIDA Nº</th>
                 <td colspan='5'>".$saida."</td>
             </tr>
             <tr>
-                <th style=\"width:120px;\">FEITA POR</th>
+                <th style=\"width:120px;text-align:left;\">FEITA POR</th>
                 <td colspan='5'>".ucwords($responsavel)."</td>
             </tr>
             <tr>
-                <th style=\"width:120px;\">TÉCNICO</th>
+                <th style=\"width:120px;text-align:left;\">TÉCNICO</th>
                 <td colspan='5'>".ucwords($bscMail->getResult()[0]['nome'])."</td>
             </tr>
             <tr>
-                <th style=\"width:120px;\">DATA</th>
+                <th style=\"width:120px;text-align:left;\">DATA</th>
                 <td colspan='5'>".$data."</td>
             </tr>
             <tr>
@@ -49,7 +49,7 @@ if($sql->getRowCount() > 0):
                 <th style=\"width: 100px;text-align: center;\">OS</th>
                 <th style=\"text-align: left;\">Equipamento</th>
                 <th style=\"text-align: left;\">Localidade</th>
-                <th style=\"width: 100px;text-align: center;\">Endereço</th>
+                <th style=\"width: 100px;text-align: left;\">Endereço</th>
             </tr>";
     $sql->FullRead("SELECT 
                         EQ.patrimonio,
@@ -87,8 +87,8 @@ if($sql->getRowCount() > 0):
                 <td style=\"text-align: center;\">".strtoupper($res['patrimonio'])."</td>
                 <td style=\"text-align: center;\">".$res['os']."</td>
                 <td style=\"text-align: left;\">".ucwords($res['equipamento'].' '.$res['fabricante'].' '.$res['modelo'])."</td>
-                <td style=\"text-align: center;\">".ucwords($endereco)."</td>
-                <td style=\"text-align: center;\">".ucwords($res['rua'])."</td>
+                <td style=\"text-align: left;\">".ucwords($endereco)."</td>
+                <td style=\"text-align: left;\">".ucwords($res['rua'])."</td>
             </tr>";
     endforeach;
             

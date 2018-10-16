@@ -30,7 +30,7 @@ $stsEquipamento = $sql->getResult();
     <div id="home">
         <div class="row">
             <div class="col-md">
-                <table class="table-responsive-sm tabela-tab">
+                <table class="table-responsive-sm tabela-tab table-hover">
                     <tr class="text-primary">
                         <th class="text-uppercase text-center" colspan="2">equipamentos no laboratório</th>
                     </tr>
@@ -51,7 +51,7 @@ $stsEquipamento = $sql->getResult();
                 </table>
             </div>
              <div class="col-md">
-               <table class="table-responsive-sm tabela-tab">
+               <table class="table-responsive-sm tabela-tab table-hover">
                     <tr class="text-primary">
                         <th class="text-uppercase text-center" colspan="2">entregas</th>
                     </tr>
@@ -72,7 +72,7 @@ $stsEquipamento = $sql->getResult();
                 </table>
             </div>
              <div class="col-md">
-                <table class="table-responsive-sm tabela-tab">
+                <table class="table-responsive-sm tabela-tab table-hover">
                     <tr class="text-primary">
                         <th class="text-uppercase text-center" colspan="2">status</th>
                     </tr>

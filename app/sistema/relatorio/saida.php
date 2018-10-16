@@ -42,13 +42,11 @@
                     </div>
                 </div>
                 <div class="col form-inline">
-                    <input type="button" class="btn btn-primary" value="Gerar Relatório" onclick="validaRelatorio('saida','#form-header-report-saida')">
+                    <input type="button" class="btn btn-primary" value="Gerar Relatório" onclick="validaRelatorio('saida','#form-header-report-saida')" style="margin-right: 5px;">
                     
-                    &nbsp;&nbsp;
+                    <span style="width: 38px;"><img src="./app/imagens/load.gif" class="form_load" alt="[CARREGANDO...]" title="CARREGANDO.." /></span>
                     
-                    <img src="./app/imagens/load.gif" class="form_load" alt="[CARREGANDO...]" title="CARREGANDO.." /> 
-                    
-                    <button type="button" class="btn btn-primary btnPrinter" style="display: none;" onclick="imprimi();">Imprimir</button>
+                    <button type="button" class="btn btn-primary btnPrinter" onclick="imprimi();">Imprimir</button>
                 
                 </div>
             </div>

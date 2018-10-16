@@ -3,7 +3,7 @@ require_once '../../config/config.inc.php';
 require_once '../../config/post.inc.php';
 
 $sql = new Read();
-
+$dt  = new Datas();
 switch ($acao):
     case 'saida':
         switch ($tipoRel):
@@ -87,7 +87,7 @@ switch ($acao):
                 </table>
                 <?break;
             case 'tecnico':
-                 $sql->FullRead("SELECT saida.id,saida.data,saida.hora,S.descricao status, COUNT(*) total_itens
+                $sql->FullRead("SELECT saida.id,saida.data,saida.hora,S.descricao status, COUNT(*) total_itens
                                     FROM tb_sys007 saida 
                                         JOIN tb_sys009 itens ON itens.id_saida = saida.id 
                                         JOIN tb_sys002 S ON S.id = saida.id_status AND saida.id_tecnico = :TECNICO
@@ -110,6 +110,77 @@ switch ($acao):
                 <? endforeach;?>
             </table>
              <?break;
+            case 'periodo':
+                $timeZone = new DateTimeZone('UTC');
+                if(!empty($dt_inicial) && !empty($dt_final)):
+                    $dtini = $dt->validarData($dt_inicial);
+                    $dtfim = $dt->validarData($dt_final);
+                    if($dtini && $dtfim):
+                        $data1 = DateTime::createFromFormat ('d/m/Y', $dt_inicial, $timeZone);
+                        $data2 = DateTime::createFromFormat ('d/m/Y', $dt_final, $timeZone);
+                        if($data1<= $data2):
+                            $sql->FullRead("SELECT saida.id,
+                                        saida.data,
+                                        saida.hora,
+                                        T.nome,
+                                        S.descricao status,
+                                        COUNT(*) total_itens
+                                    FROM tb_sys007 saida 
+                                        JOIN tb_sys009 itens ON itens.id_saida = saida.id
+                                        JOIN tb_sys001 T ON T.id = saida.id_tecnico
+                                        JOIN tb_sys002 S ON S.id = saida.id_status AND saida.data BETWEEN :DTINI AND :DTFIM
+                                    GROUP BY itens.id_saida ORDER BY saida.id desc","DTINI=".$dt->setDt($dt_inicial)."&DTFIM=".$dt->setDt($dt_final)."");
+                        else:
+                            print "<h1 class='text-center alert alert-info'>A data inicial nao pode ser maior que a final</h1>";
+                            exit();
+                        endif;
+                    else:
+                        print "<h1 class='text-center alert alert-info'>Uma das Datas Informadas não é válida!</h1>";
+                    endif;
+                elseif(!empty($dt_inicial)):
+                    $dtini = $dt->validarData($dt_inicial);
+                    if($dtini):
+                        $sql->FullRead("SELECT saida.id,saida.data,saida.hora, T.nome,S.descricao status, COUNT(*) total_itens
+                                    FROM tb_sys007 saida 
+                                        JOIN tb_sys009 itens ON itens.id_saida = saida.id 
+                                        JOIN tb_sys001 T ON T.id = saida.id_tecnico
+                                        JOIN tb_sys002 S ON S.id = saida.id_status AND saida.data = :DATA
+                                    GROUP BY itens.id_saida ORDER BY saida.id desc","DATA=".$dt->setDt($dt_inicial)."");
+                    else:
+                        print "<h1 class='text-center alert alert-info'>A data Inicial Informada e Inválida!</h1>";
+                    endif;
+                elseif(!empty($dt_final)):
+                    $dtfim = $dt->validarData($dt_final);
+                    if($dtfim):
+                        $sql->FullRead("SELECT saida.id,saida.data,saida.hora, T.nome,S.descricao status, COUNT(*) total_itens
+                                    FROM tb_sys007 saida 
+                                        JOIN tb_sys009 itens ON itens.id_saida = saida.id 
+                                        JOIN tb_sys001 T ON T.id = saida.id_tecnico
+                                        JOIN tb_sys002 S ON S.id = saida.id_status AND saida.data = :DATA
+                                    GROUP BY itens.id_saida ORDER BY saida.id desc","DATA=".$dt->setDt($dt_final)."");
+                    else:
+                        print "<h1 class='text-center alert alert-info'>A data Final Informada e Inválida!</h1>";
+                    endif;
+                endif;?>
+                <table class="table-hover">
+                    <tr>
+                        <th class="text-center">NÚMERO</th>
+                        <th class="text-left">TÉCNICO</th>
+                        <th class="text-center">DATA</th>
+                        <th class="text-center">STATUS</th>
+                        <th class="text-center">EQUIPAMENTO(S)</th>
+                   </tr>
+                    <?foreach ($sql->getResult() as $res):?>
+                    <tr class="bg-tab-tr" onclick="location.href='index.php?pg=relatorio/saida&id='+<?=$res['id'];?>" style="cursor: pointer;">
+                         <td class="text-center"><?=$res['id'];?></td>
+                         <td class="text-left text-capitalize"><?=$res['nome'];?></td>
+                         <td class="text-center"><?= date('d/m/Y',strtotime($res['data'])).' '.$res['hora'];?></td>
+                         <td class="text-center"><?=$res['status']?></td>
+                         <td class="text-center"><?=$res['total_itens'];?></td>
+                     </tr>
+                <? endforeach;?>
+                </table>
+            <?break;
             default:
                 print "<h1 class='text-center alert alert-info'>Erro desconhecido!<br /><code> nenhuma das condições inposta para mostrar relatorio de saida foi encontrada</code></h1>";
         endswitch;

@@ -55,35 +55,34 @@ endif;
 
 if($sql->getResult()):
 ?>
-
-<div class="row">
-    <div class="col">
-        <label>Patrimonio</label>
-        <input type="text" class="form-control" disabled="" value="<?=$sql->getResult()[0]['patrimonio']?>"/>
+    <div class="row">
+        <div class="col form-inline">
+            <label>Patrimonio</label>
+            <input type="text" class="form-control" disabled="" value="<?=$sql->getResult()[0]['patrimonio']?>"/>
+        </div>
+        <div class="col">
+            <label>Equipamento</label>
+            <input type="text" class="form-control text-capitalize" disabled="" value="<?=$sql->getResult()[0]['equipamento'].' '.$sql->getResult()[0]['fabricante'].' '.$sql->getResult()[0]['modelo']?>"/>
+        </div>
     </div>
-    <div class="col">
-        <label>Equipamento</label>
-        <input type="text" class="form-control text-capitalize" disabled="" value="<?=$sql->getResult()[0]['equipamento'].' '.$sql->getResult()[0]['fabricante'].' '.$sql->getResult()[0]['modelo']?>"/>
-    </div>
-</div>
-<div class="row">
-    <div class="col">
-        <label>Localidade</label>
-        <input type="text" class="form-control text-capitalize" disabled=""value="<?=$sql->getResult()[0]['local']?>"/>
-    </div>
-    <div class="col">
-        <div class="row">
-            <div class="col">
-                <label>Andar</label><br />
-                <input type="text" class="form-control" disabled="" style="max-width: 100px;" value="<?=$sql->getResult()[0]['andar']?>"/>
-            </div>
-            <div class="col">
-                <label>Sala</label>
-                <input type="text" class="form-control" disabled="" value="<?=$sql->getResult()[0]['sala']?>"/>
+    <div class="row">
+        <div class="col form-inline">
+            <label>Localidade</label>
+            <input type="text" class="form-control text-capitalize" disabled=""value="<?=$sql->getResult()[0]['local']?>"/>
+        </div>
+        <div class="col">
+            <div class="row">
+                <div class="col">
+                    <label>Andar</label><br />
+                    <input type="text" class="form-control" disabled="" style="max-width: 100px;" value="<?=$sql->getResult()[0]['andar']?>"/>
+                </div>
+                <div class="col">
+                    <label>Sala</label>
+                    <input type="text" class="form-control" disabled="" value="<?=$sql->getResult()[0]['sala']?>"/>
+                </div>
             </div>
         </div>
     </div>
-</div>
 <hr />
 <div class="text-center" style="background-color: #E9E9E9;">
     <p class="text-uppercase">histórico de laboratório</p>
