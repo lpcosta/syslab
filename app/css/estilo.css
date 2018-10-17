@@ -32,6 +32,7 @@ header > div#div-user-logado{background-color: #B1ABAC;width: 140px;height: 38px
 .grafico-home{width: 590px; height: 400px; margin-left: -50px;}
 .form_load{display: none; vertical-align: middle;}
 .j_Aviso{display: none; vertical-align: middle; color: #f00;}
+.dados-pesquisa .m_key{width: 300px;}
 .cursor-pointer{cursor: pointer;}
 .cursor-pointer:hover{background-color: #ddd;color: #000; font-weight: bolder;}
 .row .col-md h3{text-align: center; border-bottom: 1px solid #09f; padding: 0;}

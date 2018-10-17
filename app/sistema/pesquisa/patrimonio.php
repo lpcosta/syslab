@@ -1,13 +1,10 @@
 <?php
 require_once '../../config/config.inc.php';
-require_once '../../funcoes/func.inc.php';
+require_once '../../config/post.inc.php';
 
 $sql = new Read();
-extract(filter_input_array(INPUT_POST, FILTER_DEFAULT));
-$busca = strip_tags(trim($busca));
 
-if($acao == 'patrimonio'):
-    $sql->FullRead("SELECT 
+$sql->FullRead("SELECT 
     EQ.patrimonio,
     EQ.serie,
     C.descricao equipamento,
@@ -37,39 +34,77 @@ FROM
         JOIN
     tb_sys008 L ON L.id = EQ.id_local
         AND EQ.patrimonio = :PAT", "PAT="."{$busca}"."");
-elseif($acao=='os'):
+        
+if(!$sql->getResult()):
+    
     $sql->FullRead("SELECT 
-    EQ.patrimonio,
-    EQ.serie,
-    C.descricao equipamento,
-    C.id categoria,
-    EQ.andar,
-    EQ.sala,
-    EQ.status baixa,
-    EQ.ip,
-    EQ.so_id,
-    EQ.office_id,
-    EQ.key_so,
-    EQ.key_office,
-    EQ.memoria_ram,
-    EQ.hd,
-    L.local,
-    L.cr,
-    F.nome_fabricante fabricante,
-    M.modelo
-FROM
-    tb_sys004 EQ
-        JOIN
-    tb_sys006 IE ON IE.patrimonio = EQ.patrimonio
-        JOIN
-    tb_sys003 C ON C.id = EQ.id_categoria
-        JOIN
-    tb_sys018 F ON F.id_fabricante = EQ.fabricante
-        JOIN
-    tb_sys022 M ON M.id_modelo = EQ.modelo
-        JOIN
-    tb_sys008 L ON L.id = EQ.id_local
-        AND IE.os_sti = :OS", "OS="."{$busca}"."");
+        EQ.patrimonio,
+        EQ.serie,
+        C.descricao equipamento,
+        C.id categoria,
+        EQ.andar,
+        EQ.sala,
+        EQ.status baixa,
+        EQ.ip,
+        EQ.so_id,
+        EQ.office_id,
+        EQ.key_so,
+        EQ.key_office,
+        EQ.memoria_ram,
+        EQ.hd,
+        L.local,
+        L.cr,
+        F.nome_fabricante fabricante,
+        M.modelo
+    FROM
+        tb_sys004 EQ
+            JOIN
+        tb_sys006 IE ON IE.patrimonio = EQ.patrimonio
+            JOIN
+        tb_sys003 C ON C.id = EQ.id_categoria
+            JOIN
+        tb_sys018 F ON F.id_fabricante = EQ.fabricante
+            JOIN
+        tb_sys022 M ON M.id_modelo = EQ.modelo
+            JOIN
+        tb_sys008 L ON L.id = EQ.id_local
+            AND IE.os_sti = :OS", "OS="."{$busca}"."");
+            
+endif;
+
+if(!$sql->getResult()):
+    $sql->FullRead("SELECT 
+        EQ.patrimonio,
+        EQ.serie,
+        C.descricao equipamento,
+        C.id categoria,
+        EQ.andar,
+        EQ.sala,
+        EQ.status baixa,
+        EQ.ip,
+        EQ.so_id,
+        EQ.office_id,
+        EQ.key_so,
+        EQ.key_office,
+        EQ.memoria_ram,
+        EQ.hd,
+        L.local,
+        L.cr,
+        F.nome_fabricante fabricante,
+        M.modelo
+    FROM
+        tb_sys004 EQ
+            JOIN
+        tb_sys006 IE ON IE.patrimonio = EQ.patrimonio
+            JOIN
+        tb_sys003 C ON C.id = EQ.id_categoria
+            JOIN
+        tb_sys018 F ON F.id_fabricante = EQ.fabricante
+            JOIN
+        tb_sys022 M ON M.id_modelo = EQ.modelo
+            JOIN
+        tb_sys008 L ON L.id = EQ.id_local
+            AND EQ.serie = :SERIE", "SERIE="."{$busca}"."");   
 endif;
     $categorias=[2,5,17,22,23,26];
     if(isset($sql->getResult()[0]['categoria'])):
@@ -218,11 +253,5 @@ if($sql->getResult()):
     <?php endforeach;?>
 </table>
 <?else:?>
-<h1 class="text-center text-uppercase alert alert-warning" role="alert">nenhum registro encontrado! <br />para <?php 
-    if($acao=='os'):
-        print "a os ".$busca;
-    else:
-        print "o patrimônio ".$busca;
-    endif;?>
-</h1>
-<?php endif;?>
+<h1 class="text-center text-uppercase alert alert-info" role="alert">nenhum registro encontrado!</h1>
+<?endif;

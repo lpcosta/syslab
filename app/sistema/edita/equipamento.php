@@ -192,7 +192,7 @@ endif;
                     </div>
                     <div class="col form-inline">
                         <label>HD</label>
-                        <select name="memoria_ram" class="text-uppercase" <?if(!in_array($sql->getResult()[0]['id_categoria'],$categorias)){print "disabled";}?>>
+                        <select name="hd" class="text-uppercase" <?if(!in_array($sql->getResult()[0]['id_categoria'],$categorias)){print "disabled";}?>>
                             <option selected="" value="<?=$sql->getResult()[0]['hd']?>"><?=$sql->getResult()[0]['hd']?></option>
                             <option value="80gb">80GB</option>
                             <option value="160gb">160GB</option>

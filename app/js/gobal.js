@@ -873,12 +873,7 @@ function baixaPeca(peca,os,id){
         onfocusout: false,
         onkeyup: false,
         rules:{
-            busca: {
-                    required: true,
-                    minlength: 6,
-                    maxlength:7,
-                    onkeyup:false
-                }
+            busca:{required: true}
                 },
             messages: {busca:"*"},
             submitHandler: function(form){
@@ -900,8 +895,9 @@ function mostraModal(p){
     $("#txtBusca").val(p);
     $("#formSearch").submit();
 }
-    /*PESQUISA OS*/
-    $('#formSearchOs').validate({
+
+/*PESQUISA OS*/
+/*   $('#formSearchOs').validate({
         onfocusout: false,
         onkeyup: false,
         rules:{
@@ -925,7 +921,8 @@ function mostraModal(p){
                 });
              return false;
         }
-    });/*FIM DA PESQUISA DE os*/
+    });*/
+/*FIM DA PESQUISA DE os*/
 
 /*CADASTRA SECRETARIA*/
     $('#cadastra-secretaria').validate({
@@ -1170,7 +1167,28 @@ function avalia(s,a,p){
 
 /*FIM DAS FUNCOES QUE VALIDA FOMULARIOS*/
 
+function buscaAvaliacao(id){
+    $.ajax({url: './app/sistema/ajax/busca-avaliacao.php',
+        data: {ID:id},type:'POST',dataType:'HTML',
+            success: function (res){
+            $('.edita-avaliacao').html(res);
+            }
+        });
+}
 
+function editaAvaliacao(s){
+    if(s != ''){
+        var dados = $("#form-edita-avaliacao").serialize();
+        $.ajax({url: './app/sistema/ajax/edita-avaliacao.php',
+            data: dados,type:'POST',dataType:'HTML',
+                success: function (res){
+                    if(res){modal(res);}
+                    else{$('#form-bancada-search').submit();}
+                }
+            });
+    }else
+        modal('Informe um Status');
+}
 /*FUNCOES DE CADASTRO*/
 
  /*função generica que realiza o cadastro via ajax;

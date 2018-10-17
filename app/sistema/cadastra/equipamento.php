@@ -28,7 +28,7 @@ $sql = new Read();
                 <div class="col form-inline">
                     <label>fabricante</label>
                     <select class="form-control" id="txtFab" name="fabricante" onchange="getModelos(this.value);" onblur="getModelos(this.value);">
-                        <?php $sql->FullRead("SELECT FAB.id_fabricante,FAB.nome_fabricante FROM tb_sys022 MDL JOIN tb_sys018 FAB ON FAB.id_fabricante = MDL.fabricante_id GROUP BY FAB.id_fabricante"); ?>
+                        <?php $sql->FullRead("SELECT FAB.id_fabricante,FAB.nome_fabricante FROM tb_sys022 MDL JOIN tb_sys018 FAB ON FAB.id_fabricante = MDL.fabricante_id GROUP BY FAB.id_fabricante ORDER BY FAB.nome_fabricante"); ?>
                         <option selected value="">Selecione...</option>
                         <?php foreach ($sql->getResult() as $res):
                             print "<option value=".$res['id_fabricante'].">".ucfirst($res['nome_fabricante'])."</option>";

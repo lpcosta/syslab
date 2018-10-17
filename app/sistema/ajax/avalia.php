@@ -191,6 +191,7 @@ if(isset($id)):
     $agpeca = new Read();
     $agpeca->FullRead("SELECT 
                             T.nome tecnico,
+                            A.id,
                             A.data,
                             A.avaliacao,
                             S.descricao status,
@@ -231,7 +232,7 @@ if(isset($id)):
             <th class="text-center"style="min-width: 120px;">status</th>
             <th>avaliação</th>
             <th style="min-width: 200px;">peça</th>
-            <th>&nbsp;</th>
+            <th style="min-width: 100px;">&nbsp;</th>
         </tr>
         <?foreach ($agpeca->getResult() as $agp):?>
         <tr>
@@ -241,11 +242,17 @@ if(isset($id)):
             <td><?= ucfirst($agp['avaliacao'])?></td>
             <td  class="text-capitalize"><?=$agp['id_peca'].' - '.$agp['descricao_peca']?></td>
             <?if($agp['status'] != 'fechado'):?>
-            <td><button onclick="baixaPeca(<?=$agp['id_peca']?>,<?=$sql->getResult()[0]['os']?>,<?=$sql->getResult()[0]['id']?>);">Baixar</button></td>
+            <td class="text-center">
+                <?if($_SESSION['UserLogado']['grupo_id'] == 4):?>
+                <button onclick="buscaAvaliacao(<?=$agp['id']?>);">Editar</button>
+                <?endif;?>
+                <button onclick="baixaPeca(<?=$agp['id_peca']?>,<?=$sql->getResult()[0]['os']?>,<?=$sql->getResult()[0]['id']?>);">Baixar</button>
+            </td>
             <?endif;?>
         </tr>
         <?endforeach;?>
     </table>
+    <div class="edita-avaliacao"></div>
     <?endif;?><!-- fim aguardo de peça -->
     <!-- outras avaliações de bancada-->
     <hr />

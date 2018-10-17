@@ -25,19 +25,19 @@ if($sql->getRowCount() > 0):
                 <th colspan=\"6\" style=\"text-align: center;\">STI - ENTRADA DE EQUIPAMENTO NO LABORATÓRIO</th>
             </tr>
             <tr>
-                <th style=\"width:120px;\">ENTRADA Nº</th>
+                <th style=\"width:120px;text-align:left;\">ENTRADA Nº</th>
                 <td colspan='5'>".$entrada."</td>
             </tr>
             <tr>
-                <th style=\"width:120px;\">FEITA POR</th>
+                <th style=\"width:120px;text-align:left;\">FEITA POR</th>
                 <td colspan='5'>".ucwords($responsavel)."</td>
             </tr>
             <tr>
-                <th style=\"width:120px;\">TÉCNICO</th>
+                <th style=\"width:120px;text-align:left;\">TÉCNICO</th>
                 <td colspan='5'>".ucwords($bscMail->getResult()[0]['nome'])."</td>
             </tr>
             <tr>
-                <th style=\"width:120px;\">DATA</th>
+                <th style=\"width:120px;text-align:left;\">DATA</th>
                 <td colspan='5'>".$data."</td>
             </tr>
             <tr>
