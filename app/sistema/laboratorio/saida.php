@@ -16,13 +16,13 @@
             
                 <div class="col-md form-inline">
                     <label>Retirado Por </label>
-                    <select onchange="checaSaidaEntrada(this.value);" id="chooseSaida">
+                    <select onchange="checaSaidaEntrada(this.value);" id="chooseSaida" style="width: 115px;">
                         <option selected="" value="">Selecione...</option>
                         <option value="tecnico">Técnico</option>
                         <option value="funcionario">Funcionário</option>
                     </select>
                     &nbsp;&nbsp;
-                    <select name="id_tecnico" id="txtTecnico" style="display: none;" onchange="verificaSaida('0')">
+                    <select name="id_tecnico" id="txtTecnico" style="display: none; width: 250px;" onchange="verificaSaida('0')">
                         <?php $sql->FullRead("SELECT id,nome FROM tb_sys001 WHERE situacao ='l' ORDER BY nome"); ?>
                          <option selected value="">Selecione...</option>
                          <?php foreach ($sql->getResult() as $res):

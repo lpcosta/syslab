@@ -22,7 +22,7 @@ $sql->FullRead("SELECT id_status FROM tb_sys005 WHERE id_tecnico = :TEC AND iden
                $itens = NULL;
             else:
                 if($txtOs != 10):
-                    $sql->FullRead("SELECT * FROM tb_sys006 WHERE os_sti = :OS AND status != :STS", "OS={$txtOs}&STS=3");
+                    $sql->FullRead("SELECT id FROM tb_sys006 WHERE os_sti = :OS AND status != :STS", "OS={$txtOs}&STS=3");
                     if($sql->getRowCount() == 0):
                         $cria->ExeCreate("tb_sys006", ["id_entrada"=>$entrada,
                                                        "patrimonio"=>$texto->setTexto($txtPatrimonio),
@@ -31,6 +31,7 @@ $sql->FullRead("SELECT id_status FROM tb_sys005 WHERE id_tecnico = :TEC AND iden
                                                        "observacao"=>$texto->setTexto($txtObservacoes),
                                                        "status"=>1,
                                                        "checklist"=>$texto->setTexto($txtChecklist),
+                                                       "local_uso"=>$local_uso
                                                       ]);
                         if($cria->getResult()):
                             $itens = true;

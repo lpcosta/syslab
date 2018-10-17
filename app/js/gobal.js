@@ -162,6 +162,7 @@ function validaItemEntrada(t,e){
             txtOs           :{required:true,number:true},
             txtPatrimonio   :{required:true,minlength:6,maxlength:7},
             txtMotivo       :{required:true},
+            local_uso       :{required:true},
             txtObservacoes  :{required:true, minWords: 5}
         },
         submitHandler: function(){
@@ -365,7 +366,7 @@ function setaLocalidade(cr)
     }
 }
 
-function setaPeca(peca)
+function setaPeca(peca,qtde=null)
 {
     var options = $('#txtPeca option');
     values = $.map(options, function (option) {
@@ -375,15 +376,17 @@ function setaPeca(peca)
     {
         if ($.inArray(peca, values) !== -1)
         {
-            var d = new Date().getTime();
-            $.post('./app/sistema/ajax/busca-cod-peca.php',
-            {peca:peca}, function (res){
-               if(res){
-                $("div.div-qtde").remove();$("#txtPecaSerie").attr({'value':d,'readonly':true});
-                $("#txtObservacao").before("<div class='col-md form-inline div-qtde'><label>Quantidade </label><input type='text'  name='qtde' class='form-control' onblur='$('#txtQtde').attr('value',this.value)' /></div>" );
+            if(!qtde){
+                var d = new Date().getTime();
+                $.post('./app/sistema/ajax/busca-cod-peca.php',
+                {peca:peca}, function (res){
+                   if(res){
+                    $("div.div-qtde").remove();$("#txtPecaSerie").attr({'value':d,'readonly':true});
+                    $("#txtObservacao").before("<div class='col-md form-inline div-qtde'><label>Quantidade </label><input type='text'  name='qtde' class='form-control' onblur='$('#txtQtde').attr('value',this.value)' /></div>" );
+                    }
+                    else{$("div.div-qtde").remove();$("#txtPecaSerie").attr({'value':'','readonly':false});}
+                    });
                 }
-                else{$("div.div-qtde").remove();$("#txtPecaSerie").attr({'value':'','readonly':false});}
-                });
             $('#txtCodPeca').val(peca);
             $('#txtPeca').val(peca);
             $("#txtPeca").attr('value', peca);
@@ -1095,7 +1098,7 @@ function avaliaEquipamento(id){
 
 function validaAvaliacao(s,e,id,peca)/*s=status,e=equipamento,id=do cadastro do equipamento e peca=quantidade de agaurdo de peça*/
 {
-    if(peca > 0){
+    if(s=='4' && peca > 0){
          modal("<span class='alert alert-warning text-danger'>É PRECISO DAR BAIXA NAS PEÇA(S) QUE ESTE EQUIPAMENTO AGUARDA ANTES DE AVALIA-LO!</span>");
     }else{
         $.ajax({

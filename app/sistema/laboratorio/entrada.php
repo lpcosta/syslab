@@ -16,7 +16,7 @@
                 </div>
                 <div class="col-md form-inline">
                     <label>Entregue Por </label>
-                    <select onchange="checaSaidaEntrada(this.value);" id="chooseSaida" style="width: 80px;">
+                    <select onchange="checaSaidaEntrada(this.value);" id="chooseSaida" style="width: 115px;">
                         <option selected="" value="">Selecione...</option>
                         <option value="tecnico">Técnico</option>
                         <option value="funcionario">Funcionário</option>
@@ -92,10 +92,9 @@
             </div>
         </div>
         <div class="row">
-           
             <div class="col form-inline">
                 <label>Motivo</label>
-                <select id="txtMotivo" name="txtMotivo" class="text-capitalize" onkeydown="if (event.keyCode === 13){$('#txtObservacoes').focus();}">
+                <select id="txtMotivo" name="txtMotivo" class="text-capitalize" onkeydown="if (event.keyCode === 13){$('#txtObservacoes').focus();}" style="width: 300px;">
                     <option selected value="">Selecione</option>  
                     <optgroup label="Motivos Gerais">
                         <?$sql->FullRead("SELECT motivo FROM tb_sys017 WHERE categoria = :CAT ORDER BY motivo", "CAT=0");
@@ -130,7 +129,12 @@
                 </select>     
             </div>
             <div class="col form-inline">
-                
+                <label>Local de Uso</label>
+                <select name="local_uso" style="width: 200px;" >
+                    <option selected="" value="">Selecione</option>
+                    <option value="laboratorio">Laboratório</option>
+                    <option value="administrativo">Administrativo (AD)</option>
+                </select>
             </div>
         </div>
         <div class="row">

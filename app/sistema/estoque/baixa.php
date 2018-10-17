@@ -25,7 +25,6 @@
                     <?endforeach;?>
                 </select>
                 </div>
-                
                 <div class="col-md form-inline" id="txtObservacao">
                     <label>Ordem de Serviço</label>
                     <input type="text" id="txtOrdem"  name="ordem_servico" class="form-control" />

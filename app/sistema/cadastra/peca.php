@@ -4,12 +4,13 @@
        header("Location:".HOME."");
        exit();
    endif;
+   $sql = new Read();
 ?>
 <div class="tabs">
     <ul>
-        <li><a href="#cad-user">Cadastrar Peça</a></li>
+        <li><a href="#cad-peca">Cadastrar Peça</a></li>
     </ul>
-    <div id="cad-user">
+    <div id="cad-peca">
         <h2 class="text-uppercase">Cadastro de Peça</h2>
         <form class="form-cadastra" id="cadastra-peca" onsubmit="return false;">
             <input type="hidden" name="acao" value="peca" />
@@ -28,6 +29,14 @@
                             print "<option value=".$res['id'].">".$res['descricao']."</option>";
                         endforeach;
                         ?>
+                    </select>
+                </div>
+                <div class="col-md form-inline">
+                    <label>Flag</label>
+                    <select name="flag" >
+                        <option selected value="">Selecione...</option>
+                        <option value="0">Não Marcado</option>
+                        <option value="1">Marcado</option>
                     </select>
                 </div>
             </div>

@@ -50,6 +50,7 @@ if(isset($id)):
                         IE.motivo,
                         IE.observacao,
                         IE.os_sti os,
+                        IE.local_uso,
                         E.identrada entrada,
                         E.data,
                         E.nome_responsavel responsavel,
@@ -186,6 +187,13 @@ if(isset($id)):
             <input type="text" value="<?=$sql->getResult()[0]['hd']?>" class="text-capitalize" disabled=""/>
         </div>
     </div>
+    <div class="row">
+        <div class="col form-inline">
+            <label class="text-uppercase text-danger"><b>Padrão</b></label>
+            <input type="text" class="text-uppercase text-danger" value="<?=$sql->getResult()[0]['local_uso']?>" style="min-width: 250px; font-weight: bolder;" disabled="" />
+        </div>
+  
+    </div>
     <?php endif;
     if($sql->getResult()[0]['status']==5):
     $agpeca = new Read();
@@ -285,7 +293,7 @@ if(isset($id)):
         <input type="hidden" name="email_tecnico_entrada" value="<?=$sql->getResult()[0]['email']?>" />
         <div class="row">
             <div class="col form-inline">
-                <select id="txtStatus" name="id_status" class="text-capitalize" onchange="validaAvaliacao(this.value,<?=$categoria?>,<?=$sql->getResult()[0]['id_equipamento']?>,<?=$pecas?>)" style="max-width:150px; " >
+                <select id="txtStatus" name="id_status" class="text-capitalize" onchange="validaAvaliacao(this.value,<?=$categoria?>,<?=$sql->getResult()[0]['id_equipamento']?>,<?=$pecas?>)" style="max-width:165px; " >
                     <option value="">Avaliar...</option>
                     <?$sql->ExeRead("tb_sys002");
                     foreach ($sql->getResult() as $res):

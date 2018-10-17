@@ -30,7 +30,7 @@
         <h2 class="text-uppercase"><?=$pecas->getResult()[0]['total'];?> Peças em Estoque</h2>
         <table style="width: 50%; margin: 0 auto;" class="table-hover">
             <tr>
-                <th class="text-center">Ação</th>
+                <th class="text-center" style="width: 100px;">Ação</th>
                 <th class="text-center">Código</th>
                 <th>Peça</th>
                 <th>Quantidade</th>
@@ -38,7 +38,7 @@
             </tr>
             <?php foreach ($sql->getResult() as $peca):?>
             <tr class="text-capitalize">
-                <td class="text-center">
+                <td class="text-center" style="width: 100px;">
                     <img src="./app/imagens/ico-deleta.png" alt="deleta" title="deletar" style="cursor: pointer;" />
                     <img src="./app/imagens/ico-alterar.png" alt="altera" title="alterar" style="cursor: pointer;" onclick="location.href='index.php?pg=edita/peca&id='+<?=$peca['id_peca']?>"/>
                 </td>

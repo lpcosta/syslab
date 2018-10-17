@@ -99,7 +99,7 @@ $msg = "<table style=\"margin: 0 auto;\">
                 <td>". ucwords($sql->getResult()[0]['nome'])." <b>Em</b> ".$data_avaliacao."</td>
             </tr>
         </table>";
-        $mail->enviaMail("Avaliação de Equipamento -".ucwords($sql->getResult()[0]['status'])."",$emails,$msg);
+        $mail->enviaMail("Avaliação de Equipamento - ".ucwords($sql->getResult()[0]['status'])."",$emails,$msg);
         print "<span class=\"alert alert-success text-primary\">Avaliação Realizada com sucesso!</span>";
 else:
     print "Error <code>".$cria->getError()."</code><br /><hr />";
