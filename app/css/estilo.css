@@ -48,6 +48,7 @@ header > div#div-user-logado{background-color: #B1ABAC;width: 140px;height: 38px
 .entrada input{padding: 3px;}
 .entrada textarea{width: 90%;height: 100px; resize: horizontal; border: 1px solid #09f;}
 .btn-entrada button{width: 38%; height: 40px; margin: 10px; min-width: 180px;}
+
 /* opcoes de cadastro*/
 .form-cadastra label{text-transform: capitalize; font-weight: bolder; margin-right: 5px; width: 120px; display: block;text-align: left;}
 .form-cadastra hr{ background-color: #09f; height: 1px;}
@@ -57,9 +58,9 @@ header > div#div-user-logado{background-color: #B1ABAC;width: 140px;height: 38px
 .form-cadastra .opcao-cad-cpu{display: none;}
 .error{color: #f00;font-weight: bolder; font-size: 10pt; margin-left: 3px;}
 /*fim opcoes de cadastro*/
+
 .form-edita input,select{padding: 3px; border: 1px solid #09f; height: 30px;}
 .form-edita input[type='submit']{border: 1px solid #09f; min-width: 100px; height: 30px;}
-
 .bancada-top{border-bottom: 2px solid #09f; margin-top: 1px;padding-top: 3px;}
 .bancada-top label{text-transform: capitalize; font-weight: bolder; margin-right: 3px; width: 120px; display: block;text-align: left;}
 .dados-avalia{width: 98%;margin-bottom: 20px; margin-top: 3px;}
@@ -72,7 +73,6 @@ header > div#div-user-logado{background-color: #B1ABAC;width: 140px;height: 38px
 .avalia textarea{resize: none; border: 1px solid #09f; width: calc(100% - 112px);padding-left: 5px;color: #000; height: 60px;}
 .avalia p{border-bottom: 1px solid #000; font-weight: 500; color: #000; text-align: center;}
 .avalia table{width: 100%;}
-
 .form-avalia-equipamento label.error{float: right; border: none; width: calc(100% - 112px)}
 /*fim das classes de tela de avaliação em bancada*/
 
@@ -83,10 +83,17 @@ header > div#div-user-logado{background-color: #B1ABAC;width: 140px;height: 38px
 .relatorio table table{width: 100%;}
 .relatorio table table tr{font-size: 10pt;}
 .printTable{width: 100%;margin: 0px;padding: 0px;top: 0px;left: 0px;bottom: 0px;right: 0px;}
-table.printer{margin-bottom: 20px;}
 /*FIM DOS ESTILSO DE RELATORIOS*/
-/*FIM CLASSES GLOBAIS*/
 
+/*estilos de pesquisas*/
+
+.dados-pesquisa label{width:110px; text-align: left; display: block;border: 1px solid #09f;padding-left: 5px;}
+.dados-pesquisa input{border: 1px solid #09f;padding-left: 5px;color: #000; border-left: none;}
+.dados-edita label{width:110px; text-align: left; display: block;}
+.dados-edita input,select,textarea {border: 1px solid #09f;padding-left: 5px;color: #000; height: 25px; width: calc(90% - 115px);}
+/*fim dos estilos de pesquisas*/
+/*FIM CLASSES GLOBAIS*/
+table.printer{margin-bottom: 20px;}
 /*TABS*/
 
 .tabs h2{text-align: center; border-bottom: 2px solid #09f;margin-top: 0;padding-top: 0;}
@@ -107,17 +114,23 @@ table.printer{margin-bottom: 20px;}
 @media (max-width: 1440px) {
  .tabs .tabela-tab th,td {font-size: 10pt;}
  .grafico-home{width: 430px; height: 360px; margin-left: -50px;}
+ .dados-edita label{text-align: left; display: block; font-size: 10pt; width: 100px;}
+ .dados-edita input,select,textarea {border: 1px solid #09f;padding-left: 5px;color: #000; height: 25px; width: calc(100% - 105px);}
 }
 
 @media (max-width: 1360px){
  .form-cadastra label{text-transform: capitalize; font-weight: bolder; margin-right: 5px; width: 100%; display: block;text-align: left;}
+ .dados-edita label{text-align: left; display: block; font-size: 10pt; width: 100px;}
+ .dados-edita input,select,textarea {border: 1px solid #09f;padding-left: 5px;color: #000; height: 25px; width: calc(100% - 105px);}
 }
 
 
 @media (max-width: 1024px) {
- .tabs .tabela-tab th,td {font-size: 10pt;}
- .grafico-home{width: 290px; height: 300px;}
+.tabs .tabela-tab th,td {font-size: 10pt;}
+.grafico-home{width: 290px; height: 300px;}
  #txtPeca{font-size: 9pt;}
+ .dados-edita label{text-align: left; display: block; font-size: 10pt; width: 100%;}
+ .dados-edita input,select,textarea {border: 1px solid #09f;padding-left: 5px;color: #000; height: 25px; width:100%;}
 }
 
 

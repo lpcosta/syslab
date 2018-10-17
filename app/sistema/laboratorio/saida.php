@@ -16,7 +16,7 @@
             
                 <div class="col-md form-inline">
                     <label>Retirado Por </label>
-                    <select onchange="checaSaida(this.value);" id="chooseSaida">
+                    <select onchange="checaSaidaEntrada(this.value);" id="chooseSaida">
                         <option selected="" value="">Selecione...</option>
                         <option value="tecnico">Técnico</option>
                         <option value="funcionario">Funcionário</option>

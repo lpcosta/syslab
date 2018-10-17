@@ -7,7 +7,7 @@
         <li><a href="#cad-entrada" id="nentrada">Entrada de Equipamento</a></li>
     </ul>
     <div id="cad-entrada">
-        <form class="form-cadastra titulo-entrada entrada" onsubmit="return false;">
+        <form class="form-cadastra titulo-entrada entrada" id="form-cria-entrada" onsubmit="return false;" >
             <input type="hidden" id="numeroEntrada" value="" />
             <div class="row">
                 <div class="col-md form-inline">
@@ -15,18 +15,31 @@
                     <input type="text" size="30" class="text-capitalize" disabled="" id="txtResp" name="responsavel" value="<?=$_SESSION['UserLogado']['nome']?>" />
                 </div>
                 <div class="col-md form-inline">
-                    <label>Técnico &nbsp;</label>
-                    <select id="txtTecnico" name="tecnico" onchange="verificaEntrada(this.value)">
-                         <?php $sql->FullRead("SELECT id,nome FROM tb_sys001 WHERE situacao ='l' ORDER BY nome"); ?>
+                    <label>Entregue Por </label>
+                    <select onchange="checaSaidaEntrada(this.value);" id="chooseSaida">
+                        <option selected="" value="">Selecione...</option>
+                        <option value="tecnico">Técnico</option>
+                        <option value="funcionario">Funcionário</option>
+                    </select>
+                    &nbsp;&nbsp;
+                    <select name="id_tecnico" id="txtTecnico" style="display: none;" onchange="verificaEntrada(this.value)">
+                        <?php $sql->FullRead("SELECT id,nome FROM tb_sys001 WHERE situacao ='l' ORDER BY nome"); ?>
                          <option selected value="">Selecione...</option>
                          <?php foreach ($sql->getResult() as $res):
                          print "<option value=".$res['id'].">".ucfirst($res['nome'])."</option>";
                          endforeach;
-                         ?>
+                        ?>
                     </select>
+                    <span id="txtFunc" style="display: none; margin-top: -3px;">
+                        <input type="text" size="5" name="doc_fun" id="txtDocFun" placeholder="IF/RG.." />
+                        <input type="text" name="nome_fun" id="txtNomeFun"  placeholder="Nome Completo..." />
+                        <input type="button" value="ok" style="height: 25px; padding: 0; width: 30px; border: 1px solid #09f;" onclick="verificaEntrada(<?=$_SESSION['UserLogado']['id']?>);" />
+                    </span>
                 </div>
             </div>
         </form>     
+    </div>
+    
     <form class="form-cadastra entrada" id="iten-entrada" onsubmit="return false;" style="display: none;">
         <hr />
         <div class="row">

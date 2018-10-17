@@ -76,7 +76,7 @@ if($sql->getRowCount() > 0):
                 <td style=\"text-align: center;\">".strtoupper($res['patrimonio'])."</td>
                 <td style=\"text-align: center;\">".$res['os']."</td>
                 <td style=\"text-align: left;\">".ucwords($res['equipamento'].' '.$res['fabricante'].' '.$res['modelo'])."</td>
-                <td style=\"text-align: center;\">".ucwords($res['local'])."</td>
+                <td style=\"text-align: left;\">".ucwords($res['local'])."</td>
                 <td style=\"text-align: center;\">".ucwords($res['sigla'])."</td>
                 <td>". ucfirst($res['observacao'])."</td>
             </tr>";

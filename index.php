@@ -151,7 +151,7 @@ require_once './app/funcoes/func.inc.php';
                             </li>
                             <li><a href="#">Alterar Senha</a></li>
                             <li><a href="#">Backup</a></li>
-                            <li><a href="#">Logs</a></li>
+                            <li><a href="index.php?pg=logs">Logs</a></li>
                             <li><a href="#">Tabelas de Apoio</a></li>
                             <li><a href="index.php?pg=edita/atualiza-banco">Atualizar Banco</a></li>
                         </ul>

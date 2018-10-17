@@ -35,7 +35,7 @@ endif;
     <?php elseif(isset($id)):$categorias=[2,5,17,22,23,26];?>
     <div class="dados-edita">
          <hr />
-         <form class="form-cadastra entrada" id="edita-equipamento" onsubmit="return false" style="width: 98%;">
+         <form id="edita-equipamento" onsubmit="return false" style="width: 98%;">
                 <input type="hidden" name="acao" value="edita">
                 <input type="hidden" name="id" value="<?=$sql->getResult()[0]['id']?>">
                 <div class="row">
@@ -115,7 +115,7 @@ endif;
                     </div>
                     <div class="col form-inline">
                         <label>Localidade</label>
-                        <select id="txtLocalidade" name="id_local" onkeydown="if (event.keyCode === 13){$('#txtAndar').focus();}" onchange="$('#txtCr').val(this.value);" class="text-capitalize" style="width: 280px;">
+                        <select id="txtLocalidade" name="id_local" onkeydown="if (event.keyCode === 13){$('#txtAndar').focus();}" onchange="$('#txtCr').val(this.value);" class="text-capitalize" >
                             <option selected value="<?=$sql->getResult()[0]['id_local']?>" class="localidade"><?=$combo->getResult()[0]['local']?></option>                        
                             <?$combo->FullRead("SELECT id,local FROM tb_sys008 ORDER BY local");
                             foreach($combo->getResult() as $res):
@@ -140,22 +140,18 @@ endif;
                     </div>
                     <div class="col form-inline">
                         <label title="Sistema Operacional">S.O</label>
-                        <select class="text-capitalize" id="txtSo" name="so_id" <?if(!in_array($sql->getResult()[0]['id_categoria'],$categorias)){print "disabled";}?>>
+                        <select class="text-capitalize" id="txtSo" name="so_id" onchange="addChave('windows',this.value)" <?if(!in_array($sql->getResult()[0]['id_categoria'],$categorias)){print "disabled";}?>>
                             <option selected value="<?=$sql->getResult()[0]['so_id']?>">Selecione...</option>
                             <?php $combo->ExeRead("tb_sys025 ORDER BY descricao_so");
                             foreach ($combo->getResult() as $res):
-                                 if($sql->getResult()[0]['so_id'] == $res['id_so']):
-                                    continue;
-                                else:
-                                   print "<option value=".$res['id_so'].">".$res['descricao_so'].' '.$res['versao_so'].'_'.$res['arquitetura_so']."</option>";
-                                endif;
+                                print "<option value=".$res['id_so'].">".$res['descricao_so'].' '.$res['versao_so'].'_'.$res['arquitetura_so']."</option>";
                             endforeach;
                             ?>
                         </select>
                     </div>
                     <div class="col form-inline">
                         <label>Key S.O</label>
-                        <input type="text" id="txtKeySo" name="key_so" value="<?=$sql->getResult()[0]['key_so']?>" class="text-capitalize m_key " size="26" placeholder="Chave de Ativação do Windows" <?if(!in_array($sql->getResult()[0]['id_categoria'],$categorias)){print "disabled";}?> />
+                        <input type="text" id="txtKeySo" name="key_so" value="<?=$sql->getResult()[0]['key_so']?>" class="m_key text-capitalize" placeholder="Chave de Ativação do Windows" <?if(!in_array($sql->getResult()[0]['id_categoria'],$categorias)){print "disabled";}?> />
                     </div>
                     
                 </div>
@@ -166,32 +162,46 @@ endif;
                     </div>
                     <div class="col form-inline">
                         <label title="pacote office">Office</label>
-                        <select class="text-capitalize" id="txtOffice" name="office_id" <?if(!in_array($sql->getResult()[0]['id_categoria'],$categorias)){print "disabled";}?>>
-                            <option selected value="<?=$sql->getResult()[0]['so_id']?>">Selecione...</option>
+                        <select class="text-capitalize" id="txtOffice" name="office_id" onchange="addChave('office',this.value)" <?if(!in_array($sql->getResult()[0]['id_categoria'],$categorias)){print "disabled";}?>>
+                            <option selected value="<?=$sql->getResult()[0]['office_id']?>">Selecione...</option>
                             <?php $combo->ExeRead("tb_sys026 ORDER BY descricao_office");
                             foreach ($combo->getResult() as $res):
-                                 if($sql->getResult()[0]['office_id'] == $res['id_office']):
-                                    continue;
-                                else:
-                                   print "<option value=".$res['id_office'].">".$res['descricao_office'].' '.$res['versao_office'].'_'.$res['arquitetura_office']."</option>";
-                                endif;
+                                print "<option value=".$res['id_office'].">".$res['descricao_office'].' '.$res['versao_office'].'_'.$res['arquitetura_office']."</option>";
                             endforeach;
                             ?>
                         </select>
                     </div>
                     <div class="col form-inline">
                         <label>Key Office</label>
-                        <input type="text" id="txtKeyOffice" name="key_office" class="text-capitalize m_key" size="26" placeholder="Chave de Ativação do Office" maxlength="30" <?if(!in_array($sql->getResult()[0]['id_categoria'],$categorias)){print "disabled";}?>/>
+                        <input type="text" id="txtKeyOffice" name="key_office" class="m_key text-capitalize" placeholder="Chave de Ativação do Office" maxlength="30" <?if(!in_array($sql->getResult()[0]['id_categoria'],$categorias)){print "disabled";}?>/>
                     </div>
                 </div>
                 <div class="row">
                      <div class="col form-inline">
                         <label>Memória Ram</label>
-                        <input type="text" name="memoria_ram" value="<?=$sql->getResult()[0]['memoria_ram']?>" <?if(!in_array($sql->getResult()[0]['id_categoria'],$categorias)){print "disabled";}?>/>
+                        <select name="memoria_ram" class="text-uppercase" <?if(!in_array($sql->getResult()[0]['id_categoria'],$categorias)){print "disabled";}?>>
+                            <option selected="" value="<?=$sql->getResult()[0]['memoria_ram']?>"><?=$sql->getResult()[0]['memoria_ram']?></option>
+                            <option value="1gb">1GB</option>
+                            <option value="2gb">2GB</option>
+                            <option value="3gb">3GB</option>
+                            <option value="4gb">4GB</option>
+                            <option value="6gb">6GB</option>
+                            <option value="8gb">8GB</option>
+                            <option value="16gb">16GB</option>
+                        </select>
                     </div>
                     <div class="col form-inline">
                         <label>HD</label>
-                        <input type="text" name="hd" value="<?=$sql->getResult()[0]['hd']?>" <?if(!in_array($sql->getResult()[0]['id_categoria'],$categorias)){print "disabled";}?>/>
+                        <select name="memoria_ram" class="text-uppercase" <?if(!in_array($sql->getResult()[0]['id_categoria'],$categorias)){print "disabled";}?>>
+                            <option selected="" value="<?=$sql->getResult()[0]['hd']?>"><?=$sql->getResult()[0]['hd']?></option>
+                            <option value="80gb">80GB</option>
+                            <option value="160gb">160GB</option>
+                            <option value="320gb">320GB</option>
+                            <option value="480gb">480GB</option>
+                            <option value="500gb">500GB</option>
+                            <option value="720gb">720GB</option>
+                            <option value="1tb">1TB</option>
+                        </select>
                     </div>
                     <div class="col form-inline">
                         <label>Anti Virus</label>
@@ -240,9 +250,9 @@ endif;
                         </select>
                     </div>
                     <div class="col form-inline">
-                        <button type="submit" style="margin-right: 10px;">Salvar</button>
+                        <button type="submit" class="btn btn-primary" style="margin-right: 10px;">Salvar</button>
                      
-                        <button type="button" onclick="history.back();">Voltar</button>
+                        <button type="button" class="btn btn-primary" onclick="history.back();">Voltar</button>
                     </div>
                 </div>
             </form>

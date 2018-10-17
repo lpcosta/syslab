@@ -281,7 +281,7 @@ switch ($acao):
         $data   = new Datas();
         $atu    = new Update();
         if(isset($post['qtde'])):
-            $post['quantidade']=$post['qtde'];
+            $post['quantidade'] =$post['qtde'];
         endif;
         $post['preco_peca']     = str_replace(",",".",$post['preco_peca']);
         $post['dt_recebimento'] = $data->setDt($post['dt_recebimento']);

@@ -22,6 +22,23 @@ function printData()
     $(".printTable").css().remove();
 }
 
+/*função que adicona chaves (product key winodws e office)*/
+function addChave(t,c)
+{
+    if (t == 'windows' && c =='11')
+    {
+        $('#txtKeySo').val('DF4HY-VFCBJ-TFQYK-4GDV4-9KPB6');
+        
+    } else if (t=='office' && c == '7')
+    {
+        $('#txtKeyOffice').val('KGFVY-7733B-8WCK9-KTG64-BC7D8');
+    } else if (t=='office' && c == '8')
+    {
+        $('#txtKeyOffice').val('GWH28-DGCMP-P6RC4-6J4MT-3HFDY');
+    }
+}/*fim da função que adiciona chaves keys*/
+
+
 $(".btnPrinter").click(function(){
    printData();
 });
@@ -44,7 +61,7 @@ function fctLogin()
                $('.j_Aviso').addClass('alert alert-warning').html(res).slideDown(800);
            }else{
                setTimeout(function(){
-                   location.href='https://localhost/syslab/';
+                   location.href='https://syslab.lpcosta.com.br/';
                },1000)
            }
           }
@@ -122,10 +139,13 @@ function buscaCep(c)
 /*####### FUNCOES QUE AUXILIA VALIDA E VERIFICA OS ITENS E AS ENTRADAS ###### */
 
 function verificaEntrada(t){
-    $.post('./app/sistema/ajax/cria-entrada.php',{tecnico: t},function (res)
+    var dados = $('#form-cria-entrada').serialize();
+    $.post('./app/sistema/ajax/cria-entrada.php',dados+'&id_tecnico='+t,function (res)
         {
             if ($.isNumeric(res)) {
                $("#txtTecnico").attr('disabled', true);
+               $("#txtDocFun").attr('disabled', true);
+               $("#txtNomeFun").attr('disabled', true);
                $('#nentrada').html('Entrada nº' + ' ' + res);
                $('#iten-entrada').slideDown(500);
                $('#numeroEntrada').val(res);
@@ -211,7 +231,7 @@ function finalizaEntrada(e,mail,resp){
 /*#######  FIM DAS FUNCOES QUE AUXILIA E VALIDA ITENS E ENTRADAS */
 
 /*#### SAIDAS ####*/
-function checaSaida(s){
+function checaSaidaEntrada(s){
     if(s=='tecnico'){
         $('#txtFunc').hide();
         $('#txtTecnico').show();
@@ -492,7 +512,7 @@ function checaCadastroPatrimonio(p)
                     case '3':
                          var p = $('#txtPatrimonio').val();
                         modal("<div class='alert alert-warning text-primary text-uppercase'><p>Patrimônio não Cadastrado!</p>"+
-                               "<p>Deseja Cadastra-lo? <a href='index.php?ref=cadastra/equipamento&p="+p+"'>Sim</a></p></div>");
+                               "<p>Deseja Cadastra-lo? <a href='index.php?pg=cadastra/equipamento&p="+p+"'>Sim</a></p></div>");
                         break;
                     case '4':
                         modal("<div class='alert alert-warning text-primary text-uppercase'>Consta um registro de baixa desse Patrimônio!<br /> Por favor verifique e tenta Novamente!</div>");
