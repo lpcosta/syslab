@@ -58,6 +58,7 @@
     $setget    = array_map("strip_tags", $getId);
     $get    = array_map("trim", $setget);
 extract($get);
+unset($get['pg']);
     $sql->ExeRead("tb_sys007 WHERE id ={$id}");
     $entrada = $sql->getRowCount();
         if($sql->getRowCount() > 0):

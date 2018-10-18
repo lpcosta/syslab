@@ -11,7 +11,7 @@ function WSErro($ErrMsg, $ErrNo, $ErrDie = null) {
 
 function paginaSegura() {
     if(!isset($_SESSION['UserLogado'])):
-        header("Location:".SITE."");
+        header("Location:".HOME."");
     endif;
 }
 

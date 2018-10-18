@@ -138,13 +138,14 @@ require_once './app/funcoes/func.inc.php';
                                         <?endif;?>
                                         </ul>
                                     </li>
-                                    <li><a href="#">Localidade</a>
-                                        <ul class="submenu-3">
+                                    <li><a href="index.php?pg=gerenciar/localidade">Localidade</a>
+                                        
+                                       <!-- <ul class="submenu-3">
                                             <li><a href="#">Editar</a></li>
                                         <?if(GRUPO == 4):?>    
                                             <li><a href="#">Excluir</a></li>
                                         <?endif;?>
-                                        </ul>
+                                        </ul>-->
                                     </li>
                                     <li><a href="#">Usuario</a></li>
                                 </ul>

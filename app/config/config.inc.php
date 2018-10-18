@@ -12,7 +12,7 @@ define('SITENAME', 'Syslab');
 define('SITEDESC', 'Sistema responsavel pelo controle de equipamentos em Laboratorio da prefeitura de santo andre - sp');
 
 // DEFINE A BASE DO SITE ####################
-define('HOME', 'https://localhost/syslab');
+define('HOME', 'https://syslab.lpcosta.com.br/');
 //define('THEME', 'cidadeonline');
 define('IP',$_SERVER['REMOTE_ADDR']);
 define('HOST',gethostbyaddr(IP));

@@ -1,8 +1,9 @@
 <?php
-require_once '../../config/config.inc.php';
-require_once '../../funcoes/func.inc.php';
-require_once '../../config/post.inc.php';
 session_start();
+require_once '../../config/config.inc.php';
+require_once '../../config/post.inc.php';
+require_once '../../funcoes/func.inc.php';
+
 $sql        = new Read();
 $cria       = new Create();
 $texto      = new Check();
@@ -230,7 +231,7 @@ if(isset($id)):
                                 JOIN
                                 tb_sys002 S ON S.id = A.id_status AND A.id_item_entrada = :ID AND A.id_status != :STS ","ID={$id}&STS=5");
     
-  if(isset($agpeca) || $avaBancada->getRowCount() > 0):?>
+  if($pecas > 0 || $avaBancada->getRowCount() > 0):?>
     <p class="text-center text-capitalize">histórico de bancada</p>
     <?if(isset($agpeca)):?>
     <table class="table-hover">
@@ -289,7 +290,7 @@ if(isset($id)):
     <hr />
     <form id="form-avalia-equipamento" onsubmit="return false;" >
         <input type="hidden" name="id_item_entrada" value="<?=$sql->getResult()[0]['id']?>" />
-        <input type="hidden" name="id_tecnico_bancada" value="<?=$_SESSION['UserLogado']['id']?>" />
+        <input type="hidden" name="id_tecnico_bancada" value="<?=ID_TECNICO?>" />
         <input type="hidden" name="email_tecnico_entrada" value="<?=$sql->getResult()[0]['email']?>" />
         <div class="row">
             <div class="col form-inline">

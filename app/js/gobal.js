@@ -6,12 +6,6 @@ $( ".tabs" ).tabs({
       }*/
    });
    
-// function imprimi()
-// {
-//    $('.printer').printArea();
-//    return false;
-// }
-
 function printData()
 {
     $(".printTable").css({
@@ -134,6 +128,35 @@ function buscaCep(c)
             $("#txtCep").attr('disabled', true);
         }
     });
+}
+
+function buscaIdAvaliacao(){
+    $("#form-dados-avaliacao").validate({
+        rules:{
+            entrada:{required:true},
+            patrimonio:{required:true},
+       },
+        submitHandler: function(){
+          modal('validado');
+        }
+       
+    });
+}
+
+function buscaLocalidade(id){
+     $.ajax({
+            type: "POST",
+            url: "./app/sistema/ajax/busca-localidade.php",
+            data: {id:id},
+            dataType:'HTML',
+            beforeSend:function(){
+             $('.form_load').fadeIn(300);
+            },
+            success: function( res )
+            {$('.form_load').fadeOut();
+                $('.dados-edita').html(res);
+            }
+        });
 }
 
 /*####### FUNCOES QUE AUXILIA VALIDA E VERIFICA OS ITENS E AS ENTRADAS ###### */
@@ -1181,12 +1204,15 @@ function buscaAvaliacao(id){
 
 function editaAvaliacao(s){
     if(s != ''){
-        var dados = $("#form-edita-avaliacao").serialize();
+        var dados = $("form.edita").serialize();
         $.ajax({url: './app/sistema/ajax/edita-avaliacao.php',
             data: dados,type:'POST',dataType:'HTML',
                 success: function (res){
                     if(res){modal(res);}
-                    else{$('#form-bancada-search').submit();}
+                    else{
+                        $('#form-bancada-search').submit();
+                        $("#btnAtualizaEdicaoAvaliacao").trigger('click');
+                    }
                 }
             });
     }else

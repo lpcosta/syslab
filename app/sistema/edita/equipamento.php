@@ -141,7 +141,11 @@ endif;
                     <div class="col form-inline">
                         <label title="Sistema Operacional">S.O</label>
                         <select class="text-capitalize" id="txtSo" name="so_id" onchange="addChave('windows',this.value)" <?if(!in_array($sql->getResult()[0]['id_categoria'],$categorias)){print "disabled";}?>>
-                            <option selected value="<?=$sql->getResult()[0]['so_id']?>">Selecione...</option>
+                            <?if(!empty($sql->getResult()[0]['so_id'])){ $combo->ExeRead("tb_sys025 WHERE id_so = {$sql->getResult()[0]['so_id']}");?>
+                            <option selected value="<?=$sql->getResult()[0]['so_id']?>"><?=$combo->getResult()[0]['descricao_so'].' '.$combo->getResult()[0]['versao_so'].' '.$combo->getResult()[0]['arquitetura_so']?></option>
+                            <?}else{?>
+                            <option selected value="">Selecione...</option>
+                            <?}?>
                             <?php $combo->ExeRead("tb_sys025 ORDER BY descricao_so");
                             foreach ($combo->getResult() as $res):
                                 print "<option value=".$res['id_so'].">".$res['descricao_so'].' '.$res['versao_so'].'_'.$res['arquitetura_so']."</option>";
@@ -151,7 +155,7 @@ endif;
                     </div>
                     <div class="col form-inline">
                         <label>Key S.O</label>
-                        <input type="text" id="txtKeySo" name="key_so" value="<?=$sql->getResult()[0]['key_so']?>" class="m_key text-capitalize" placeholder="Chave de Ativação do Windows" <?if(!in_array($sql->getResult()[0]['id_categoria'],$categorias)){print "disabled";}?> />
+                        <input type="text" id="txtKeySo" name="key_so" value="<?=$sql->getResult()[0]['key_so']?>" class="text-capitalize" placeholder="Chave de Ativação do Windows" <?if(!in_array($sql->getResult()[0]['id_categoria'],$categorias)){print "disabled";}?> />
                     </div>
                     
                 </div>
@@ -163,7 +167,11 @@ endif;
                     <div class="col form-inline">
                         <label title="pacote office">Office</label>
                         <select class="text-capitalize" id="txtOffice" name="office_id" onchange="addChave('office',this.value)" <?if(!in_array($sql->getResult()[0]['id_categoria'],$categorias)){print "disabled";}?>>
-                            <option selected value="<?=$sql->getResult()[0]['office_id']?>">Selecione...</option>
+                            <?if(!empty($sql->getResult()[0]['office_id'])){ $combo->ExeRead("tb_sys026 WHERE id_office = {$sql->getResult()[0]['office_id']}");?>
+                            <option selected value="<?=$sql->getResult()[0]['office_id']?>"><?=$combo->getResult()[0]['descricao_office'].' '.$combo->getResult()[0]['versao_office'].' '.$combo->getResult()[0]['arquitetura_office']?></option>
+                            <?}else{?>
+                            <option selected value="">Selecione...</option>
+                            <?}?>
                             <?php $combo->ExeRead("tb_sys026 ORDER BY descricao_office");
                             foreach ($combo->getResult() as $res):
                                 print "<option value=".$res['id_office'].">".$res['descricao_office'].' '.$res['versao_office'].'_'.$res['arquitetura_office']."</option>";
@@ -173,7 +181,7 @@ endif;
                     </div>
                     <div class="col form-inline">
                         <label>Key Office</label>
-                        <input type="text" id="txtKeyOffice" name="key_office" class="m_key text-capitalize" placeholder="Chave de Ativação do Office" maxlength="30" <?if(!in_array($sql->getResult()[0]['id_categoria'],$categorias)){print "disabled";}?>/>
+                        <input type="text" id="txtKeyOffice" name="key_office" value="<?=$sql->getResult()[0]['key_office']?>" class="text-capitalize" placeholder="Chave de Ativação do Office" maxlength="30" <?if(!in_array($sql->getResult()[0]['id_categoria'],$categorias)){print "disabled";}?>/>
                     </div>
                 </div>
                 <div class="row">

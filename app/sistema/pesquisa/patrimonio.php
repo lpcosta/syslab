@@ -1,7 +1,7 @@
 <?php
 require_once '../../config/config.inc.php';
 require_once '../../config/post.inc.php';
-
+session_start();
 $sql = new Read();
 
 $sql->FullRead("SELECT 
@@ -205,6 +205,7 @@ if($sql->getResult()):
 ?>
     
     <?endswitch;
+    $patrimonio = $sql->getResult()[0]['patrimonio'];
     $sql->FullRead("SELECT 
             IE.id_entrada entrada,
             IE.motivo,
@@ -223,7 +224,7 @@ if($sql->getResult()):
                 JOIN
             tb_sys001 TEC ON TEC.id = ENT.id_tecnico
                 JOIN
-            tb_sys002 STS ON STS.id = IE.status AND IE.patrimonio = :PAT order by IE.id desc;", "PAT={$sql->getResult()[0]['patrimonio']}");
+            tb_sys002 STS ON STS.id = IE.status AND IE.patrimonio = :PAT order by IE.id desc;", "PAT="."$patrimonio"."");
     ?>
 </div>
 <hr />
@@ -252,6 +253,64 @@ if($sql->getResult()):
     </tr>
     <?php endforeach;?>
 </table>
+<hr/>
+<?
+    $sql->FullRead("SELECT 
+                    A.id,
+                    A.data,
+                    IE.id_entrada entrada,
+                    IE.os_sti os,
+                    IE.status sts,
+                    T.nome tecnico,
+                    A.avaliacao,
+                    S.descricao status,
+                    S.cor,
+                    A.peca_id
+                FROM
+                    tb_sys010 A
+                        JOIN
+                    tb_sys006 IE ON IE.id = A.id_item_entrada
+                        JOIN
+                    tb_sys001 T ON T.id = A.id_tecnico_bancada
+                        JOIN
+                    tb_sys002 S ON S.id = A.id_status
+                        AND IE.patrimonio = :PAT ORDER BY A.id DESC","PAT="."$patrimonio"."");
+?>
+    <p class="text-uppercase text-center" style="background-color: #E9E9E9;">histórico de bancada</p>
+    <?if($sql->getRowCount() > 0):?>
+    <table class="tabela-dados table-hover">
+        <tr class="text-uppercase">
+            <th class="text-center">data</th>
+            <th class="text-center">entrada</th>
+            <th class="text-center" style="width: 60px;">os</th>
+            <th style="min-width: 190px;">técnico</th>
+            <th style="max-width: 300px;">avaliação</th>
+            <th>&nbsp;</th>
+            <th style="width: 115px;">status</th>
+            <th>peça</th>
+        </tr>
+    <? foreach ($sql->getResult() as $res):?>
+        <tr style="background-color: <?=$res['cor']?>;">
+            <td class="text-center"><?=date("d/m/Y",strtotime($res['data']))?></td>
+            <td class="text-center"><?=$res['entrada']?></td>
+            <td class="text-center"><?=$res['os']?></td>
+            <td class="text-left text-capitalize"><?=$res['tecnico']?></td>
+            <td style="max-width: 300px;" class="text-left"><?= ucfirst($res['avaliacao'])?></td>
+        <?if($res['sts'] == 4 && $_SESSION['UserLogado']['grupo_id'] == 4):?>
+            <td class="text-left"><a href="index.php?pg=laboratorio/edita-avaliacao&id=<?=$res['id']?>"><button>Editar</button></a></td>
+        <?else:?>
+            <td class="text-left">&nbsp;</td>
+        <?endif;?>
+            <td><?=$res['status']?></td>
+        <?if(!empty($res['peca_id'])):
+            $sql->FullRead("SELECT id_peca,descricao_peca FROM tb_sys015 WHERE id_peca = :PECA","PECA={$res['peca_id']}");?>
+            <td class="text-left text-capitalize"><?=$sql->getResult()[0]['id_peca'].' - '.$sql->getResult()[0]['descricao_peca']?></td>
+        <?else:?>
+            <td class="text-left">&nbsp;</td>
+        <?endif;?>
+        </tr> 
+    <?endforeach;endif;?>
+    </table>
 <?else:?>
 <h1 class="text-center text-uppercase alert alert-info" role="alert">nenhum registro encontrado!</h1>
 <?endif;
