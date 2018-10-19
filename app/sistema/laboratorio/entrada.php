@@ -130,8 +130,8 @@
                     <label>Local de Uso</label>
                     <select name="local_uso" style="width: 200px;" >
                         <option selected="" value="">Selecione</option>
-                        <option value="laboratorio">Laboratório</option>
-                        <option value="administrativo">Administrativo (AD)</option>
+                        <option value="rede laboratorio">Rede Laboratorio</option>
+                        <option value="rede adm (AD)">Rede Adm (AD)</option>
                     </select>
                 </div>
             </div>

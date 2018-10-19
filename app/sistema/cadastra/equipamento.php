@@ -123,11 +123,29 @@ $sql = new Read();
                 <div class="row" >
                     <div class="col form-inline">
                         <label title="Office">Memória</label>
-                        <input type="text" id="txtMemoria" name="txtMemoria" class="form-control " size="5"placeholder="ram..." />
+                        <select id="txtMemoria" name="txtMemoria" class="form-control">
+                            <option selected="" value="">Selecione...</option>
+                            <option value="1gb">1GB</option>
+                            <option value="2gb">2GB</option>
+                            <option value="3gb">3GB</option>
+                            <option value="4gb">4GB</option>
+                            <option value="6gb">6GB</option>
+                            <option value="8gb">8GB</option>
+                            <option value="16gb">16GB</option>
+                        </select>
                     </div>
                      <div class="col form-inline">
-                        <label title="Chave de Ativação do Office">HD</label>
-                        <input type="text" id="txtHd" name="txtHd" class="form-control " size="5"placeholder="hd..." />
+                        <label title="HD">HD</label>
+                        <select id="txtHd" name="txtHd" class="form-control">
+                            <option selected="" value="">Selecione...</option>
+                            <option value="80gb">80GB</option>
+                            <option value="160gb">160GB</option>
+                            <option value="320gb">320GB</option>
+                            <option value="480gb">480GB</option>
+                            <option value="500gb">500GB</option>
+                            <option value="720gb">720GB</option>
+                            <option value="1tb">1TB</option>
+                        </select>
                     </div>
                 </div>
             </div><!-- Fim campos CPU --> 

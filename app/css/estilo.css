@@ -21,7 +21,6 @@ header > div#div-user-logado{background-color: #B1ABAC;width: 140px;height: 38px
 /*fim MENU*/
 
 /*ID GLOBAIS*/
-
 #formSearch{float: right;}
 #form-bancada-search label{margin-left: 5px;}
 
@@ -89,7 +88,7 @@ header > div#div-user-logado{background-color: #B1ABAC;width: 140px;height: 38px
 /*FIM DOS ESTILSO DE RELATORIOS*/
 
 /*estilos de pesquisas*/
-
+.ui-autocomplete-loading {background: url('../imagens/load.gif') right center no-repeat}
 .dados-pesquisa label{width:110px; text-align: left; display: block;border: 1px solid #09f;padding-left: 5px;}
 .dados-pesquisa input{border: 1px solid #09f;padding-left: 5px;color: #000; border-left: none;}
 .dados-edita label{width:110px; text-align: left; display: block;}

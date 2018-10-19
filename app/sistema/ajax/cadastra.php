@@ -11,13 +11,13 @@ switch ($acao):
     case 'equipamento':
             $sqlCons->FullRead("SELECT patrimonio,serie FROM tb_sys004 WHERE patrimonio = :PAT or serie = :SERIE", "PAT="."{$texto->setTexto($patrimonio)}"."&SERIE="."{$texto->setTexto($serie)}"."");
             if($sqlCons->getRowCount() > 0):
-               if($sqlCons->getResult()[0]['patrimonio'] === $patrimonio):
-                print "<span class=\"alert alert-warning\" role=\"alert\">Consta um registro para esse Patrimônio!</span>";
-                elseif($sqlCons->getResult()[0]['serie'] === $serie):
+               if($sqlCons->getResult()[0]['patrimonio'] === $patrimonio){
+                    print "<span class=\"alert alert-warning\" role=\"alert\">Consta um registro para esse Patrimônio!</span>";
+               }else if($sqlCons->getResult()[0]['serie'] === $serie){
                    print "<span class=\"alert alert-warning\" role=\"alert\">Número de serie já esta em uso!</span>";
-                else:
-                    print "<p>error!<br /> não faço idéia de como você veio parar aqui...</p>";
-                endif;
+                }else{
+                    print "<span class=\"alert alert-warning\" role=\"alert\">Não faço idéia do porque esta aparecendo essa msg!</span>";
+                }
             else:
                 $sqlCad->ExeCreate("tb_sys004",["patrimonio"    => $texto->setTexto($patrimonio),
                                                 "serie"         => $texto->setTexto($serie),

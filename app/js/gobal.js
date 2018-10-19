@@ -5,7 +5,114 @@ $( ".tabs" ).tabs({
           effect: "blind", duration: 5
       }*/
    });
-   
+/*######### autocomplete ##################*/  
+
+$('#busca').autocomplete({
+        source: function(request, response){
+            $.ajax({
+                url:"./app/sistema/ajax/auto-complete-pecas.php",
+                dataType:"json",
+                type:'POST',
+                data:{p:request.term},
+                success: function(data){
+                    response(data);
+                }
+            });
+        },
+        minLength: 1,
+        select: function(event,ui){
+            $("#busca").val(ui.item.label);
+            buscaPeca(ui.item.value);
+            return false;
+        }
+    }); 
+  
+ $('#bsclocalidade').autocomplete({
+        source: function(request, response){
+            $.ajax({
+                url:"./app/sistema/ajax/auto-complete-localidade.php",
+                dataType:"json",
+                type:'POST',
+                data:{p:request.term},
+                success: function(data){
+                    response(data);
+                }
+            });
+        },
+        minLength: 1,
+        select: function(event,ui){
+            $("#bsclocalidade").val(ui.item.label);
+            buscaLocalidade(ui.item.value);
+            return false;
+        }
+    });  
+/*######### fim autocomplete ##################*/  
+function buscaPeca(id){
+    $.ajax({
+      url:'./app/sistema/ajax/busca-peca.php',
+      data: {codigo:id},
+      type:'POST',
+      dataType:'HTML',
+      success: function (res){
+        $('.dados-edita').html(res).slideDown(800);
+        $('.btn-edita-peca').show();
+      }
+    });
+}
+
+function liberaCamposEdicaoPeca(){
+    $('.editable').attr('disabled',false);
+    $('#btnEditarPeca').toggle();
+    $('#btnSalvaEdicaoPeca').toggle();
+}
+
+function liberaCamposEdicao()
+{
+    $('.editable').attr('disabled',false);
+    $('.btn-acao-edita').toggle();
+    $('.btn-acao-salva').toggle();
+}
+function editaPeca(){
+    var dados = $(".form-edita").serialize();
+    $.ajax({
+        url: "./app/sistema/ajax/edita-peca.php",
+        data: dados,
+        type: "POST",
+        dataType:'HTML',
+        beforeSend:function(){
+         $('.form_load').fadeIn(500);
+        },
+        success: function(res)
+        {$('.form_load').fadeOut(500);
+           modal(res);
+           buscaPeca($('#txtIdPeca').val());
+           $('#btnEditarPeca').toggle();
+           $('#btnSalvaEdicaoPeca').toggle();
+        }
+    });
+}
+
+function editaLocalidade(id){
+   var dados = $(".edita").serialize();
+   $.ajax({
+        url: "./app/sistema/ajax/edita-localidade.php",
+        data: dados,
+        type: "POST",
+        dataType:'HTML',
+        beforeSend:function(){
+         $('.form_load').fadeIn(500);
+        },
+        success: function(res)
+        {
+            $('.form_load').fadeOut(500);
+            $('.btn-acao-edita').toggle();
+            $('.btn-acao-salva').toggle();
+            buscaLocalidade(id);
+             modal(res);
+        }
+    });
+}
+
 function printData()
 {
     $(".printTable").css({
@@ -365,8 +472,10 @@ function setaLocalidade(cr)
         {
             if ($.inArray(cr, values) !== -1)
             {
-                $('#txtLocalidade').val(cr);
+                $("#txtLocalidade").val(cr);
                 $("#txtLocalidade").attr('value', cr);
+                var id = $('#txtLocalidade').val();
+                buscaLocalidade(id);
             }
             else if (cr.trim()!= '')
             {
@@ -377,7 +486,8 @@ function setaLocalidade(cr)
                     {
                     if ($.isNumeric(res)){
                         $('#txtLocalidade').attr('value', res);
-                        $('#txtLocalidade').val(res);                    
+                        $('#txtLocalidade').val(res); 
+                        buscaLocalidade(res);
                     } else
                     {
                       $('#txtCodLocal').val('').focus();
@@ -779,29 +889,6 @@ $("#form-edita-peca").validate({
     }
 });
 
-$("#edita-peca").validate({
-    rules:{
-        categoria_id:{required:true},
-        descricao_peca:{required:true}
-    },
-   submitHandler: function(){
-        var dados = $("#edita-peca").serialize();
-            $.ajax({
-                url: './app/sistema/ajax/edita-peca.php',
-                data: dados,
-                type:'POST',
-                dataType:'HTML',
-            beforeSend:function(){
-           $('.form_load').fadeIn(500);
-            },
-            success: function (res){
-               $('.form_load').fadeOut(500);
-               modal(res);
-            }
-        });
-        return false;
-    }
-});
 
 $('#baixa-peca').validate({
    rules:{

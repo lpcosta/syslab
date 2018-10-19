@@ -3,6 +3,9 @@ require_once '../../config/config.inc.php';
 require_once '../../config/post.inc.php';
 session_start();
 $sql = new Read();
+$texto = new Check();
+
+$busca = $texto->setTexto($busca);
 
 $sql->FullRead("SELECT 
     EQ.patrimonio,
@@ -35,8 +38,7 @@ FROM
     tb_sys008 L ON L.id = EQ.id_local
         AND EQ.patrimonio = :PAT", "PAT="."{$busca}"."");
         
-if(!$sql->getResult()):
-    
+if(!$sql->getResult()){
     $sql->FullRead("SELECT 
         EQ.patrimonio,
         EQ.serie,
@@ -69,10 +71,9 @@ if(!$sql->getResult()):
             JOIN
         tb_sys008 L ON L.id = EQ.id_local
             AND IE.os_sti = :OS", "OS="."{$busca}"."");
-            
-endif;
+}
 
-if(!$sql->getResult()):
+if(!$sql->getResult()){
     $sql->FullRead("SELECT 
         EQ.patrimonio,
         EQ.serie,
@@ -105,7 +106,7 @@ if(!$sql->getResult()):
             JOIN
         tb_sys008 L ON L.id = EQ.id_local
             AND EQ.serie = :SERIE", "SERIE="."{$busca}"."");   
-endif;
+}
     $categorias=[2,5,17,22,23,26];
     if(isset($sql->getResult()[0]['categoria'])):
         $categoria = $sql->getResult()[0]['categoria'];

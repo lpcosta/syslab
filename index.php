@@ -216,6 +216,7 @@ require_once './app/funcoes/func.inc.php';
     <script src="./app/libs/JQuery-Validate/localization/messages_pt_BR.js" /></script>
     <script src="./app/libs/PrintArea/demo/jquery.PrintArea.js"></script>
     <script src="./app/js/gobal.js" /></script>
+    <script src="./app/js/autocomplete.js" /></script>
     
 </html>
 <?php 
