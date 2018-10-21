@@ -1,6 +1,6 @@
 <?php
-   paginaSegura();
-  $sql = new Read();
+    paginaSegura();
+    $sql = new Read();
 ?>
 <div class="tabs">
     <ul>
@@ -21,7 +21,7 @@
                 <div class="col form-inline">
                     <div class="cod-rel form-inline">
                         <label>Nº da Saída</label>
-                        <input type="text" name="id_saida" id="txtCodSaida" placeholder="Nº saída..." />
+                        <input type="text" name="id_saida" id="txtCodSaida" placeholder="Nº saída..." onkeydown="if(event.keyCode == '13'){validaRelatorio('saida','#form-header-report-saida');}" />
                     </div>
                     <div class="tecnico-rel form-inline" style="display: none;">
                         <label></label>
@@ -46,7 +46,7 @@
                     
                     <span style="width: 38px;"><img src="./app/imagens/load.gif" class="form_load" alt="[CARREGANDO...]" title="CARREGANDO.." /></span>
                     
-                    <button type="button" class="btn btn-primary btnPrinter" onclick="imprimi();">Imprimir</button>
+                    <button type="button" class="btn btn-primary btnPrinter" onclick="imprime();">Imprimir</button>
                 
                 </div>
             </div>
@@ -54,15 +54,12 @@
         </form>
     </div>
 <?if(isset($_GET['id'])):
-    $getId    = filter_input_array(INPUT_GET,FILTER_DEFAULT);
-    $setget    = array_map("strip_tags", $getId);
-    $get    = array_map("trim", $setget);
-extract($get);
-unset($get['pg']);
-    $sql->ExeRead("tb_sys007 WHERE id ={$id}");
-    $entrada = $sql->getRowCount();
+    require_once './app/config/get.inc.php';
+    if(!empty($id)):
+        $sql->ExeRead("tb_sys007 WHERE id ={$id}");
+        $saida = $sql->getRowCount();
         if($sql->getRowCount() > 0):
-             $sql->FullRead("SELECT nome,data,hora,nome_fun,doc_fun FROM tb_sys007 saida
+             $sql->FullRead("SELECT nome,data,hora,nome_fun,doc_fun,responsavel FROM tb_sys007 saida
                             JOIN tb_sys001 tecnico ON tecnico.id = saida.id_tecnico AND saida.id = :ID ","ID={$id}");
             $dadosTecnico = $sql->getResult()[0];
             $sql->FullRead("SELECT EQ.patrimonio, C.descricao equipamento,IE.os_sti,L.local,L.rua,L.bairro,F.nome_fabricante fabricante,M.modelo,EQ.andar,EQ.sala
@@ -76,17 +73,18 @@ unset($get['pg']);
                                 JOIN tb_sys007 S ON S.id = ISA.id_saida AND  ISA.id_saida= :IDSAIDA","IDSAIDA={$id}");
             $dtperiodo = 'data';  
         endif;
+    endif;
 endif;
 ?>
-    <div class="relatorio printTable">
-        <?if(isset($id) && $entrada > 0):?>
-        <table>
+    <div id="printArea" class="relatorio printTable">
+        <?if(isset($saida) && $saida > 0):?>
+         <table class="relatorio">
             <tr>
-                <th rowspan="5" style="width: 78px;"><img src="<?= LOGO_LORAC ?>"/></th>
+                <th rowspan="5" style="width:110px;"><img src="<?= LOGO_PSA ?>"/></th>
             </tr>
             <tr>
                 <th colspan="2" class="text-center text-uppercase"><?= PREFEITURA ?></th>
-                <th rowspan="4" style="width: 78px;"><img src="<?= LOGO_SYSLAB ?>"/></th>
+                <th rowspan="4" style="width:110px;">&nbsp;</th>
             </tr>
             <tr>
                 <th colspan="2" class="text-center text-uppercase"><?= SECRETARIA ?></th>
@@ -103,30 +101,40 @@ endif;
             <tr>
                 <th colspan="4" class="text-center text-uppercase">saída de equipamento</th>
             </tr>
-            <tr class="text-uppercase">
-                <th>Saída nº</th>
-                <td colspan="2"><?=$id?></td>
-            </tr>
-            <tr class="text-uppercase">
-                <th>técnico</th>
-                <td colspan="2"><?=$dadosTecnico['nome']?></td>
-            </tr>
-            <tr class="text-uppercase">
-                <th><?=$dtperiodo?></th>
-                <td colspan="2"><?=date("d/m/Y",strtotime($dadosTecnico['data'])).' '.$dadosTecnico['hora']?></td>
+            <tr>
+                <td colspan="5">
+                    <table class="relatorio">
+                        <tr class="left">
+                            <td><b>Entrada</b></td>
+                            <td><?=$id?></td>
+                            <td><b>Data</b></td>
+                            <td><?=date("d/m/Y",strtotime($dadosTecnico['data'])).' '.$dadosTecnico['hora']?></td>
+                        </tr>
+                        <tr class="left">
+                            <td><b>Feita Por</b></td>
+                            <td class="text-capitalize"><?=$dadosTecnico['responsavel']?></td>
+                            <td><b>Em Nome de</b></td>
+                        <?if(empty($dadosTecnico['nome_fun'])):?>
+                            <td colspan="2" class="text-capitalize"><?=$dadosTecnico['nome']?></td>
+                        <?elseif(!empty($dadosTecnico['nome_fun'])):?>
+                            <td colspan="2" class="text-capitalize"><?=$dadosTecnico['nome_fun'].' <b>RG/IF</b> '.$dadosTecnico['doc_fun']?></td>
+                        <?endif;?>
+                        </tr>
+                    </table>                    
+                </td>
             </tr>
             <tr>
                 <td colspan="4">&nbsp;</td>
             </tr>
             <tr>
                 <td colspan="5">            
-                    <table class="table-hover">
+                     <table class="relatorio">
                         <tr>
                             <th class="text-center">OS</th>
                             <th class="text-center">PATRIMONIO</th>
-                            <th>EQUIPAMENTO</th>
-                            <th>LOCAL</th>
-                            <th>ENDEREÇO</th>
+                            <th class="left">EQUIPAMENTO</th>
+                            <th class="left">LOCAL</th>
+                            <th class="left">ENDEREÇO</th>
                         </tr>
                         <? foreach ($sql->getResult() as $res):?>
                         <tr class="text-capitalize">
@@ -139,6 +147,18 @@ endif;
                         <? endforeach;?>
                     </table>
                 </td>
+            </tr>
+        </table>
+        <table class="relatorio" style="margin-top:50px;">
+            <tr>
+                <th class="text-center">_______________________________________</th>
+
+                <th class="text-center">_______________________________________</th>
+            </tr>
+            <tr>
+                <th class="text-center">Técnico</th>
+
+                <th class="text-center">Responsável</th>
             </tr>
         </table>
         <?endif;?>

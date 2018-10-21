@@ -23,7 +23,7 @@ switch ($acao):
             if($atu->getResult()):
                 print "<span class='alert alert-success' role='alert'>Equipamento atualizado!</span>";
             else:
-                print "Erro: <code>".$atu->getError()."</code>";
+                print "<code>".$atu->getError()."</code>";
             endif;
         else:
             print "<span class='alert alert-warning' role='alert'>NUMERO DE SÉRIE INFORMADO JÁ ESTA EM USO POR OUTRO EQUIPAMENTO</span>";
@@ -35,7 +35,7 @@ switch ($acao):
         if($atu->getResult()):
             print "<span class='alert alert-success' role='alert'>Atualização Realizada!</span>";
         else:
-            print "Erro <code>".$atu->getError()."</code>";
+            print "<code>".$atu->getError()."</code>";
         endif;
         break;
     case 'localidade':
@@ -44,7 +44,7 @@ switch ($acao):
         if($atu->getResult()):
             print "<span class='alert alert-success' role='alert'>Atualização Realizada!</span>";
         else:
-            print "Erro <code>".$atu->getError()."</code>";
+            print "<code>".$atu->getError()."</code>";
         endif;
         break;
     case 'usuario':
@@ -53,7 +53,7 @@ switch ($acao):
         if($atu->getResult()):
             print "<span class='alert alert-success' role='alert'>Atualização Realizada!</span>";
         else:
-            print "Erro <code>".$atu->getError()."</code>";
+            print "<code>".$atu->getError()."</code>";
         endif;
         break;
     case 'avaliacao':

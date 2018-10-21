@@ -1,9 +1,23 @@
 <?php
    paginaSegura();
    $sql = new Read();
-   $sql->FullRead("SELECT * FROM tb_sys001 T
+   $sql->FullRead("SELECT T.id,
+                          T.nome,
+                          T.email,
+                          T.contato,
+                          T.celular,
+                          T.login,
+                          T.dt_cadastro,
+                          T.dt_ultimo_login,
+                          T.situacao,
+                          T.tipo,
+                          T.id_empresa,
+                          T.grupo_id,
+                          E.razaosocial,
+                          G.descricao
+                        FROM tb_sys001 T
                             JOIN tb_sys012 E ON E.idEmpresa = T.id_empresa
-                            JOIN tb_sys021 G ON G.id_grupo = T.grupo_id;");
+                            JOIN tb_sys021 G ON G.id_grupo = T.grupo_id ORDER BY nome");
 ?>
 <div class="tabs">
     <ul>
@@ -45,7 +59,7 @@
             <? foreach ($sql->getResult() as $res):?>
                 <tr style="<?if($res['situacao']=='b'){print "background-color: #ccc;";}?>">
                     <td style="width: 40px;" class="text-center cursor-pointer" onclick="buscaUsuario(<?=$res['id']?>)"><?=$res['id']?></td>
-                    <td><?=$res['nome']?></td>
+                    <td class="text-capitalize"><?=$res['nome']?></td>
                     <td><?=$res['login']?></td>
                     <td><?=$res['email']?></td>
                     <td class="text-center"><?=$res['contato']?></td>

@@ -25,14 +25,14 @@
                     &nbsp;
                     <img src="./app/imagens/load.gif" class="form_load" alt="[CARREGANDO...]" title="CARREGANDO.." /> 
                     
-                    <button type="button" class="btn btn-primary btnPrinter" style="display: none;" onclick="imprimi();">Imprimir</button>
+                    <button type="button" class="btn btn-primary btnPrinter" style="display: none;" onclick="imprime();">Imprimir</button>
                 </div>
             </div>
             <hr />
         </form>
     </div>
 
-    <div class="relatorio printTable">
+    <div id="printArea" class="relatorio printTable">
         
     </div>
 </div>

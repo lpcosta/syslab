@@ -48,7 +48,7 @@ $sql->ExeRead("tb_sys004 WHERE id = {$id}");
             <? $combo->FullRead("SELECT modelo FROM tb_sys022 WHERE id_modelo =:MOD", "MOD={$sql->getResult()[0]['modelo']}") ?>
             <select class="text-capitalize editable" disabled="" id="txtModelo" name="modelo">
                 <option selected value="<?=$sql->getResult()[0]['modelo']?>"class="cmbv_modelos"><?=$combo->getResult()[0]['modelo']?></option>
-            <?php $combo->FullRead("SELECT * FROM tb_sys022 WHERE fabricante_id = :FAB","FAB={$sql->getResult()[0]['fabricante']}");
+            <?php $combo->FullRead("SELECT * FROM tb_sys022 WHERE fabricante_id = :FAB ORDER BY modelo","FAB={$sql->getResult()[0]['fabricante']}");
                 foreach ($combo->getResult() as $res):
                     if($sql->getResult()[0]['modelo'] == $res['modelo']):
                         continue;
@@ -64,7 +64,7 @@ $sql->ExeRead("tb_sys004 WHERE id = {$id}");
             <? $combo->FullRead("SELECT descricao FROM tb_sys003 WHERE id =:ID", "ID={$sql->getResult()[0]['id_categoria']}") ?>
             <select class="text-capitalize editable" disabled="" id="txtEquipamento" name="id_categoria">
                 <option selected value="<?=$sql->getResult()[0]['id_categoria']?>"><?=$combo->getResult()[0]['descricao']?></option>
-             <?php $combo->FullRead("SELECT * FROM tb_sys003");
+             <?php $combo->FullRead("SELECT * FROM tb_sys003 ORDER BY descricao");
                 foreach ($combo->getResult() as $res):
                     if($sql->getResult()[0]['id_categoria'] == $res['id']):
                         continue;
@@ -78,7 +78,7 @@ $sql->ExeRead("tb_sys004 WHERE id = {$id}");
         <div class="col form-inline">
             <label>Tipo</label>
             <select name="tipo" class="text-capitalize editable" disabled="">
-                <option selected value="<?=$sql->getResult()[0]['tipo']?>">Selecione..</option>
+                <option selected value="<?=$sql->getResult()[0]['tipo']?>"><?if($sql->getResult()[0]['tipo']=='a'){print "ativo";}else{print "backup";}?></option>
                 <option value="a">Ativo</option>
                 <option value="b">Backup</option>
 

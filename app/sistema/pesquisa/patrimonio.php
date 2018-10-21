@@ -130,9 +130,9 @@ if($sql->getResult()):
     <div class="row">
         <div class="col form-inline">
             <label>Patrimonio</label>
-            <input type="text" class="text-uppercase"disabled="" value="<?=$sql->getResult()[0]['patrimonio']?>" style="width:80px;"/>
+            <input type="text" class="text-uppercase"disabled="" value="<?=$sql->getResult()[0]['patrimonio']?>" style="width:90px;"/>
             <label style="width:40px;border-left: none;">N/S</label>
-            <input type="text" class="text-uppercase"disabled="" value="<?=$sql->getResult()[0]['serie']?>" style="width: calc(100% - 232px);"/>
+            <input type="text" class="text-uppercase"disabled="" value="<?=$sql->getResult()[0]['serie']?>" style="width: calc(100% - 242px);"/>
         </div>
         <div class="col form-inline">
             <label>Equipamento</label>

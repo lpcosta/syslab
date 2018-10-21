@@ -32,7 +32,7 @@ function buscaResultado(array $campos,$tabela,$cond,$valor) {
     $sql->FullRead("SELECT {$fields} FROM {$tabela} WHERE {$cond} LIKE :COND ORDER BY {$campos[0]} limit 20","COND=".$lista."%");
     $json = [];
     foreach ($sql->getResult() as $row):
-        array_push($json, ["label" => strtoupper($row[$campos[0]]),"value" =>$row[$campos[1]]]);
+        array_push($json, ["label" => ucwords($row[$campos[0]]),"value" =>$row[$campos[1]]]);
     endforeach;
     return print json_encode($json);
 }

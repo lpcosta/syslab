@@ -8,7 +8,7 @@ define('WS_ERROR', 'error');
 define('HOJE',date('d/m/Y'));
 
 // DEFINE IDENTIDADE DO SITE ################
-define('SITENAME', 'Syslab');
+define('SITENAME', 'https://localhost/syslab');
 define('SITEDESC', 'Sistema responsavel pelo controle de equipamentos em Laboratorio da prefeitura de santo andre - sp');
 
 // DEFINE A BASE DO SITE ####################

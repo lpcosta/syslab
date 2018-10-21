@@ -1,11 +1,16 @@
 <?php
-    paginaSegura();
-    $sql = new Read();
-    $sql2 = new Read();
-    $sql3 = new Read();
-    $cria = new Create();
-    $dt=0;
-    $sql->ExeRead("tb_sys028 where peca_id=61 ");
-    $sql2->ExeRead("tb_sys020 where peca_id=61");
-    print "Quantidade 1".$sql->getRowCount()."<br />";
-    print "Quantidade 2".$sql2->getRowCount()."<br />";
+   paginaSegura();
+  $sql = new Read();
+  $atu = new Update();
+  /*
+  $sql->FullRead("SELECT S.id saida,S.data,T.nome from tb_sys007 S JOIN tb_sys001 T ON T.id = S.id_tecnico");
+  
+  foreach ($sql->getResult() as $res):
+      $atu->ExeUpdate("tb_sys007", ["responsavel"=>$res['nome']], "WHERE id = :ID", "ID={$res['saida']}");
+      if($atu->getResult()):
+           print "Saida ".$res['saida']."Atualiza!</br />";
+      else:
+          print $atu->getError();
+      endif;
+  endforeach;
+*/

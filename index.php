@@ -26,7 +26,7 @@ require_once './app/funcoes/func.inc.php';
         <link rel="stylesheet" href="./app/libs/JQuery-ui-1.12.1/jquery-ui.structure.css" />
         <link rel="stylesheet" href="./app/css/menu.css" />
         <link rel="stylesheet" href="./app/css/estilo.css" />
-        
+
         <!-- HTML5 shim and Respond.js for IE8 support of HTML5
         elements and media queries -->     <!-- WARNING: Respond.js doesn't work if you
         view the page via file:// -->     <!--[if lt IE 9]>       <script
@@ -34,8 +34,7 @@ require_once './app/funcoes/func.inc.php';
         <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
         <![endif]-->     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
        <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>-->
-      <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-
+        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     </head>
 
     <body>
@@ -90,7 +89,7 @@ require_once './app/funcoes/func.inc.php';
                     <li><a href="#">Relatorios</a>
                         <ul class="submenu-1">
                             <li><a href="index.php?pg=relatorio/saida">Saídas</a></li>
-                            <li><a href="#">Relatorio002</a></li>
+                            <li><a href="index.php?pg=relatorio/entrada">Entradas</a></li>
                             <li><a href="#">Relatorio003</a></li>
                             <li><a href="#">Relatorio004</a></li>
                             <li><a href="#">Relatorio005</a></li>
@@ -126,28 +125,29 @@ require_once './app/funcoes/func.inc.php';
                                     <li><a href="index.php?pg=gerenciar/localidade">Localidade</a></li>
                                     <?if(GRUPO == 4):?>
                                     <li><a href="index.php?pg=gerenciar/usuarios">Usuario</a></li>
+                                    <li><a href="index.php?pg=edita/atualiza-banco">Atualizar Banco</a></li>
                                     <?endif;?>
                                 </ul>
                             </li>
                             <li><a href="#">Alterar Senha</a></li>
                             <li><a href="#">Backup</a></li>
                             <li><a href="index.php?pg=logs">Logs</a></li>
-                            <li><a href="#">Tabelas de Apoio</a></li>
-                            <li><a href="index.php?pg=edita/atualiza-banco">Atualizar Banco</a></li>
                         </ul>
                     </li>
                 </ul> 
+                
                 <!--<form name="formSearchOs" id="formSearchOs" onsubmit="return false;" style="max-width: 300px !important;">
                      <input type="hidden" name="acao" value="os" />
                     <label for="txtBusca">Pesquisar:</label>
                     <input type="search" size="7" placeholder="os..." name="busca" maxlength="7" id="txtBuscaOs" required="">
                     <button type="submit" name="btnSearch" id="btnSearch">Buscar</button>
                 </form>-->
+                
                 <form name="formSearch" id="formSearch" class="text-right" onsubmit="return false;" style="max-width: 300px !important;">
                     <input type="hidden" name="acao" value="patrimonio" />
-                    <label for="txtBusca">Pesquisar:</label>
-                    <input type="search" size="7" placeholder="os,n/s,pat" name="busca" id="txtBusca" required="">
-                    <button type="submit" name="btnSearch" id="btnSearch">Buscar</button>
+                    <input type="search" onkeydown="autoCompletar(this,'patrimonio','pesquisageral')" size="7" placeholder="os,n/s,pat" name="busca" id="txtBusca" required="">
+                    <!--<button type="submit" name="btnSearch" id="btnSearch">Buscar</button>-->
+                    <img src="app/imagens/icons/img-search.PNG" alt="search..." title="pesquisar" onclick="$('#formSearch').submit();"/>
                 </form>
             </nav>
             <? endif;?>
@@ -195,7 +195,6 @@ require_once './app/funcoes/func.inc.php';
     <script src="./app/libs/JQuery-Validate/localization/messages_pt_BR.js" /></script>
     <script src="./app/libs/PrintArea/demo/jquery.PrintArea.js"></script>
     <script src="./app/js/gobal.js" /></script>
-    <script src="./app/js/autocomplete.js" /></script>
     
 </html>
 <?php 

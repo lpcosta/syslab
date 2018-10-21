@@ -35,6 +35,9 @@ function autoCompletar(obj,target,fnc){
                 case 'usuario':
                     buscaUsuario(ui.item.value);
                     break;
+                case 'pesquisageral':
+                    pesquisaGeral(ui.item.label);
+                    break;
                 default:
                     return false;
             }
@@ -261,14 +264,15 @@ function editaLocalidade(id){
     });
 }
 
-function printData()
-{
-    $(".printTable").css({
-        "width": "100%",
-        "margin": "0",
-     });
-    $('.printTable').printArea();
-    $(".printTable").css().remove();
+function imprime() {
+    var divToPrint = document.getElementById('printArea');
+    newWin= window.open();
+    newWin.document.write('<style>.text-uppercase{text-transform: uppercase;}.text-center{text-align:center;}.left{text-align:left;}.text-capitalize{text-transform: capitalize;}.relatorio{width:100%;}</style>');
+    newWin.document.write(divToPrint.innerHTML);
+    newWin.document.close();
+    newWin.focus();
+    newWin.print();
+    newWin.close();
 }
 
 /*função que adicona chaves (product key winodws e office)*/
@@ -286,11 +290,6 @@ function addChave(t,c)
         $('#txtKeyOffice').val('GWH28-DGCMP-P6RC4-6J4MT-3HFDY');
     }
 }/*fim da função que adiciona chaves keys*/
-
-
-$(".btnPrinter").click(function(){
-   printData();
-});
 
 /*REALIZA LOGIN*/
 function fctLogin()
@@ -641,12 +640,14 @@ function setaTipoRel(val){
 }
 
 function validaRelatorio(t,idfrm){
-    if(t=='saida'){
+    if(t=='saida' && $.trim($('#txtCodSaida').val())==''){
+        modal('informe um numero de saída');
+    }else if(t=='entrada' && $.trim($('#txtCodEntrada').val())=='')
+    {modal('informe um numero de entrada');}
+    else{
         switch($('#tipoRel').val()){
             case 'codigo':
-                if($.trim($('#txtCodSaida').val())=='')
-                {modal('informe um numero de saída');}
-                else{geraRelatorio(idfrm);}
+                geraRelatorio(idfrm);
                 break;
             case 'tecnico':
                 if($('#txtTecnico').val()=='')
@@ -661,8 +662,6 @@ function validaRelatorio(t,idfrm){
             default:
                 return false;
         }
-    }else if(t=='entrada'){
-        
     }
 }
 
@@ -1052,6 +1051,18 @@ function baixaPeca(peca,os,id){
 function mostraModal(p){
     $("#txtBusca").val(p);
     $("#formSearch").submit();
+}
+
+function pesquisaGeral(id){
+    $.ajax({
+        type: "POST",
+        url: "./app/sistema/pesquisa/patrimonio.php",
+        data: {busca:id},
+        success: function( res )
+        {
+          show_modal('#modal-busca-patrimonio',res);                              
+        }
+    });
 }
 
 /*PESQUISA OS*/
