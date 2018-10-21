@@ -12,6 +12,7 @@ $sql->FullRead("SELECT * FROM tb_sys015 WHERE id_peca = :ID", "ID={$codigo}");
 <hr />
 <form class="form-edita" onsubmit="return false">
     <input type="hidden" name="id_peca" id="txtIdPeca" value="<?=$codigo?>">
+    <input type="hidden" name="acao" value="peca">
     <div class="row">
         <div class="col form-inline">
             <label>Código</label>

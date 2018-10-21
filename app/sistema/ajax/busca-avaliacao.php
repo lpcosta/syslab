@@ -9,7 +9,8 @@ $sql->ExeRead("tb_sys010 WHERE id ={$ID}");
 
 if($sql->getResult()):?>
 <form class="edita" onsubmit="return false;" >
-    <input type="hidden" name="id" value="<?=$ID?>"
+    <input type="hidden" name="id" value="<?=$ID?>" />
+    <input type="hidden" name="acao" value="avaliacao" />
     <hr />
     <div class="row">
         <div class="col form-inline">

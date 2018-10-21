@@ -9,8 +9,10 @@ $combo  = new Read();
 $sql->ExeRead("tb_sys008 WHERE id = {$id}");
 
 ?>
-<form class="edita" onsubmit="return false"  style="width: 98%;">
+<hr />
+<form class="edita" onsubmit="return false">
     <input type="hidden" name="id" id="txtIdLocal" value="<?=$id?>">
+    <input type="hidden" name="acao" value="localidade">
     <div class="row">
         <div class="col form-inline">
             <label>Código</label>

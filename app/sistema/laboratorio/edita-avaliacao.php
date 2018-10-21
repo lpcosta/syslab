@@ -1,16 +1,13 @@
 <?php
    paginaSegura();
-if(isset($_GET['id'])):
-    
-    $getId    = filter_input_array(INPUT_GET,FILTER_DEFAULT);
-    $setget   = array_map("strip_tags", $getId);
-    $get      = array_map("trim", $setget);
-extract($get);
-unset($get['pg']);
-$sql = new Read();
-$sql->ExeRead("tb_sys010 WHERE id = {$id}");
-$sql2 = new Read();
-endif;
+    if(isset($_GET['id'])):
+        require_once './app/config/get.inc.php';
+        if(!empty($id)):
+            $sql = new Read();
+            $sql->ExeRead("tb_sys010 WHERE id = {$id}");
+            $sql2 = new Read();
+        endif;
+    endif;
 ?>
 <div class="tabs">
     <ul>
@@ -20,6 +17,7 @@ endif;
     <div id="edita-avaliacao">
         <form class="edita" onsubmit="return false;">
             <input type="hidden" name="id" value="<?=$id?>" />
+            <input type="hidden" name="acao" value="avaliacao" />
             <div class="row">
                 <div class="col form-inline">
                     <label>Técnico</label>

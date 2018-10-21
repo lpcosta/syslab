@@ -15,12 +15,13 @@
             <div class="col form-inline">
                 <label style="width:50px;">Peça</label>
                 &nbsp;
-                <input type="text" id="busca" name="peca" class="form-control text-capitalize" style="width: calc(100% - 55px);" />
+                <input type="text" id="peca" onkeydown="autoCompletar(this,'peca','peca')" name="peca" class="form-control text-capitalize" style="width: calc(100% - 55px);" />
             </div>
             <div class="col form-inline">
                 <div class="col btn-edita-peca" style="display:none;">
-                    <button type="button" id="btnEditarPeca"        class="btn btn-primary" onclick="liberaCamposEdicaoPeca();">Editar</button>
-                    <button type="button" id="btnSalvaEdicaoPeca"   class="btn btn-primary" style="display: none;" onclick="editaPeca()">Salvar</button>
+                    <button type="button" class="btn btn-primary btn-acao-edita" onclick="liberaCamposEdicao();">Editar</button>
+                    <button type="button" class="btn btn-primary btn-acao-salva" style="display: none;" onclick="editaPeca()">Salvar</button>
+                    &nbsp;
                     <img src="./app/imagens/load.gif" class="form_load" alt="[CARREGANDO...]" title="CARREGANDO.." />
                 </div>
                 <div class="col">

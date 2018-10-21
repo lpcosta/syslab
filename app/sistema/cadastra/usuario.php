@@ -39,7 +39,7 @@
                 </div>
                 <div class="col-md form-inline">
                     <label>Contato</label>
-                    <input type="tel" id="txtContatoUser" name="contatoUser" class="form-control" placeholder="(xx)xxxx-xxxx" />
+                    <input type="tel" id="txtContatoUser" name="contatoUser" class="contatoFixo form-control" placeholder="(xx)xxxx-xxxx" />
                 </div>
             </div>
             <div class="row">
@@ -49,7 +49,7 @@
                 </div>
                 <div class="col-md form-inline">
                     <label>Celular</label>
-                    <input type="tel" id="txtCelularUser" name="celularUser" class="form-control" placeholder="(xx)xxxxx-xxxx" />
+                    <input type="tel" id="txtCelularUser" name="celularUser" class="contatoMovel form-control" placeholder="(xx)xxxxx-xxxx" />
                 </div>
             </div>
             <div class="row">

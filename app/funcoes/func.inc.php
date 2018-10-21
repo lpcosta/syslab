@@ -9,6 +9,10 @@ function WSErro($ErrMsg, $ErrNo, $ErrDie = null) {
     endif;
 }
 
+function mblower($texto) {
+    return print strip_tags(trim(mb_strtolower($texto, 'UTF-8')));
+}
+
 function paginaSegura() {
     if(!isset($_SESSION['UserLogado'])):
         header("Location:".HOME."");
@@ -36,4 +40,5 @@ function Valor($valor) {
 
        return $valor;
 }
+
 set_error_handler('PHPErro');

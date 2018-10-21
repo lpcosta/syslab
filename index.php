@@ -117,37 +117,16 @@ require_once './app/funcoes/func.inc.php';
                             </li>
                             <li><a href="#">Gerenciar</a>
                                 <ul class="submenu-2">
-                                    <li><a href="#">Equipamento</a>
+                                    <li><a href="index.php?pg=gerenciar/equipamento">Equipamento</a>
                                         <ul class="submenu-3">
                                             <li><a href="index.php?pg=cadastra/modelo-equipamento">Cadastrar Modelo</a></li>
-                                            <li><a href="index.php?pg=edita/equipamento">Editar</a></li>
-                                        <?if(GRUPO == 4):?>    
-                                            <li><a href="#">Excluir</a></li>
-                                        <?endif;?>
                                         </ul>
                                     </li>
-                                    <li><a href="#">Windows/Office</a>
-                                        <ul class="submenu-3">
-                                            <li><a href="#">Editar Windows</a></li>
-                                        <?if(GRUPO == 4):?>
-                                            <li><a href="#">Excluir Windows</a></li>
-                                        <?endif;?>
-                                            <li><a href="#">Editar Office</a></li>
-                                        <?if(GRUPO == 4):?>
-                                            <li><a href="#">Excluir Office</a></li>
-                                        <?endif;?>
-                                        </ul>
-                                    </li>
-                                    <li><a href="index.php?pg=gerenciar/localidade">Localidade</a>
-                                        
-                                       <!-- <ul class="submenu-3">
-                                            <li><a href="#">Editar</a></li>
-                                        <?if(GRUPO == 4):?>    
-                                            <li><a href="#">Excluir</a></li>
-                                        <?endif;?>
-                                        </ul>-->
-                                    </li>
-                                    <li><a href="#">Usuario</a></li>
+                                    <li><a href="index.php?pg=gerenciar/windows-office">Windows/Office</a></li>
+                                    <li><a href="index.php?pg=gerenciar/localidade">Localidade</a></li>
+                                    <?if(GRUPO == 4):?>
+                                    <li><a href="index.php?pg=gerenciar/usuarios">Usuario</a></li>
+                                    <?endif;?>
                                 </ul>
                             </li>
                             <li><a href="#">Alterar Senha</a></li>

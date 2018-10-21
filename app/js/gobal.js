@@ -6,47 +6,64 @@ $( ".tabs" ).tabs({
       }*/
    });
 /*######### autocomplete ##################*/  
-
-$('#busca').autocomplete({
+function autoCompletar(obj,target,fnc){
+    $('#'+obj.id).autocomplete({
         source: function(request, response){
             $.ajax({
-                url:"./app/sistema/ajax/auto-complete-pecas.php",
+                url:"./app/sistema/ajax/auto-complete.php",
                 dataType:"json",
                 type:'POST',
-                data:{p:request.term},
+                data:{p:request.term,acao:target},
                 success: function(data){
                     response(data);
                 }
             });
         },
-        minLength: 1,
-        select: function(event,ui){
-            $("#busca").val(ui.item.label);
-            buscaPeca(ui.item.value);
-            return false;
-        }
-    }); 
-  
- $('#bsclocalidade').autocomplete({
-        source: function(request, response){
-            $.ajax({
-                url:"./app/sistema/ajax/auto-complete-localidade.php",
-                dataType:"json",
-                type:'POST',
-                data:{p:request.term},
-                success: function(data){
-                    response(data);
-                }
-            });
-        },
-        minLength: 1,
-        select: function(event,ui){
-            $("#bsclocalidade").val(ui.item.label);
-            buscaLocalidade(ui.item.value);
+        minLength: 2,
+        select: function(e,ui){
+            $("#"+obj.id).val(ui.item.label);
+            switch(fnc){
+                case 'equipamento':
+                    buscaEquipamento(ui.item.value);
+                    break;
+                case 'localidade':
+                    buscaLocalidade(ui.item.value);
+                    break;
+                case 'peca':
+                    buscaPeca(ui.item.value);
+                    break;
+                case 'usuario':
+                    buscaUsuario(ui.item.value);
+                    break;
+                default:
+                    return false;
+            }
             return false;
         }
     });  
+}
 /*######### fim autocomplete ##################*/  
+
+/******************************************************************************/
+/*################# BUSCA TECNICO ############################*/
+function buscaUsuario(id){
+    $.ajax({
+        type: "POST",
+        url: "./app/sistema/ajax/busca-usuario.php",
+        data: {id:id},
+        dataType:'HTML',
+        beforeSend:function(){
+         $('.form_load').fadeIn(300);
+        },
+        success: function( res )
+        {$('.form_load').fadeOut();
+            $('.dados-edita').html(res);
+        }
+    });
+}
+
+
+/*################# BUSCA PEÇA ############################*/
 function buscaPeca(id){
     $.ajax({
       url:'./app/sistema/ajax/busca-peca.php',
@@ -59,23 +76,132 @@ function buscaPeca(id){
       }
     });
 }
-
-function liberaCamposEdicaoPeca(){
-    $('.editable').attr('disabled',false);
-    $('#btnEditarPeca').toggle();
-    $('#btnSalvaEdicaoPeca').toggle();
+/*################# BUSCA CIDADE ############################*/
+function buscaCidade(e)/*essa função busca cidades e preenche um combo com as cidades e cep*/
+{
+   $.post('./app/sistema/ajax/buscacidade.php',
+            {
+                estado: $(e).val()
+            }, function (res)
+    {
+        if (res) {
+            $("#txtCidade").attr('disabled', false);
+            $("#txtCidade").children(".cidades").remove();
+            $("#txtCidade").append(res);
+        } else
+        {
+            $("#txtCidade").attr('disabled', true);
+            $("#txtCep").attr('disabled', true);
+        }
+    });
+}
+/*################# BUSCA CEP ############################*/
+function buscaCep(c)
+{
+   $.post('./app/sistema/ajax/buscacep.php',
+            {
+                cidade: $(c).val()
+            }, function (res)
+    {
+        if (res) {
+            $("#txtCep").attr('disabled', false);
+            $("#txtCep").val(res);
+        } else
+        {
+            $("#txtCep").attr('disabled', true);
+        }
+    });
+}
+/*################# BUSCA IDAVALIAÇÃO ############################*/
+function buscaIdAvaliacao(){
+    $("#form-dados-avaliacao").validate({
+        rules:{
+            entrada:{required:true},
+            patrimonio:{required:true},
+       },
+        submitHandler: function(){
+          modal('validado');
+        }
+       
+    });
+}
+/*################# BUSCA LOCALIDADE ############################*/
+function buscaLocalidade(id){
+    $.ajax({
+        type: "POST",
+        url: "./app/sistema/ajax/busca-localidade.php",
+        data: {id:id},
+        dataType:'HTML',
+        beforeSend:function(){
+         $('.form_load').fadeIn(300);
+        },
+        success: function( res )
+        {$('.form_load').fadeOut();
+            $('.dados-edita').html(res);
+        }
+    });
+}
+/*################# BUSCA EQUIPAMENTO ############################*/
+function buscaEquipamento(id){
+    $.ajax({
+        type: "POST",
+        url: "./app/sistema/ajax/busca-equipamento.php",
+        data: {id:id},
+        dataType:'HTML',
+        beforeSend:function(){
+         $('.form_load').fadeIn(300);
+        },
+        success: function( res )
+        {$('.form_load').fadeOut();
+            $('.dados-edita').html(res);
+        }
+    });
+}
+/*################# BUSCA AVALIAÇÃO ############################*/
+function buscaAvaliacao(id){
+    $.ajax({url: './app/sistema/ajax/busca-avaliacao.php',
+        data: {ID:id},type:'POST',dataType:'HTML',
+            success: function (res){
+            $('.edita-avaliacao').html(res);
+            }
+        });
 }
 
+function liberaCamposEdicaoEquipamento(){
+    var categoria = $('#txtCategoria').val();
+    $('.editable').attr('disabled',false);
+    switch(categoria){
+        case '1':
+            $('.editable-printer').attr('disabled',false);
+        case  '2':
+        case  '5':
+        case '17':
+        case '23':
+        case '22':
+        case '26':
+            $('.editable-cpu').attr('disabled',false);
+            break;
+        case '3':
+            $('.editable-estab').attr('disabled',false);
+        case '4':
+            $('.editable-monitor').attr('disabled',false);
+        default:
+            $('.editable').attr('disabled',true);
+    }
+    $('.btn-acao-edita').toggle();
+    $('.btn-acao-salva').toggle();
+}
 function liberaCamposEdicao()
 {
     $('.editable').attr('disabled',false);
     $('.btn-acao-edita').toggle();
     $('.btn-acao-salva').toggle();
 }
-function editaPeca(){
-    var dados = $(".form-edita").serialize();
+
+function editaUsuario(){
+    var dados = $(".edita").serialize();
     $.ajax({
-        url: "./app/sistema/ajax/edita-peca.php",
+        url: "./app/sistema/ajax/edita.php",
         data: dados,
         type: "POST",
         dataType:'HTML',
@@ -83,11 +209,33 @@ function editaPeca(){
          $('.form_load').fadeIn(500);
         },
         success: function(res)
-        {$('.form_load').fadeOut(500);
-           modal(res);
-           buscaPeca($('#txtIdPeca').val());
-           $('#btnEditarPeca').toggle();
-           $('#btnSalvaEdicaoPeca').toggle();
+        {
+            $('.form_load').fadeOut(500);
+            $('.btn-acao-edita').toggle();
+            $('.btn-acao-salva').toggle();
+            buscaUsuario($('#txtIdTecnico').val());
+            modal(res);    
+        }
+    });
+}
+
+function editaPeca(){
+    var dados = $(".form-edita").serialize();
+    $.ajax({
+        url: "./app/sistema/ajax/edita.php",
+        data: dados,
+        type: "POST",
+        dataType:'HTML',
+        beforeSend:function(){
+         $('.form_load').fadeIn(500);
+        },
+        success: function(res)
+        {
+            $('.form_load').fadeOut(500);
+            $('.btn-acao-edita').toggle();
+            $('.btn-acao-salva').toggle();
+            buscaPeca($('#txtIdPeca').val());
+            modal(res);    
         }
     });
 }
@@ -95,7 +243,7 @@ function editaPeca(){
 function editaLocalidade(id){
    var dados = $(".edita").serialize();
    $.ajax({
-        url: "./app/sistema/ajax/edita-localidade.php",
+        url: "./app/sistema/ajax/edita.php",
         data: dados,
         type: "POST",
         dataType:'HTML',
@@ -108,7 +256,7 @@ function editaLocalidade(id){
             $('.btn-acao-edita').toggle();
             $('.btn-acao-salva').toggle();
             buscaLocalidade(id);
-             modal(res);
+            modal(res);
         }
     });
 }
@@ -201,70 +349,6 @@ function getModelos(fab,mod = null)
             });
 }/*FIM GETMODELOS*/  
 
-function buscaCidade(e)/*essa função busca cidades e preenche um combo com as cidades e cep*/
-{
-   $.post('./app/sistema/ajax/buscacidade.php',
-            {
-                estado: $(e).val()
-            }, function (res)
-    {
-        if (res) {
-            $("#txtCidade").attr('disabled', false);
-            $("#txtCidade").children(".cidades").remove();
-            $("#txtCidade").append(res);
-        } else
-        {
-            $("#txtCidade").attr('disabled', true);
-            $("#txtCep").attr('disabled', true);
-        }
-    });
-}
-
-function buscaCep(c)
-{
-   $.post('./app/sistema/ajax/buscacep.php',
-            {
-                cidade: $(c).val()
-            }, function (res)
-    {
-        if (res) {
-            $("#txtCep").attr('disabled', false);
-            $("#txtCep").val(res);
-        } else
-        {
-            $("#txtCep").attr('disabled', true);
-        }
-    });
-}
-
-function buscaIdAvaliacao(){
-    $("#form-dados-avaliacao").validate({
-        rules:{
-            entrada:{required:true},
-            patrimonio:{required:true},
-       },
-        submitHandler: function(){
-          modal('validado');
-        }
-       
-    });
-}
-
-function buscaLocalidade(id){
-     $.ajax({
-            type: "POST",
-            url: "./app/sistema/ajax/busca-localidade.php",
-            data: {id:id},
-            dataType:'HTML',
-            beforeSend:function(){
-             $('.form_load').fadeIn(300);
-            },
-            success: function( res )
-            {$('.form_load').fadeOut();
-                $('.dados-edita').html(res);
-            }
-        });
-}
 
 /*####### FUNCOES QUE AUXILIA VALIDA E VERIFICA OS ITENS E AS ENTRADAS ###### */
 
@@ -457,7 +541,7 @@ function finalizaSaida(s,mail,resp){
 
 /*#### FIM SAIDAS #####*/
 
-function setaLocalidade(cr)
+function setaLocalidade(cr,acao=null)
 {
     if(cr == 30 || cr == 31 || cr == 32 || cr == 33){
         modal("<span class='alert alert-warning text-primary text-uppercase'>para essa localidade é necessário informar o cr do local</span>");
@@ -475,7 +559,7 @@ function setaLocalidade(cr)
                 $("#txtLocalidade").val(cr);
                 $("#txtLocalidade").attr('value', cr);
                 var id = $('#txtLocalidade').val();
-                buscaLocalidade(id);
+                if(!acao){buscaLocalidade(id);}
             }
             else if (cr.trim()!= '')
             {
@@ -487,7 +571,7 @@ function setaLocalidade(cr)
                     if ($.isNumeric(res)){
                         $('#txtLocalidade').attr('value', res);
                         $('#txtLocalidade').val(res); 
-                        buscaLocalidade(res);
+                        if(!acao){buscaLocalidade(res);}
                     } else
                     {
                       $('#txtCodLocal').val('').focus();
@@ -704,18 +788,15 @@ function setCadEquipamento(e){
 }/*FIM SETCADEQUIPAMENTO*/
 
 /*mascaras de campos*/
-$(function() {
-        $.mask.definitions['~'] = "[+-]";
-        $(".m_key").mask("*****-*****-*****-*****-*****");
-        $("#txtIp").mask("999.999.999.999");
-        $("#txtContatoUser").mask("(99)9999-9999");
-        $("#txtCelularUser").mask("(99)99999-9999");
-        $("#txtCnpj").mask("99.999.999/9999-99");
-        $("#txtContato").mask("(99)9999-9999");
-        $("#txtCep").mask("99.999-999");
-        $(".data").mask("99/99/9999");
-    });
-   
+
+    $.mask.definitions['~'] = "[+-]";
+    $(".m_key").mask("*****-*****-*****-*****-*****");
+    $("#txtIp").mask("999.999.999.999");
+    $(".contatoFixo").mask("(99)9999-9999");
+    $(".contatoMovel").mask("(99)99999-9999");
+    $("#txtCnpj").mask("99.999.999/9999-99");
+    $("#txtCep").mask("99.999-999");
+    $(".data").mask("99/99/9999");
    
 function maskKey(el)/*mascara para chave key de windows e office */
 {
@@ -811,58 +892,22 @@ function ValidarCPF(cpfval){
     });/*FIM CADASTRO OFFICE*/
     
 /*EDITA-QUIPAMENTO*/
-$("#form-edita-equipamento").validate({
-    rules:{
-        patrimonio:{required:true,minlength:6,maxlength:7}
-    },
-    submitHandler: function(){
-        var dados = $("#form-edita-equipamento").serialize();
-            $.ajax({
-                url: './app/sistema/ajax/edita-equipamento.php',
-                data: dados,
-                type:'POST',
-                dataType:'HTML',
-            beforeSend:function(){
-           $('.form_load').fadeIn(500);
-            },
-            success: function (res){
-                $('.form_load').fadeOut(500);
-                if($.isNumeric(res)){
-                   location.href='index.php?pg=edita/equipamento&id='+res;
-                }else{modal("<span class='alert alert-warning text-danger'>Nenhum registro encontrado para o patrimonio informado!</span>");$('.form_load').fadeOut(500);}
-            }
-        });
-        return false;
-    }
-});
-
-
-$('#edita-equipamento').validate({
-   rules:{
-       patrimonio   :{required:true},
-       numSerie     :{required:true},
-       fabricante   :{required:true},
-       modelo       :{required:true},
-       equipamento  :{required:true}
-   },
-   submitHandler: function(){
-        var dados = $("#edita-equipamento").serialize();
-            $.ajax({
-                url: './app/sistema/ajax/edita-equipamento.php',
-                data: dados,
-                type:'POST',
-                dataType:'HTML',
-            beforeSend:function(){
-           $('.form_load').fadeIn(500);
-            },
-            success: function (res){
-               $('.form_load').fadeOut(500);
-               modal(res);
-            }
-        });
-        return false;
-    }
-});
+function editaEquipamento(){
+    var dados = $(".edita").serialize();
+        $.ajax({
+            url: './app/sistema/ajax/edita.php',
+            data: dados,
+            type:'POST',
+            dataType:'HTML',
+        beforeSend:function(){
+       $('.form_load').fadeIn(500);
+        },
+        success: function (res){
+           $('.form_load').fadeOut(500);
+           modal(res);
+        }
+    });
+}
 
 $("#form-edita-peca").validate({
     rules:{
@@ -1280,19 +1325,10 @@ function avalia(s,a,p){
 
 /*FIM DAS FUNCOES QUE VALIDA FOMULARIOS*/
 
-function buscaAvaliacao(id){
-    $.ajax({url: './app/sistema/ajax/busca-avaliacao.php',
-        data: {ID:id},type:'POST',dataType:'HTML',
-            success: function (res){
-            $('.edita-avaliacao').html(res);
-            }
-        });
-}
-
 function editaAvaliacao(s){
     if(s != ''){
         var dados = $("form.edita").serialize();
-        $.ajax({url: './app/sistema/ajax/edita-avaliacao.php',
+        $.ajax({url: './app/sistema/ajax/edita.php',
             data: dados,type:'POST',dataType:'HTML',
                 success: function (res){
                     if(res){modal(res);}

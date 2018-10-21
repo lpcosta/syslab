@@ -19,7 +19,6 @@ $entregas = $sql->getResult();
 
 $sql->FullRead("SELECT S.descricao, COUNT(*) total, S.id FROM tb_sys002 S JOIN tb_sys006 E ON E.status = S.id and E.status != :STS GROUP BY E.status order by S.descricao","STS=3");
 $stsEquipamento = $sql->getResult();
-
 ?>
             
 <div class="tabs">

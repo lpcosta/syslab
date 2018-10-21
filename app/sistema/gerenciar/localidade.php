@@ -4,14 +4,13 @@
 ?>
 <div class="tabs">
     <ul>
-        <li><a href="#edita-equipamento">Gerenciar Localidade</a></li>
+        <li><a href="#edita">Gerenciar Localidade</a></li>
     </ul>
-    <div id="edita-equipamento">
-        <input type="hidden" name="acao" value="pesquisa" />
+    <div id="edita">
         <div class="row">
             <div class="col form-inline">
                 <label style="width: 100px;">Localidade</label>
-                <input type="text" id="bsclocalidade" class="form-control" style="width: calc(100% - 105px);" />
+                <input type="text" id="bsclocalidade" onkeydown="autoCompletar(this,'localidade','localidade')" class="form-control" style="width: calc(100% - 105px);" />
             </div>
             <div class="col form-inline">
                 <input type="text" id="txtCr" class="form-control" onblur="setaLocalidade(this.value);" placeholder="CR" onkeyup="if (event.keyCode == 13){$('#bsclocalidade').focus();}" style="width: 80px;"/>
@@ -25,9 +24,8 @@
                 </select>
             </div>
         </div>
-    </div>
-    <hr style="margin-top: -10px;" />
-    <div class="dados-edita">
-       
+        <div class="dados-edita">
+
+        </div>
     </div>
 </div>
