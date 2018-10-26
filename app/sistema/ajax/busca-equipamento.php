@@ -164,16 +164,33 @@ $sql->ExeRead("tb_sys004 WHERE id = {$id}");
     </div>
     <div class="row">
          <div class="col form-inline">
+             <label>processador</label>
+            <select name="processador_id" class="text-uppercase editable-cpu" disabled="">
+                <?if(!empty($sql->getResult()[0]['processador_id'])){ $combo->ExeRead("tb_sys028 WHERE id = {$sql->getResult()[0]['processador_id']}");?>
+                <option selected value="<?=$sql->getResult()[0]['processador_id']?>"><?=$combo->getResult()[0]['processador'];if($sql->getResult()[0]['geracao']!=0){print $sql->getResult()[0]['geracao'].'ª Geração';}?></option>
+                <?}else{?>
+                <option selected value="">Selecione...</option>
+                <?}?>
+                <?php $combo->ExeRead("tb_sys028 ORDER BY processador");
+                foreach ($combo->getResult() as $res):
+                    print "<option value=".$res['id']."> ". $res['processador'].' ';if($res['geracao']!=0){print $res['geracao'].'ª Geração';}"</option>";
+                endforeach;
+                ?>
+            </select>
+        </div>
+        <div class="col form-inline">
             <label>Memória Ram</label>
-            <select name="memoria_ram" class="text-uppercase editable-cpu" disabled="">
-                <option selected="" value="<?=$sql->getResult()[0]['memoria_ram']?>"><?=$sql->getResult()[0]['memoria_ram']?></option>
-                <option value="1gb">1GB</option>
-                <option value="2gb">2GB</option>
-                <option value="3gb">3GB</option>
-                <option value="4gb">4GB</option>
-                <option value="6gb">6GB</option>
-                <option value="8gb">8GB</option>
-                <option value="16gb">16GB</option>
+            <select name="memoria_ram_id" class="text-uppercase editable-cpu" disabled="">
+                <?if(!empty($sql->getResult()[0]['memoria_ram_id'])){ $combo->ExeRead("tb_sys029 WHERE id = {$sql->getResult()[0]['memoria_ram_id']}");?>
+                <option selected value="<?=$sql->getResult()[0]['memoria_ram_id']?>"><?=$combo->getResult()[0]['capacidade'].' '.$combo->getResult()[0]['tipo_memoria']?></option>
+                <?}else{?>
+                <option selected value="">Selecione...</option>
+                <?}?>
+                <?php $combo->ExeRead("tb_sys029 ORDER BY tipo_memoria");
+                foreach ($combo->getResult() as $res):
+                    print "<option value=".$res['id'].">".$res['capacidade'].' '.$res['tipo_memoria']."</option>";
+                endforeach;
+                ?>
             </select>
         </div>
         <div class="col form-inline">
@@ -189,7 +206,9 @@ $sql->ExeRead("tb_sys004 WHERE id = {$id}");
                 <option value="1tb">1TB</option>
             </select>
         </div>
-        <div class="col form-inline">
+    </div>
+    <div class="row">
+         <div class="col form-inline">
             <label>Anti Virus</label>
             <select name="anti_virus" class="editable-cpu" disabled="">
                 <option selected value="<?=$sql->getResult()[0]['anti_virus']?>"><?=$sql->getResult()[0]['anti_virus']?></option>
@@ -198,9 +217,7 @@ $sql->ExeRead("tb_sys004 WHERE id = {$id}");
                 <option value="outro">outro</option>
             </select>
         </div>
-    </div>
-    <div class="row">
-         <div class="col form-inline">
+        <div class="col form-inline">
             <label>Tela</label>
             <input type="text" name="tela" value="<?=$sql->getResult()[0]['tela']?>" class="editable-monitor" disabled="" />
         </div>
@@ -213,7 +230,9 @@ $sql->ExeRead("tb_sys004 WHERE id = {$id}");
                 <option value="super-wide">Super Wide-Screen</option>
             </select>
         </div>
-        <div class="col form-inline">
+    </div>
+    <div class="row">
+         <div class="col form-inline">
             <label>VNC</label>
             <select name="vnc" class="editable-cpu" disabled="">
                 <option selected value="<?=$sql->getResult()[0]['vnc']?>"><?=$sql->getResult()[0]['vnc']?></option>
@@ -221,22 +240,17 @@ $sql->ExeRead("tb_sys004 WHERE id = {$id}");
                 <option value="nao">Não</option>
             </select>
         </div>
-    </div>
-    <div class="row">
-         <div class="col form-inline">
+        <div class="col form-inline">
             <label>V.A)</label>
             <input type="text" name="va" class="editable-estab" disabled="" value="<?=$sql->getResult()[0]['va']?>">
         </div>
         <div class="col form-inline">
-            <label>Status</label>
+             <label>Status</label>
             <select name="status" class="editable" disabled="">
                 <option selected value="<?=$sql->getResult()[0]['status']?>"><?=$sql->getResult()[0]['status']?></option>
                 <option value="ativo">ativo</option>
                 <option value="baixado">baixado</option>
             </select>
-        </div>
-        <div class="col form-inline">
-            
         </div>
     </div>
 </form>

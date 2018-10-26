@@ -103,15 +103,15 @@ class Login {
     
     //Executa o login armazenando a sessão!
     private function Execute() {
-        
         if (!session_id()):
             session_start();
         endif;
         $sql = new Create();
+        $atu = new Update();
         $_SESSION['UserLogado']=true;
         $_SESSION['UserLogado'] = $this->Result;
+        $atu->ExeUpdate("tb_sys001", ["tentativa_login"=>0,"situacao"=>'l',"senha_padrao"=>'nao'], "WHERE login = :LGN", "LGN={$this->Login}");
         $sql->ExeCreate("tb_sys024", ["tecnico"=> $this->Result['nome'],"data"=>date('Y-m-d H:i:s'),"ip" => $this->ip,"host" => $this->host,"acao" =>1,"msg" => 'fez login no ip']);
         $this->Result = true;        
     }
-
 }

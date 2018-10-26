@@ -2,7 +2,7 @@
 paginaSegura();
 $sql = new Read();
 $dt = new Datas();                 
-
+$regiao = new Read();
 $sql->FullRead("SELECT C.descricao equipamento,COUNT(*) total,C.id
                                 FROM tb_sys003 C 
                                 JOIN tb_sys004 EQ ON EQ.id_categoria = C.id
@@ -19,6 +19,9 @@ $entregas = $sql->getResult();
 
 $sql->FullRead("SELECT S.descricao, COUNT(*) total, S.id FROM tb_sys002 S JOIN tb_sys006 E ON E.status = S.id and E.status != :STS GROUP BY E.status order by S.descricao","STS=3");
 $stsEquipamento = $sql->getResult();
+
+
+
 ?>
             
 <div class="tabs">
@@ -38,7 +41,7 @@ $stsEquipamento = $sql->getResult();
                         <th class="text-center">quantidade</th>
                     </tr>
                 <? foreach ($equipamentos as $res):?>
-                    <tr class="text-capitalize">
+                    <tr class="text-capitalize" style="cursor:pointer;" onclick="location.href='index.php?pg=laboratorio/equipamento&cid='+<?=$res['id']?>">
                         <td><?=$res['equipamento']?></td>
                         <td class="text-center"><?=$res['total']?></td>
                     </tr>
@@ -68,6 +71,20 @@ $stsEquipamento = $sql->getResult();
                         <th>Total</th>
                         <th class="text-center"><?=$totalEntregas?></th>
                     </tr>
+                    <tr class="text-primary">
+                        <th colspan="2" class="text-center">Entregas por Região</th>
+                    </tr>
+                <?$regiao->FullRead("SELECT R.nome_regiao regiao,R.id_regiao,count(*) total 
+                                        FROM tb_sys006 IE
+                                        JOIN tb_sys004 EQ ON EQ.patrimonio = IE.patrimonio
+                                        JOIN tb_sys008 L ON L.id = EQ.id_local
+                                        JOIN tb_sys023 R ON R.id_regiao = L.regiao_id AND IE.status = :STS group by L.regiao_id order by L.local","STS=4");
+                    foreach ($regiao->getResult() as $reg):?>
+                    <tr style="cursor: pointer" onclick="mostraEntregasRegiao(<?=$reg['id_regiao']?>)">
+                        <td class="text-capitalize"><?=$reg['regiao']?></td>
+                        <td class="text-center"><?=$reg['total']?></td>
+                    </tr>
+                <? endforeach;?>
                 </table>
             </div>
              <div class="col-md">
@@ -157,7 +174,7 @@ $stsEquipamento = $sql->getResult();
             </div>
         </div><!-- segunda linha -->
     </div><!-- div home -->
-   
+    
 </div><!-- div tabs-->
 <script>
     google.charts.load('current', {'packages':['corechart']});

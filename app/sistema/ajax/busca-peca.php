@@ -15,15 +15,9 @@ $sql->FullRead("SELECT * FROM tb_sys015 WHERE id_peca = :ID", "ID={$codigo}");
     <input type="hidden" name="acao" value="peca">
     <div class="row">
         <div class="col form-inline">
-            <label>Código</label>
-            <input type="text" class="text-capitalize" value="<?=$codigo?>" disabled=""/>
-        </div>
-        <div class="col form-inline">
             <label>Peça</label>
             <input type="text" name="descricao_peca" class="text-capitalize editable" value="<?=$sql->getResult()[0]['descricao_peca']?>" disabled=""/>
         </div>
-    </div>
-    <div class="row">
         <div class="col form-inline">
             <label>Categoria</label>
             <select name="categoria_id" class="text-capitalize editable" disabled="">
@@ -38,6 +32,8 @@ $sql->FullRead("SELECT * FROM tb_sys015 WHERE id_peca = :ID", "ID={$codigo}");
                 ?>
             </select>
         </div>
+    </div>
+    <div class="row">
         <div class="col form-inline">
             <label>Flag</label>
             <select name="flag" class="editable" disabled="">
@@ -45,5 +41,10 @@ $sql->FullRead("SELECT * FROM tb_sys015 WHERE id_peca = :ID", "ID={$codigo}");
                 <option value="1">Marcado</option>
             </select>
         </div>
+        <div class="col form-inline">
+            <label>R$ Referência</label>
+            <input type="text" name="preco_refencia" class="editable" disabled="" value="<?=str_replace(".",",",$sql->getResult()[0]['preco_refencia'])?>"/>
+        </div>
     </div>
 </form>
+

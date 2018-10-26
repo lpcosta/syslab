@@ -1,12 +1,16 @@
 <?php
+session_start();
 require_once '../../config/config.inc.php';
 require_once '../../funcoes/func.inc.php';
 require_once '../../config/post.inc.php';
-$sqlCad = new Create();
-$sqlCons = new Read();
-$texto = new Check();
 
-//var_dump($post);
+$sqlCad     = new Create();
+$sqlCons    = new Read();
+$texto  = new Check();
+foreach ($post as $key => $value):
+    $post[$key]=$texto->setTexto($value);
+endforeach;
+
 switch ($acao):
     case 'equipamento':
             $sqlCons->FullRead("SELECT patrimonio,serie FROM tb_sys004 WHERE patrimonio = :PAT or serie = :SERIE", "PAT="."{$texto->setTexto($patrimonio)}"."&SERIE="."{$texto->setTexto($serie)}"."");
@@ -19,26 +23,9 @@ switch ($acao):
                     print "<span class=\"alert alert-warning\" role=\"alert\">Não faço idéia do porque esta aparecendo essa msg!</span>";
                 }
             else:
-                $sqlCad->ExeCreate("tb_sys004",["patrimonio"    => $texto->setTexto($patrimonio),
-                                                "serie"         => $texto->setTexto($serie),
-                                                "fabricante"    => $texto->setTexto($fabricante),
-                                                "modelo"        => $texto->setTexto($modelo),
-                                                "id_categoria"  => $texto->setTexto($equipamento),
-                                                "tipo"          => $texto->setTexto("a"),
-                                                "id_local"      => $texto->setTexto($localidade),
-                                                "data_cad"      => date('Y-m-d'),
-                                                "ip"            => $texto->setTexto($txtip),
-                                                "so_id"         => $texto->setTexto($so),
-                                                "key_so"        => $texto->setTexto($txtKeySo),
-                                                "office_id"     => $texto->setTexto($office),
-                                                "key_office"    => $texto->setTexto($txtKeyOffice),
-                                                "memoria_ram"   => $texto->setTexto($txtMemoria),
-                                                "hd"            => $texto->setTexto($txtHd),
-                                                "tela"          => $texto->setTexto($txtTela),
-                                                "tipo_tela"     => $texto->setTexto($txtTipoTela),
-                                                "va"            => $texto->setTexto($txtVa),
-                                                "status"        => $texto->setTexto('ativo')
-                                               ]);
+                unset($post['acao']);
+                $post['data_cad']= date('Y-m-d');
+                $sqlCad->ExeCreate("tb_sys004",$post);
                 if($sqlCad->getResult()):
                     print "<span class=\"alert alert-success\" role=\"alert\">Cadastro Realizado com sucesso!</span>";
                 else:
@@ -244,7 +231,6 @@ switch ($acao):
         break;
     case 'peca':
             unset($post['acao']);
-            session_start();
             $post['dt_cadastro']=date('Y-m-d H:i:s');$post['tec_cad_nome']=$_SESSION['UserLogado']['nome'];$post['ip_cadastro'] = IP;$post['host_cadastro']=HOST;
             $post['descricao_peca']=$texto->setTexto($post['descricao_peca']);
             $sqlCons->FullRead("SELECT id_peca FROM tb_sys015 WHERE descricao_peca = :DESCP", "DESCP="."{$post['descricao_peca']}"."");
@@ -277,7 +263,6 @@ switch ($acao):
             endif;
         break;
     case 'recebepeca':
-        session_start();
         $data   = new Datas();
         $atu    = new Update();
         if(isset($post['qtde'])):
@@ -303,6 +288,34 @@ switch ($acao):
             endif;
         else:
             print "Sua entrada nao pode ser feita porque consta um registro com número de série informado! por favor verifique!";
+        endif;
+        break;
+    case 'memoria':
+        unset($post['acao']);
+        $sqlCons->ExeRead("tb_sys029 WHERE tipo_memoria = '{$tipo_memoria}'AND capacidade = '{$capacidade}'");
+        if($sqlCons->getRowCount()== 0):
+            $sqlCad->ExeCreate("tb_sys029", $post);
+            if($sqlCad->getResult()):
+                print "<span class=\"alert alert-success\" role=\"alert\">Cadastro Realizado!";
+            else:
+                print "<p>{$sqlCad->getError()}</p>";
+            endif;
+        else:
+            print "<span class=\"alert alert-info\">tipo de memoria e capacidade já cadastrado</span>";
+        endif;
+        break;
+    case 'processador':
+        unset($post['acao']);
+        $sqlCons->ExeRead("tb_sys028 WHERE processador = '{$processador}'AND geracao = '{$geracao}'");
+        if($sqlCons->getRowCount()== 0):
+            $sqlCad->ExeCreate("tb_sys028", $post);
+            if($sqlCad->getResult()):
+                print "<span class=\"alert alert-success\" role=\"alert\">Cadastro Realizado!";
+            else:
+                print "<p>{$sqlCad->getError()}</p>";
+            endif;
+        else:
+            print "<span class=\"alert alert-info\">tipo de processador e geração já cadastrado</span>";
         endif;
         break;
     default :

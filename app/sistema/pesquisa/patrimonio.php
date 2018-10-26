@@ -20,8 +20,10 @@ $sql->FullRead("SELECT
     EQ.office_id,
     EQ.key_so,
     EQ.key_office,
-    EQ.memoria_ram,
+    EQ.memoria_ram_id,
+    EQ.processador_id,
     EQ.hd,
+    EQ.status situacao,
     L.local,
     L.cr,
     F.nome_fabricante fabricante,
@@ -52,8 +54,10 @@ if(!$sql->getResult()){
         EQ.office_id,
         EQ.key_so,
         EQ.key_office,
-        EQ.memoria_ram,
+        EQ.memoria_ram_id,
+        EQ.processador_id,
         EQ.hd,
+        EQ.status situacao,
         L.local,
         L.cr,
         F.nome_fabricante fabricante,
@@ -87,8 +91,10 @@ if(!$sql->getResult()){
         EQ.office_id,
         EQ.key_so,
         EQ.key_office,
-        EQ.memoria_ram,
+        EQ.memoria_ram_id,
+        EQ.processador_id,
         EQ.hd,
+        EQ.status situacao,
         L.local,
         L.cr,
         F.nome_fabricante fabricante,
@@ -108,6 +114,7 @@ if(!$sql->getResult()){
             AND EQ.serie = :SERIE", "SERIE="."{$busca}"."");   
 }
     $categorias=[2,5,17,22,23,26];
+    
     if(isset($sql->getResult()[0]['categoria'])):
         $categoria = $sql->getResult()[0]['categoria'];
     else:
@@ -117,10 +124,25 @@ if(!$sql->getResult()){
         if($sql->getResult()[0]['so_id'] !=0):
             $sqlSo = new Read();
             $sqlSo->ExeRead("tb_sys025 WHERE id_so = {$sql->getResult()[0]['so_id']}");
+            $so = $sqlSo->getResult()[0]['descricao_so'].' '.$sqlSo->getResult()[0]['versao_so'].' '.$sqlSo->getResult()[0]['arquitetura_so'];
         endif;
         if($sql->getResult()[0]['office_id'] !=0):
             $sqlOf = new Read();
             $sqlOf->ExeRead("tb_sys026 WHERE id_office = {$sql->getResult()[0]['office_id']}");
+            $office = $sqlOf->getResult()[0]['descricao_office'].' '.$sqlOf->getResult()[0]['versao_office'].' '.$sqlOf->getResult()[0]['arquitetura_office'];
+        endif;
+        if($sql->getResult()[0]['memoria_ram_id'] !=0):
+            $sqlMem = new Read();
+            $sqlMem->ExeRead("tb_sys029 WHERE id = {$sql->getResult()[0]['memoria_ram_id']}");
+            $memoria = $sqlMem->getResult()[0]['capacidade'].' '.$sqlMem->getResult()[0]['tipo_memoria'];
+        endif;
+        if($sql->getResult()[0]['processador_id'] !=0):
+            $sqlProc = new Read();
+            $sqlProc->ExeRead("tb_sys028 WHERE id = {$sql->getResult()[0]['processador_id']}");
+            $processador = $sqlProc->getResult()[0]['processador'].' ';
+            if($sqlProc->getResult()[0]['geracao']!=0):
+                $processador .=$sqlProc->getResult()[0]['geracao'].'ªGeração';
+            endif;
         endif;
     endif;
         
@@ -145,10 +167,10 @@ if($sql->getResult()):
             <input type="text" class="text-capitalize" disabled=""value="<?=$sql->getResult()[0]['cr']. ' - ' .$sql->getResult()[0]['local']?>" style="width: calc(100% - 112px);"/>
         </div>
         <div class="col form-inline">
-            <label style="width:60px;">Andar</label>
-            <input type="text" class="text-uppercase" disabled="" style="max-width: 100px;" value="<?=$sql->getResult()[0]['andar']?>" style="width: 100%;min-width:150px; "/>
+            <label>Andar</label>
+            <input type="text" class="text-uppercase" disabled="" style="max-width: 100px;" value="<?=$sql->getResult()[0]['andar']?>"/>
             <label style="width:60px; border-left: none;">Sala</label>
-                <input type="text" class="text-capitalize" disabled="" value="<?=$sql->getResult()[0]['sala']?>" style="width: calc(100% - 222px);"/>
+                <input type="text" class="text-capitalize" disabled="" value="<?=$sql->getResult()[0]['sala']?>" style="width: calc(100% - 272px);"/>
         </div>
     </div>
 <?switch ($sql->getResult()[0]['categoria']):
@@ -169,8 +191,8 @@ if($sql->getResult()):
         <div class="row">
             <div class="col form-inline">
                 <label>S.O</label>
-                <?if(isset($sqlSo)):?>
-                    <input type="text" value="<?=$sqlSo->getResult()[0]['descricao_so'].' '.$sqlSo->getResult()[0]['versao_so'].' '.$sqlSo->getResult()[0]['arquitetura_so']?>" class="text-capitalize" style="min-width: 250px;" disabled="" />
+                <?if(isset($so)):?>
+                    <input type="text" value="<?=$so?>" class="text-capitalize" style="min-width: 250px;" disabled="" />
                 <?else:print "<input type='text' disabled='' style=\"min-width: 250px;\" />";endif;?>
             </div>
             <div class="col form-inline">
@@ -181,8 +203,8 @@ if($sql->getResult()):
         <div class="row">
             <div class="col form-inline">
                 <label>Office</label>
-                <?if(isset($sqlOf)):?>
-                    <input type="text" value="<?=$sqlOf->getResult()[0]['descricao_office'].' '.$sqlOf->getResult()[0]['versao_office'].' '.$sqlOf->getResult()[0]['arquitetura_office']?>" class="text-capitalize" style="min-width: 250px;" disabled="" />
+                <?if(isset($office)):?>
+                    <input type="text" value="<?=$office?>" class="text-capitalize" style="min-width: 250px;" disabled="" />
                <?else:print "<input type='text' disabled='' style=\"min-width: 250px;\" />";endif;?>
             </div>
             <div class="col form-inline">
@@ -193,11 +215,25 @@ if($sql->getResult()):
         <div class="row">
             <div class="col form-inline">
                 <label>memória</label>
-                <input type="text" value="<?=$sql->getResult()[0]['memoria_ram']?>" class="text-capitalize" style="min-width: 250px;" disabled="" />
+                <?if(isset($memoria)):?>
+                    <input type="text" value="<?=$memoria?>" class="text-capitalize" style="min-width: 250px;" disabled="" />
+               <?else:print "<input type='text' disabled='' style=\"min-width: 250px;\" />";endif;?>
             </div>
             <div class="col form-inline">
                 <label>HD</label>
                 <input type="text" value="<?=$sql->getResult()[0]['hd']?>" class="text-capitalize" disabled=""/>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col form-inline">
+                <label>processador</label>
+                <?if(isset($processador)):?>
+                    <input type="text" value="<?=$processador?>" class="text-capitalize" style="min-width: 250px;" disabled="" />
+               <?else:print "<input type='text' disabled='' style=\"min-width: 250px;\" />";endif;?>
+            </div>
+            <div class="col form-inline">
+                <label>situação</label>
+                <input type="text" value="<?=$sql->getResult()[0]['situacao']?>" class="text-capitalize" disabled=""/>
             </div>
         </div>
 <?break;
@@ -208,24 +244,25 @@ if($sql->getResult()):
     <?endswitch;
     $patrimonio = $sql->getResult()[0]['patrimonio'];
     $sql->FullRead("SELECT 
-            IE.id_entrada entrada,
-            IE.motivo,
-            IE.os_sti os,
-            IE.observacao,
-            STS.descricao status,
-            STS.cor,
-            TEC.nome tecnico,
-            ENT.data
-        FROM
-            tb_sys006 IE
-                JOIN
-            tb_sys004 EQ ON EQ.patrimonio = IE.patrimonio
-                JOIN
-            tb_sys005 ENT ON ENT.identrada = IE.id_entrada
-                JOIN
-            tb_sys001 TEC ON TEC.id = ENT.id_tecnico
-                JOIN
-            tb_sys002 STS ON STS.id = IE.status AND IE.patrimonio = :PAT order by IE.id desc;", "PAT="."$patrimonio"."");
+                        IE.id,
+                        IE.id_entrada entrada,
+                        IE.motivo,
+                        IE.os_sti os,
+                        IE.observacao,
+                        STS.descricao status,
+                        STS.cor,
+                        TEC.nome tecnico,
+                        ENT.data
+                    FROM
+                        tb_sys006 IE
+                            JOIN
+                        tb_sys004 EQ ON EQ.patrimonio = IE.patrimonio
+                            JOIN
+                        tb_sys005 ENT ON ENT.identrada = IE.id_entrada
+                            JOIN
+                        tb_sys001 TEC ON TEC.id = ENT.id_tecnico
+                            JOIN
+                        tb_sys002 STS ON STS.id = IE.status AND IE.patrimonio = :PAT order by IE.id desc;", "PAT="."$patrimonio"."");
     ?>
 </div>
 <hr />
@@ -240,16 +277,24 @@ if($sql->getResult()):
         <th style="min-width: 190px;">técnico</th>
         <th style="min-width: 150px;">motivo</th>
         <th>Observação</th>
+        <th class="text-center" style="width:50px;">saída</th>
         <th style="width: 115px;">status</th>
     </tr>
     <?foreach ($sql->getResult() as $res):?>
     <tr style="background-color: <?=$res['cor']?>;">
         <td class="text-center"><?=date('d/m/Y',strtotime($res['data']));?></td>
-        <td class="text-center"><?=$res['entrada']?></td>
+        <td class="text-center cursor-pointer" onclick="location.href='index.php?pg=relatorio/entrada&id='+<?=$res['entrada']?>"><?=$res['entrada']?></td>
         <td class="text-center"><?=$res['os']?></td>
         <td class="text-capitalize"><?=$res['tecnico']?></td>
         <td><?=$res['motivo']?></td>
         <td><?=$res['observacao']?></td>
+    <?if($res['status']=='fechado'):
+        $sql->FullRead("SELECT id_saida FROM tb_sys009 WHERE id_item_entrada = :ITEM","ITEM={$res['id']}");
+        ?>
+        <td class="text-center cursor-pointer" onclick="location.href='index.php?pg=relatorio/saida&id='+<?=$sql->getResult()[0]['id_saida']?>"><?=$sql->getResult()[0]['id_saida']?></td>
+    <?else:?>
+        <td>&nbsp;</td>
+    <?endif;?>
         <td class="text-capitalize"><?=$res['status']?></td>
     </tr>
     <?php endforeach;?>
@@ -298,9 +343,9 @@ if($sql->getResult()):
             <td class="text-left text-capitalize"><?=$res['tecnico']?></td>
             <td style="max-width: 300px;" class="text-left"><?= ucfirst($res['avaliacao'])?></td>
         <?if($res['sts'] == 4 && $_SESSION['UserLogado']['grupo_id'] == 4):?>
-            <td class="text-left"><a href="index.php?pg=laboratorio/edita-avaliacao&id=<?=$res['id']?>"><button>Editar</button></a></td>
+            <td class="text-left"><a href="index.php?pg=edita/edita-avaliacao&id=<?=$res['id']?>"><button>Editar</button></a></td>
         <?else:?>
-            <td class="text-left">&nbsp;</td>
+            <td class="text-left">&nbsp;</td>b 
         <?endif;?>
             <td><?=$res['status']?></td>
         <?if(!empty($res['peca_id'])):

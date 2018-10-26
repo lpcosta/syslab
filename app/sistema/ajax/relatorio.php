@@ -4,6 +4,11 @@ require_once '../../config/post.inc.php';
 
 $sql = new Read();
 $dt  = new Datas();
+$texto  = new Check();
+foreach ($post as $key => $value):
+    $post[$key]=$texto->setTexto($value);
+endforeach;
+
 switch ($acao):
     case 'saida':
         switch ($tipoRel):
@@ -50,7 +55,7 @@ switch ($acao):
                         <td colspan="5">
                             <table class="relatorio">
                                 <tr class="left">
-                                    <td><b>Entrada</b></td>
+                                    <td><b>Saída</b></td>
                                     <td><?=$id_saida?></td>
                                     <td><b>Data</b></td>
                                     <td><?=date("d/m/Y",strtotime($dadosTecnico['data'])).' '.$dadosTecnico['hora']?></td>
@@ -412,6 +417,160 @@ switch ($acao):
                 print "<h1 class='text-center alert alert-info'>Erro desconhecido!<br /><code> nenhuma das condições inposta para mostrar relatorio de entrada foi encontrada</code></h1>";
         endswitch;
         break;
+    case 'agpeca':
+        unset($post['acao']);
+        if($categoria == 0 && empty($secretaria)):
+            $sql->FullRead("SELECT C.descricao equipamento,F.nome_fabricante fabricante,
+                                   M.modelo,EQ.patrimonio,IE.os_sti os,L.local localidade,
+                                   P.descricao_peca peca,A.data dtava
+                            FROM   tb_sys004 EQ JOIN
+                                tb_sys006 IE ON IE.patrimonio = EQ.patrimonio JOIN
+                                tb_sys022 M ON M.id_modelo = EQ.modelo        JOIN
+                                tb_sys003 C ON C.id = EQ.id_categoria         JOIN
+                                tb_sys008 L ON L.id = EQ.id_local             JOIN
+                                tb_sys010 A ON A.id_item_entrada = IE.id      JOIN
+                                tb_sys015 P ON P.id_peca = A.peca_id          JOIN
+                                tb_sys018 F ON F.id_fabricante = EQ.fabricante
+                                AND IE.status = :STATUS ORDER BY A.data", "STATUS=5");
+            $equipamento = "todos";                    
+            $_secretaria = "todas";             
+        elseif($categoria != 0 && empty($secretaria)):
+            $sql->FullRead("SELECT C.descricao equipamento,F.nome_fabricante fabricante,
+                                   M.modelo,EQ.patrimonio,IE.os_sti os,L.local localidade,
+                                   P.descricao_peca peca,A.data dtava
+                            FROM   tb_sys004 EQ JOIN
+                                tb_sys006 IE ON IE.patrimonio = EQ.patrimonio JOIN
+                                tb_sys022 M ON M.id_modelo = EQ.modelo        JOIN
+                                tb_sys003 C ON C.id = EQ.id_categoria         JOIN
+                                tb_sys008 L ON L.id = EQ.id_local             JOIN
+                                tb_sys010 A ON A.id_item_entrada = IE.id      JOIN
+                                tb_sys015 P ON P.id_peca = A.peca_id          JOIN
+                                tb_sys018 F ON F.id_fabricante = EQ.fabricante
+                                AND IE.status = :STATUS AND C.id = :CATEG ORDER BY A.data", "STATUS=5&CATEG={$categoria}");
+            $equipamento = $sql->getResult()[0]['equipamento'];
+            $_secretaria = "todas";     
+        elseif(empty($categoria) && !empty($secretaria)):
+            $sql->FullRead("SELECT C.descricao equipamento,F.nome_fabricante fabricante,
+                                   M.modelo,EQ.patrimonio,IE.os_sti os,L.local localidade,
+                                   P.descricao_peca peca,A.data dtava,S.nome_secretaria
+                            FROM   tb_sys004 EQ JOIN
+                                tb_sys006 IE ON IE.patrimonio = EQ.patrimonio       JOIN
+                                tb_sys022 M ON M.id_modelo = EQ.modelo              JOIN
+                                tb_sys003 C ON C.id = EQ.id_categoria               JOIN
+                                tb_sys008 L ON L.id = EQ.id_local                   JOIN
+                                tb_sys011 S ON S.id_secretaria = L.secretaria_id    JOIN
+                                tb_sys010 A ON A.id_item_entrada = IE.id            JOIN
+                                tb_sys015 P ON P.id_peca = A.peca_id                JOIN
+                                tb_sys018 F ON F.id_fabricante = EQ.fabricante
+                                AND IE.status = :STATUS AND S.id_secretaria = :SEC ORDER BY A.data", "STATUS=5&SEC={$secretaria}");
+            $equipamento = "todos";
+            $_secretaria = $sql->getResult()[0]['nome_secretaria']; 
+        elseif(!empty($categoria) && !empty($secretaria)):
+            $sql->FullRead("SELECT C.descricao equipamento,F.nome_fabricante fabricante,
+                                   M.modelo,EQ.patrimonio,IE.os_sti os,L.local localidade,
+                                   P.descricao_peca peca,A.data dtava,S.nome_secretaria
+                            FROM   tb_sys004 EQ JOIN
+                                tb_sys006 IE ON IE.patrimonio = EQ.patrimonio       JOIN
+                                tb_sys022 M ON M.id_modelo = EQ.modelo              JOIN
+                                tb_sys003 C ON C.id = EQ.id_categoria               JOIN
+                                tb_sys008 L ON L.id = EQ.id_local                   JOIN
+                                tb_sys011 S ON S.id_secretaria = L.secretaria_id    JOIN
+                                tb_sys010 A ON A.id_item_entrada = IE.id            JOIN
+                                tb_sys015 P ON P.id_peca = A.peca_id                JOIN
+                                tb_sys018 F ON F.id_fabricante = EQ.fabricante
+                                AND IE.status = :STATUS AND S.id_secretaria = :SEC AND C.id = :CATEG ORDER BY A.data", "STATUS=5&SEC={$secretaria}&CATEG={$categoria}");
+            $equipamento = $sql->getResult()[0]['equipamento'];
+            $_secretaria = $sql->getResult()[0]['nome_secretaria']; 
+        else:
+            $sql->FullRead("SELECT C.descricao equipamento,F.nome_fabricante fabricante,
+                                   M.modelo,EQ.patrimonio,IE.os_sti os,L.local localidade,
+                                   P.descricao_peca peca,A.data dtava
+                            FROM   tb_sys004 EQ JOIN
+                                tb_sys006 IE ON IE.patrimonio = EQ.patrimonio JOIN
+                                tb_sys022 M ON M.id_modelo = EQ.modelo        JOIN
+                                tb_sys003 C ON C.id = EQ.id_categoria         JOIN
+                                tb_sys008 L ON L.id = EQ.id_local             JOIN
+                                tb_sys010 A ON A.id_item_entrada = IE.id      JOIN
+                                tb_sys015 P ON P.id_peca = A.peca_id          JOIN
+                                tb_sys018 F ON F.id_fabricante = EQ.fabricante
+                                AND IE.status = :STATUS ORDER BY A.data", "STATUS=5");
+            $equipamento = "todos";
+            $_secretaria = "todas";
+        endif;
+        if($sql->getResult()):?>
+            <table class="relatorio">
+                <tr>
+                    <th rowspan="5" style="width:110px;"><img src="<?= LOGO_PSA ?>"/></th>
+                </tr>
+                <tr>
+                    <th colspan="2" class="text-center text-uppercase"><?= PREFEITURA ?></th>
+                    <th rowspan="4" style="width:110px;">&nbsp;</th>
+                </tr>
+                <tr>
+                    <th colspan="2" class="text-center text-uppercase"><?= SECRETARIA ?></th>
+                </tr>
+                <tr>
+                    <th colspan="2" class="text-center text-uppercase"><?= DIRETORIA ?></th>
+                </tr>
+                <tr>
+                    <th class="text-center text-uppercase"><?= GERENCIA ?></th>
+                </tr>
+                <tr>
+                    <th colspan="4">&nbsp;</th>
+                </tr>
+                <tr>
+                    <th colspan="4" class="text-center text-uppercase">relatório de aguardo de peças</th>
+                </tr>
+                <tr>
+                    <td colspan="5">
+                        <table class="relatorio">
+                            <tr class="left">
+                                <td><b>Data</b></td>
+                                <td><?=date("d/m/Y H:i:s")?></td>
+                                <td><b>Secretaria</b></td>
+                                <td class="text-capitalize"><?=$_secretaria?></td>
+                            </tr>
+                            <tr class="left">
+                                <td><b>Equipamento</b></td>
+                                <td class="text-capitalize"><?=$equipamento?></td>
+                                <td><b>Registros</b></td>
+                                <td colspan="2" class="text-capitalize"><?=$sql->getRowCount()?></td>
+                            </tr>
+                        </table>                    
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="4">&nbsp;</td>
+                </tr>
+                <tr>
+                    <td colspan="5">            
+                        <table class="relatorio">
+                            <tr>
+                                <th class="text-center">OS</th>
+                                <th class="text-center">PATRIMONIO</th>
+                                <th class="left" style="min-width: 180px;">EQUIPAMENTO</th>
+                                <th class="left">LOCALIDADE</th>
+                                <th class="left">PEÇA</th>
+                                <th class="text-center">DT.AVALIAÇÂO</th>
+                            </tr>
+                            <? foreach ($sql->getResult() as $res):?>
+                            <tr class="text-capitalize">
+                                <td class="text-center"><?=$res['os']?></td>
+                                <td class="text-center"><?=$res['patrimonio']?></td>
+                                <td><?=$res['equipamento'] . ' ' . $res['fabricante'] . ' ' . $res['modelo'];?></td>
+                                <td><?=$res['localidade']?></td>
+                                <td><?=$res['peca']?></td>
+                                <td class="text-center"><?=date("d/m/Y",strtotime($res['dtava']))?></td>
+                            </tr>
+                            <? endforeach;?>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        <?else:?>
+        <h1 class="text-center text-capitalize text-danger">nenhum registro encontrado!</h1>    
+        <?endif;?>
+       <?break;
     default :
-        print "<h1>ERRO! parametro que especifica o tipo de relatroio nao passado!</h1>";
+        print "<h1>ERRO! parametro que especifica o tipo de relatório nao passado!</h1>";
 endswitch;

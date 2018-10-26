@@ -38,6 +38,9 @@ function autoCompletar(obj,target,fnc){
                 case 'pesquisageral':
                     pesquisaGeral(ui.item.label);
                     break;
+                case 'avalia':
+                    avaliaEquipamento(ui.item.value);
+                    break;
                 default:
                     return false;
             }
@@ -172,10 +175,13 @@ function buscaAvaliacao(id){
 
 function liberaCamposEdicaoEquipamento(){
     var categoria = $('#txtCategoria').val();
+    
     $('.editable').attr('disabled',false);
+   
     switch(categoria){
         case '1':
-            $('.editable-printer').attr('disabled',false);
+            $('.editable-monitor').attr('disabled',false);
+            break;
         case  '2':
         case  '5':
         case '17':
@@ -186,11 +192,14 @@ function liberaCamposEdicaoEquipamento(){
             break;
         case '3':
             $('.editable-estab').attr('disabled',false);
+            break;
         case '4':
             $('.editable-monitor').attr('disabled',false);
+            break;
         default:
             $('.editable').attr('disabled',true);
     }
+    
     $('.btn-acao-edita').toggle();
     $('.btn-acao-salva').toggle();
 }
@@ -200,6 +209,36 @@ function liberaCamposEdicao()
     $('.btn-acao-edita').toggle();
     $('.btn-acao-salva').toggle();
 }
+
+function bloqueiaCamposEdicao(){
+    $('.editable').attr('disabled',true);
+    $('.editable-cpu').attr('disabled',true);
+    $('.editable-monitor').attr('disabled',true);
+    $('.editable-estab').attr('disabled',true);
+    $('.editable-monitor').attr('disabled',true);
+}
+
+/*EDITA-QUIPAMENTO*/
+function editaEquipamento(){
+    var dados = $(".edita").serialize();
+        $.ajax({
+            url: './app/sistema/ajax/edita.php',
+            data: dados,
+            type:'POST',
+            dataType:'HTML',
+        beforeSend:function(){
+       $('.form_load').fadeIn(500);
+        },
+        success: function (res){
+            $('.form_load').fadeOut(500);
+            $('.btn-acao-edita').toggle();
+            $('.btn-acao-salva').toggle();
+            bloqueiaCamposEdicao();
+            modal(res);
+        }
+    });
+}
+
 
 function editaUsuario(){
     var dados = $(".edita").serialize();
@@ -597,15 +636,17 @@ function setaPeca(peca,qtde=null)
                 $.post('./app/sistema/ajax/busca-cod-peca.php',
                 {peca:peca}, function (res){
                    if(res){
+                    var dados = res.split(',');
                     $("div.div-qtde").remove();$("#txtPecaSerie").attr({'value':d,'readonly':true});
                     $("#txtObservacao").before("<div class='col-md form-inline div-qtde'><label>Quantidade </label><input type='text'  name='qtde' class='form-control' onblur='$('#txtQtde').attr('value',this.value)' /></div>" );
+                    $('#txtPreco').val(dados[1]);
                     }
                     else{$("div.div-qtde").remove();$("#txtPecaSerie").attr({'value':'','readonly':false});}
                     });
+                    
                 }
             $('#txtCodPeca').val(peca);
             $('#txtPeca').val(peca);
-            $("#txtPeca").attr('value', peca);
         }
         else 
         {
@@ -640,14 +681,25 @@ function setaTipoRel(val){
 }
 
 function validaRelatorio(t,idfrm){
-    if(t=='saida' && $.trim($('#txtCodSaida').val())==''){
-        modal('informe um numero de saída');
-    }else if(t=='entrada' && $.trim($('#txtCodEntrada').val())=='')
-    {modal('informe um numero de entrada');}
-    else{
+    if(t=='agpeca'){
+       if($.trim($('#txtEquipamento').val())=='' && $.trim($('#txtSecretaria').val())=='' ){
+           modal('Favor informar um equipametno ou uma secretaria');
+       }else if($.trim($('#txtSecretaria').val())=='26')
+       {
+           modal('Secretaria Inválida!');
+       }else{
+           $('.gera-relatorio').hide();
+           $('.gera-excel').show();
+           geraRelatorio(idfrm);
+       };
+    }else{
         switch($('#tipoRel').val()){
             case 'codigo':
-                geraRelatorio(idfrm);
+                if(t=='saida' && $.trim($('#txtCodSaida').val())==''){
+                    modal('informe um numero de saida!');
+                }else if(t=='entrada'&& $.trim($('#txtCodEntrada').val())==''){
+                    modal('informe um numero de entrada!');
+                }else{geraRelatorio(idfrm);}
                 break;
             case 'tecnico':
                 if($('#txtTecnico').val()=='')
@@ -662,6 +714,21 @@ function validaRelatorio(t,idfrm){
             default:
                 return false;
         }
+    }
+}
+
+function geraExel(pg){
+    var categ  = $.trim($('#txtEquipamento').val());
+    var secret = $.trim($('#txtSecretaria').val());
+    switch(pg){
+        case 'agpeca':
+            if(categ=='0')
+            {location.href='./excel/aguardo-geral-peca.php';}
+            else if(categ != '0' && secret != '26' && secret == '')
+            {location.href='./excel/categoria.php?categoria='+categ;}
+            break;
+        dafault:
+            return false;
     }
 }
 
@@ -890,24 +957,6 @@ function ValidarCPF(cpfval){
         }
     });/*FIM CADASTRO OFFICE*/
     
-/*EDITA-QUIPAMENTO*/
-function editaEquipamento(){
-    var dados = $(".edita").serialize();
-        $.ajax({
-            url: './app/sistema/ajax/edita.php',
-            data: dados,
-            type:'POST',
-            dataType:'HTML',
-        beforeSend:function(){
-       $('.form_load').fadeIn(500);
-        },
-        success: function (res){
-           $('.form_load').fadeOut(500);
-           modal(res);
-        }
-    });
-}
-
 $("#form-edita-peca").validate({
     rules:{
         id_peca:{required:true,number:true}
@@ -975,12 +1024,12 @@ function baixaPeca(peca,os,id){
     /*CADASTRO DE EQUIPAMENTO*/
     $('#cad-equip').validate({
             rules:{
-                equipamento :{required:true},
-                fabricante  :{required:true},
-                modelo      :{required:true},
-                serie       :{required:true,minlength:5},
-                patrimonio  :{required:true,minlength:6,maxlength:7},
-                localidade  :{required:true}
+                id_categoria :{required:true},
+                fabricante   :{required:true},
+                modelo       :{required:true},
+                serie        :{required:true,minlength:5},
+                patrimonio   :{required:true,minlength:6,maxlength:7},
+                id_local     :{required:true}
             },
             submitHandler: function(){
                  cadastra('./app/sistema/ajax/cadastra.php','#cad-equip');
@@ -1024,6 +1073,20 @@ function baixaPeca(peca,os,id){
         }
     });
     /*FIM DO CADASTRO DE EMPRESA*/
+/*########### PESQUISA ENTREGAS POR REGIAO##########*/
+function mostraEntregasRegiao(regiao){
+    $.ajax({
+        type: "POST",
+        url: "./app/sistema/pesquisa/entregas-regiao.php",
+        data: {regiao:regiao},
+        success: function( res )
+        {
+          show_modal('#modal-entregas-regiao',res);                              
+        }
+    });
+}
+/*########### FIM PESQUISA ENTREGAS POR REGIAO##########*/
+
 
     /*PESQUISA PATRIMONIO*/
     $('#formSearch').validate({
@@ -1206,7 +1269,7 @@ $("#cadastra-peca").validate({
     }
 });
 
-$("#cadastra-fornecdor").validate({
+$("#cadastra-fornecedor").validate({
     rules:{
         nome_fornecedor :{required:true}
     },
@@ -1228,6 +1291,49 @@ $("#recebe-peca").validate({
     }
 });
 
+$('#cadastra-memoria').validate({
+    rules:{
+        tipo_memoria:{required:true},
+        capacidade:{required:true}
+    },
+    messages: {tipo_memoria: "*",capacidade:"*"},
+    submitHandler: function(){
+        cadastra('./app/sistema/ajax/cadastra.php','#cadastra-memoria');
+    }
+});
+
+
+function liberaEdicaoMemoria(i){
+    $('.editable-'+i).attr('disabled',false);
+    $('.btn-edit-'+i).hide();
+    $('.btn-salva-'+i).show();
+}
+function editaMemoria(i){
+    var dados = $(".edita-mem-"+i).serialize();
+        $.ajax({
+            url: './app/sistema/ajax/edita.php',
+            data: dados,
+            type:'POST',
+            dataType:'HTML',
+        success: function (res){
+            $('.editable-'+i).attr('disabled',true);
+            $('.btn-edit-'+i).show();
+            $('.btn-salva-'+i).hide();
+            modal(res);
+        }
+    });
+}
+
+$('#cadastra-processador').validate({
+    rules:{
+        processador:{required:true},
+        geracao:{required:true}
+    },
+    messages: {processador: "*",geracao:"*"},
+    submitHandler: function(){
+        cadastra('./app/sistema/ajax/cadastra.php','#cadastra-processador');
+    }
+});
 
 $("#form-bancada-search").validate({
     onfocusout: false,
@@ -1327,7 +1433,12 @@ function avalia(s,a,p){
                 },
                 success: function (res){
                     $('.form_load').fadeOut(500);
-                    modal(res,'index.php?pg=bancada');
+                    if(s=='4')
+                    {modal(res,'index.php?pg=bancada');}
+                    else{
+                        $('#form-bancada-search').submit();
+                    }
+                   
                 }
             });
     }

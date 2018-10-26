@@ -12,7 +12,7 @@
             <div class="row">
                 <div class="col form-inline">
                     <label>Tipo de Relatório</label>
-                    <select id="tipoRel" name="tipoRel" onchange="setaTipoRel(this.value);">
+                    <select id="tipoRel" name="tipoRel" onchange="setaTipoRel(this.value);" style="width: 150px;">
                         <option selected value="codigo">Nº da Saída</option>
                         <option value="tecnico">Técnico</option>
                         <option value="periodo">Período</option>
@@ -24,8 +24,7 @@
                         <input type="text" name="id_saida" id="txtCodSaida" placeholder="Nº saída..." onkeydown="if(event.keyCode == '13'){validaRelatorio('saida','#form-header-report-saida');}" />
                     </div>
                     <div class="tecnico-rel form-inline" style="display: none;">
-                        <label></label>
-                        <select name="id_tecnico" id="txtTecnico" class="text-capitalize">
+                        <select name="id_tecnico" id="txtTecnico" class="text-capitalize" style="width: 100%;">
                             <option selected value="">Selecione...</option>
                             <?$sql->FullRead("SELECT id,nome FROM tb_sys001 WHERE situacao = :SIT ORDER BY nome","SIT=".'l'."");
                             foreach ($sql->getResult() as $res):?>
@@ -105,7 +104,7 @@ endif;
                 <td colspan="5">
                     <table class="relatorio">
                         <tr class="left">
-                            <td><b>Entrada</b></td>
+                            <td><b>Saída</b></td>
                             <td><?=$id?></td>
                             <td><b>Data</b></td>
                             <td><?=date("d/m/Y",strtotime($dadosTecnico['data'])).' '.$dadosTecnico['hora']?></td>

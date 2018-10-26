@@ -2,15 +2,26 @@
    paginaSegura();
   $sql = new Read();
   $atu = new Update();
-  /*
-  $sql->FullRead("SELECT S.id saida,S.data,T.nome from tb_sys007 S JOIN tb_sys001 T ON T.id = S.id_tecnico");
   
+  
+  /*atualizar os preços de referencia de acordo com o ultimo resgistrado*/
+  /*
+  $sql->ExeRead("tb_sys020");
   foreach ($sql->getResult() as $res):
-      $atu->ExeUpdate("tb_sys007", ["responsavel"=>$res['nome']], "WHERE id = :ID", "ID={$res['saida']}");
+      $atu->ExeUpdate("tb_sys015", ["preco_refencia"=>$res['preco_peca']], "WHERE id_peca = :ID", "ID={$res['peca_id']}");
       if($atu->getResult()):
-           print "Saida ".$res['saida']."Atualiza!</br />";
+           print "Peça ".$res['peca_id']." Atualizada !</br />";
       else:
           print $atu->getError();
       endif;
   endforeach;
 */
+function random_color() {
+    $letters = '0123456789ABCDEF';
+    for($i = 0; $i < 6; $i++) {
+        $index = rand(0,15);
+       $letters[$i] = $index;
+    }
+    return substr($letters, 0, 6); // abcd$letters;
+}
+print $cor = random_color();

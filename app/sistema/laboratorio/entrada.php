@@ -1,6 +1,6 @@
 <?php
-   paginaSegura();
-    $sql = new Read();
+paginaSegura();
+$sql = new Read();
 ?>
 <div class="tabs">
     <ul>

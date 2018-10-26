@@ -12,7 +12,7 @@
             <div class="row">
                 <div class="col form-inline">
                     <label>Tipo de Relatório</label>
-                    <select id="tipoRel" name="tipoRel" onchange="setaTipoRel(this.value);">
+                    <select id="tipoRel" name="tipoRel" onchange="setaTipoRel(this.value);" style="width: 150px;">
                         <option selected value="codigo">Nº da Entrada</option>
                         <option value="tecnico">Técnico</option>
                         <option value="periodo">Período</option>
@@ -25,7 +25,7 @@
                     </div>
                     <div class="tecnico-rel form-inline" style="display: none;">
                         <label></label>
-                        <select name="id_tecnico" id="txtTecnico" class="text-capitalize">
+                        <select name="id_tecnico" id="txtTecnico" class="text-capitalize" style="width: 100%;">
                             <option selected value="">Selecione...</option>
                             <?$sql->FullRead("SELECT id,nome FROM tb_sys001 WHERE situacao = :SIT ORDER BY nome","SIT=".'l'."");
                             foreach ($sql->getResult() as $res):?>

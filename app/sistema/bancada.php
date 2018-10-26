@@ -27,7 +27,7 @@ $dt  = new Datas();
             <div class="row">
                 <div class="col-lg form-inline">
                     <label>Patrimonio/OS</label>
-                    <input type="text" name="patrimonio" class="form-control auto-focus" id="txtPatrimonio" autofocus="" />
+                    <input type="text" name="patrimonio" onkeydown="autoCompletar(this,'avalia','avalia')" class="form-control auto-focus" id="txtPatrimonio" autofocus="" />
                     &nbsp;
                     <input type="submit" class="btn btn-primary" id="btnAvalia" name="btnBancada" value="Pesquisar" />&nbsp;
                     <input type="button" class="btn btn-primary" name="btnBancada" value="Carregar" onclick="history.go(0);" />

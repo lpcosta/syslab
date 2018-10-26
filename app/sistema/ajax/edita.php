@@ -31,6 +31,7 @@ switch ($acao):
         break;
     case 'peca':
         unset($post['id_peca']);unset($post['id']);unset($post['acao']);
+        $post['preco_refencia'] = str_replace(",",".",$post['preco_refencia']);
         $atu->ExeUpdate("tb_sys015", $post, "WHERE id_peca = :ID", "ID={$id_peca}");
         if($atu->getResult()):
             print "<span class='alert alert-success' role='alert'>Atualização Realizada!</span>";
@@ -61,6 +62,15 @@ switch ($acao):
         $atu->ExeUpdate("tb_sys010", $post, "WHERE id = :ID", "ID={$id}");
         if(!$atu->getResult()):
             print $sql->getError();
+        endif;
+        break;
+    case 'memoria':
+        unset($post['id']); unset($post['acao']);
+          $atu->ExeUpdate("tb_sys029", $post, "WHERE id = :ID", "ID={$id}");
+        if($atu->getResult()):
+            print "<span class='alert alert-success' role='alert'>Atualização Realizada!</span>";
+        else:
+            print "<code>".$atu->getError()."</code>";
         endif;
         break;
     default :

@@ -1,8 +1,8 @@
 <?php
 session_start();
 require_once '../../config/config.inc.php';
-require_once '../../config/post.inc.php';
 require_once '../../funcoes/func.inc.php';
+require_once '../../config/post.inc.php';
 
 $sql        = new Read();
 $cria       = new Create();
@@ -63,6 +63,7 @@ if(isset($id)):
                         F.nome_fabricante fabricante,
                         M.modelo,
                         L.local,
+                        EQ.ip,
                         EQ.patrimonio,
                         EQ.serie,
                         EQ.id id_equipamento,
@@ -70,7 +71,8 @@ if(isset($id)):
                         EQ.office_id,
                         EQ.key_so,
                         EQ.key_office,
-                        EQ.memoria_ram,
+                        EQ.memoria_ram_id,
+                        EQ.processador_id,
                         EQ.hd
                     FROM tb_sys004 EQ
                         JOIN tb_sys006 IE ON IE.patrimonio = EQ.patrimonio
@@ -141,61 +143,90 @@ if(isset($id)):
             <textarea disabled=""><?= ucfirst($sql->getResult()[0]['observacao'])?></textarea>
         </div>
     </div>
-    <?php if(in_array($categoria,$categorias)):
-       
+
+    <p class="text-capitalize">infomações adicionais do equipamento</p>
+    <?
+        if(in_array($categoria,$categorias)):
         if($sql->getResult()[0]['so_id'] !=0):
             $sqlSo = new Read();
             $sqlSo->ExeRead("tb_sys025 WHERE id_so = {$sql->getResult()[0]['so_id']}");
+            $so = $sqlSo->getResult()[0]['descricao_so'].' '.$sqlSo->getResult()[0]['versao_so'].' '.$sqlSo->getResult()[0]['arquitetura_so'];
         endif;
         if($sql->getResult()[0]['office_id'] !=0):
             $sqlOf = new Read();
             $sqlOf->ExeRead("tb_sys026 WHERE id_office = {$sql->getResult()[0]['office_id']}");
+            $office = $sqlOf->getResult()[0]['descricao_office'].' '.$sqlOf->getResult()[0]['versao_office'].' '.$sqlOf->getResult()[0]['arquitetura_office'];
+        endif;
+        if($sql->getResult()[0]['memoria_ram_id'] !=0):
+            $sqlMem = new Read();
+            $sqlMem->ExeRead("tb_sys029 WHERE id = {$sql->getResult()[0]['memoria_ram_id']}");
+            $memoria = $sqlMem->getResult()[0]['capacidade'].' '.$sqlMem->getResult()[0]['tipo_memoria'];
+        endif;
+        if($sql->getResult()[0]['processador_id'] !=0):
+            $sqlProc = new Read();
+            $sqlProc->ExeRead("tb_sys028 WHERE id = {$sql->getResult()[0]['processador_id']}");
+            $processador = $sqlProc->getResult()[0]['processador'].' ';
+            if($sqlProc->getResult()[0]['geracao']!=0):
+                $processador .=$sqlProc->getResult()[0]['geracao'].'ªGeração';
+            endif;
         endif;
     ?>
-
-    <p class="text-capitalize">infomações adicionais do equipamento</p>
-    <div class="row">
+          <div class="row">
         <div class="col form-inline">
             <label>S.O</label>
-            <?if(isset($sqlSo)):?>
-                <input type="text" value="<?=$sqlSo->getResult()[0]['descricao_so'].' '.$sqlSo->getResult()[0]['versao_so'].' '.$sqlSo->getResult()[0]['arquitetura_so']?>" class="text-capitalize" style="min-width: 250px;" disabled="" />
+            <?if(isset($so)):?>
+                <input type="text" value="<?=$so?>" class="text-capitalize" style="min-width: 250px;" disabled="" />
             <?else:print "<input type='text' disabled='' style=\"min-width: 250px;\" />";endif;?>
         </div>
         <div class="col form-inline">
             <label>Chave S.O</label>
             <input type="text" value="<?=$sql->getResult()[0]['key_so']?>" class="text-uppercase" disabled=""/>
         </div>
-    </div>
+        </div>
+        <div class="row">
+            <div class="col form-inline">
+                <label>Office</label>
+                <?if(isset($office)):?>
+                    <input type="text" value="<?=$office?>" class="text-capitalize" style="min-width: 250px;" disabled="" />
+               <?else:print "<input type='text' disabled='' style=\"min-width: 250px;\" />";endif;?>
+            </div>
+            <div class="col form-inline">
+                <label>Chave office</label>
+                <input type="text" value="<?=$sql->getResult()[0]['key_office']?>" class="text-uppercase" disabled=""/>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col form-inline">
+                <label>memoria Ram</label>
+                <?if(isset($memoria)):?>
+                 <input type="text" value="<?=$memoria?>" class="text-capitalize" style="min-width: 250px;" disabled="" />
+                <?else:print "<input type='text' disabled='' style=\"min-width: 250px;\" />";endif;?>
+            </div>
+            <div class="col form-inline">
+                <label>HD</label>
+                <input type="text" value="<?=$sql->getResult()[0]['hd']?>" class="text-capitalize" disabled=""/>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col form-inline">
+                <label>Processador</label>
+                <?if(isset($memoria)):?>
+                <input type="text" class="text-capitalize" value="<?=$processador?>" style="min-width: 250px;" disabled="" />
+                <?else:print "<input type='text' disabled='' style=\"min-width: 250px;\" />";endif;?>
+            </div>
+            <div class="col form-inline">
+                <label class="text-uppercase text-danger"><b>Padrão</b></label>
+                <input type="text" class="text-uppercase text-danger" value="<?=$sql->getResult()[0]['local_uso']?>" style="min-width: 250px; font-weight: bolder;" disabled="" />
+            </div>
+        </div>
+<?elseif($categoria==1):?>
     <div class="row">
         <div class="col form-inline">
-            <label>Office</label>
-            <?if(isset($sqlOf)):?>
-                <input type="text" value="<?=$sqlOf->getResult()[0]['descricao_office'].' '.$sqlOf->getResult()[0]['versao_office'].' '.$sqlOf->getResult()[0]['arquitetura_office']?>" class="text-capitalize" style="min-width: 250px;" disabled="" />
-           <?else:print "<input type='text' disabled='' style=\"min-width: 250px;\" />";endif;?>
-        </div>
-        <div class="col form-inline">
-            <label>Chave office</label>
-            <input type="text" value="<?=$sql->getResult()[0]['key_office']?>" class="text-uppercase" disabled=""/>
+            <label>Uso:</label>
+            <input type="text" value="<?=$sql->getResult()[0]['ip']?>" class="text-capitalize" style="min-width: 250px;" disabled="" />
         </div>
     </div>
-    <div class="row">
-        <div class="col form-inline">
-            <label>memoria Ram</label>
-            <input type="text" value="<?=$sql->getResult()[0]['memoria_ram']?>" class="text-capitalize" style="min-width: 250px;" disabled="" />
-        </div>
-        <div class="col form-inline">
-            <label>HD</label>
-            <input type="text" value="<?=$sql->getResult()[0]['hd']?>" class="text-capitalize" disabled=""/>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col form-inline">
-            <label class="text-uppercase text-danger"><b>Padrão</b></label>
-            <input type="text" class="text-uppercase text-danger" value="<?=$sql->getResult()[0]['local_uso']?>" style="min-width: 250px; font-weight: bolder;" disabled="" />
-        </div>
-  
-    </div>
-    <?php endif;
+    <?endif;
     if($sql->getResult()[0]['status']==5):
     $agpeca = new Read();
     $agpeca->FullRead("SELECT 
@@ -251,7 +282,7 @@ if(isset($id)):
             <td><?= ucfirst($agp['avaliacao'])?></td>
             <td  class="text-capitalize"><?=$agp['id_peca'].' - '.$agp['descricao_peca']?></td>
             <?if($agp['status'] != 'fechado'):?>
-            <td class="text-center">
+            <td class="text-center" style="width: 110px;">
                 <?if($_SESSION['UserLogado']['grupo_id'] == 4):?>
                 <button onclick="buscaAvaliacao(<?=$agp['id']?>);">Editar</button>
                 <?endif;?>

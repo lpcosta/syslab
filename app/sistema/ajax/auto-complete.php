@@ -20,6 +20,8 @@ switch ($acao):
     case 'usuario':
         buscaResultado(["nome","id"], "tb_sys001", "nome", "{$p}");
         break;
+    case 'avalia':
+        buscaResultado(["patrimonio","id"], "tb_sys006", "status != 3 AND patrimonio", "{$p}");
     default :
         NULL;
 endswitch;

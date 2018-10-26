@@ -1,6 +1,6 @@
 <?php
    paginaSegura();
-    if(GRUPO >= 3):
+    if(GRUPO != 4):
        header("Location:".HOME."");
        exit();
    endif;
@@ -12,7 +12,7 @@
         <li><a href="#cad-user">Cadastrar Status</a></li>
     </ul>
     <div id="cad-user">
-        <h2 class="text-uppercase">novo satus</h2>
+        <h2 class="text-uppercase">novo status</h2>
         <form class="form-cadastra" id="cadastra-status" onsubmit="return false;">
             <input type="hidden" name="acao" value="status" />
             <div class="row">

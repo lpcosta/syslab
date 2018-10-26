@@ -16,7 +16,7 @@ $sql = new Read();
             <div class="row">
                 <div class="col form-inline">
                     <label>equipamento</label>
-                    <select class="form-control" id="txtEqpmt" name="equipamento" onchange="setCadEquipamento(this.value)">
+                    <select class="form-control" id="txtEqpmt" name="id_categoria" onchange="setCadEquipamento(this.value)">
                         <?php $sql->ExeRead("tb_sys003"); ?>
                         <option selected value="">Selecione...</option>
                         <?php foreach ($sql->getResult() as $res):
@@ -58,7 +58,7 @@ $sql = new Read();
    
                 <div class="col form-inline cmb-localidade">
                     <label>Localidade</label>
-                    <select class="form-control" id="txtLocalidade" name="localidade">
+                    <select class="form-control" id="txtIdLocal" name="id_local">
                         <?php $sql->FullRead("SELECT id,local FROM tb_sys008 ORDER BY local"); ?>
                         <option selected value="">Selecione...</option>
                         <?php foreach ($sql->getResult() as $res):
@@ -76,7 +76,7 @@ $sql = new Read();
                 <div class="row" >
                     <div class="col form-inline">
                         <label>IP</label>
-                        <input type="text" id="txtIp" name="txtip" class="form-control" size="15" maxlength="15" placeholder="IP..."/>
+                        <input type="text" id="txtIp" name="ip" class="form-control" size="15" maxlength="15" placeholder="IP..."/>
                     </div>
                      
                 </div>
@@ -89,7 +89,7 @@ $sql = new Read();
                 <div class="row" >
                     <div class="col form-inline">
                         <label title="Sistema Operacional">S.O</label>
-                        <select class="form-control" id="txtSo" name="so">
+                        <select class="form-control" id="txtSo" name="so_id">
                             <?php $sql->ExeRead("tb_sys025"); ?>
                             <option selected value="">Selecione...</option>
                             <?php foreach ($sql->getResult() as $res):
@@ -100,13 +100,13 @@ $sql = new Read();
                     </div>
                      <div class="col form-inline">
                         <label title="Chave de Ativação">Chave</label>
-                        <input type="text" id="txtKeySo" name="txtKeySo" class="form-control m_key" size="25"placeholder="Chave de Ativação Windows" />
+                        <input type="text" id="txtKeySo" name="key_so" class="form-control m_key" size="33" maxlength="30" placeholder="Chave de Ativação Windows" />
                     </div>
                 </div>
                 <div class="row" >
                     <div class="col form-inline">
                         <label title="Office">Office</label>
-                        <select class="form-control" id="txtOffice" name="office">
+                        <select class="form-control" id="txtOffice" name="office_id">
                             <?php $sql->ExeRead("tb_sys026"); ?>
                             <option selected value="">Selecione...</option>
                             <?php foreach ($sql->getResult() as $res):
@@ -117,13 +117,13 @@ $sql = new Read();
                     </div>
                      <div class="col form-inline">
                         <label title="Chave de Ativação do Office">Chave</label>
-                        <input type="text" id="txtKeyOffice" name="txtKeyOffice" class="form-control m_key" size="25"placeholder="Chave de Ativação Office" />
+                        <input type="text" id="txtKeyOffice" name="key_office" class="form-control m_key" size="33" maxlength="30" placeholder="Chave de Ativação Office" />
                     </div>
                 </div>
                 <div class="row" >
                     <div class="col form-inline">
                         <label title="Office">Memória</label>
-                        <select id="txtMemoria" name="txtMemoria" class="form-control">
+                        <select id="txtMemoria" name="memoria_ram" class="form-control">
                             <option selected="" value="">Selecione...</option>
                             <option value="1gb">1GB</option>
                             <option value="2gb">2GB</option>
@@ -136,7 +136,7 @@ $sql = new Read();
                     </div>
                      <div class="col form-inline">
                         <label title="HD">HD</label>
-                        <select id="txtHd" name="txtHd" class="form-control">
+                        <select id="txtHd" name="hd" class="form-control">
                             <option selected="" value="">Selecione...</option>
                             <option value="80gb">80GB</option>
                             <option value="160gb">160GB</option>
@@ -156,11 +156,11 @@ $sql = new Read();
                 <div class="row">
                     <div class="col form-inline">
                         <label title="Office">Tela</label>
-                        <input type="text" id="txtTela" name="txtTela" class="form-control " size="5"placeholder="pol.." />
+                        <input type="text" id="txtTela" name="tela" class="form-control " size="5"placeholder="pol.." />
                     </div>
                     <div class="col form-inline">
                         <label title="Chave de Ativação do Office">Tipo Tela</label>
-                        <select class="form-control" id="txtTipoTela" name="txtTipoTela">
+                        <select class="form-control" id="txtTipoTela" name="tipo_tela">
                             <option selected value="">Selecione...</option>
                             <option value="normal">Normal</option>
                             <option value="wide">WideScreen</option>
@@ -176,7 +176,7 @@ $sql = new Read();
                 <div class="row" >
                     <div class="col form-inline">
                         <label>Volt-Ampere</label>
-                        <input type="text" id="txtVa" name="txtVa" class="form-control" size="8" placeholder="(VA)" />
+                        <input type="text" id="txtVa" name="va" class="form-control" size="8" placeholder="(VA)" />
                     </div>
                 </div>
             </div><!-- fim Opção estabilizador --> 

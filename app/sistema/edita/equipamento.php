@@ -168,22 +168,39 @@
                 </div>
             </div>
             <div class="row">
-                 <div class="col form-inline">
+                <div class="col form-inline">
+                    <label>processador</label>
+                    <select name="processador_id" class="text-uppercase">
+                        <?if(!empty($sql->getResult()[0]['processador_id'])){ $combo->ExeRead("tb_sys028 WHERE id = {$sql->getResult()[0]['processador_id']}");?>
+                        <option selected value="<?=$sql->getResult()[0]['processador_id']?>"><?=$combo->getResult()[0]['processador'];if($combo->getResult()[0]['geracao'] != 0){print $combo->getResult()[0]['geracao'].'ª Geração';}?></option>
+                        <?}else{?>
+                        <option selected value="">Selecione...</option>
+                        <?}?>
+                        <?php $combo->ExeRead("tb_sys028 ORDER BY processador");
+                        foreach ($combo->getResult() as $res):
+                            print "<option value=".$res['id'].">".$res['processador'];if($res['geracao']!=0){print $res['geracao'].'ª Geração';}"</option>";
+                        endforeach;
+                        ?>
+                    </select>
+                </div>
+                <div class="col form-inline">
                     <label>Memória Ram</label>
-                    <select name="memoria_ram" class="text-uppercase" <?if(!in_array($sql->getResult()[0]['id_categoria'],$categorias)){print "disabled";}?>>
-                        <option selected="" value="<?=$sql->getResult()[0]['memoria_ram']?>"><?=$sql->getResult()[0]['memoria_ram']?></option>
-                        <option value="1gb">1GB</option>
-                        <option value="2gb">2GB</option>
-                        <option value="3gb">3GB</option>
-                        <option value="4gb">4GB</option>
-                        <option value="6gb">6GB</option>
-                        <option value="8gb">8GB</option>
-                        <option value="16gb">16GB</option>
+                    <select name="memoria_ram_id" class="text-uppercase">
+                        <?if(!empty($sql->getResult()[0]['memoria_ram_id'])){ $combo->ExeRead("tb_sys029 WHERE id = {$sql->getResult()[0]['memoria_ram_id']}");?>
+                        <option selected value="<?=$sql->getResult()[0]['memoria_ram_id']?>"><?=$combo->getResult()[0]['capacidade'].' '.$combo->getResult()[0]['tipo_memoria']?></option>
+                        <?}else{?>
+                        <option selected value="">Selecione...</option>
+                        <?}?>
+                        <?php $combo->ExeRead("tb_sys029 ORDER BY tipo_memoria");
+                        foreach ($combo->getResult() as $res):
+                            print "<option value=".$res['id'].">".$res['capacidade'].' '.$res['tipo_memoria']."</option>";
+                        endforeach;
+                        ?>
                     </select>
                 </div>
                 <div class="col form-inline">
                     <label>HD</label>
-                    <select name="hd" class="text-uppercase" <?if(!in_array($sql->getResult()[0]['id_categoria'],$categorias)){print "disabled";}?>>
+                    <select name="hd" class="text-uppercase">
                         <option selected="" value="<?=$sql->getResult()[0]['hd']?>"><?=$sql->getResult()[0]['hd']?></option>
                         <option value="80gb">80GB</option>
                         <option value="160gb">160GB</option>
@@ -194,61 +211,66 @@
                         <option value="1tb">1TB</option>
                     </select>
                 </div>
-                <div class="col form-inline">
+            </div>
+            <div class="row">
+                 <div class="col form-inline">
                     <label>Anti Virus</label>
-                    <select name="anti_virus" <?if(!in_array($sql->getResult()[0]['id_categoria'],$categorias)){print "disabled";}?>>
+                    <select name="anti_virus" class="text-capitalize">
                         <option selected value="<?=$sql->getResult()[0]['anti_virus']?>"><?=$sql->getResult()[0]['anti_virus']?></option>
                         <option value="trend">Trend</option>
                         <option value="avast">Avast</option>
                         <option value="outro">outro</option>
                     </select>
                 </div>
-            </div>
-            <div class="row">
-                 <div class="col form-inline">
+                <div class="col form-inline">
                     <label>Tela</label>
-                    <input type="text" name="tela" value="<?=$sql->getResult()[0]['tela']?>" <?if($sql->getResult()[0]['id_categoria'] != 4){print "disabled";}?>>
+                    <input type="text" name="tela" value="<?=$sql->getResult()[0]['tela']?>" class="text-capitalize"/>
                 </div>
                 <div class="col form-inline">
                     <label>Tipo Tela</label>
-                    <select name="tipo_tela" <?if($sql->getResult()[0]['id_categoria'] != 4){print "disabled";}?>>
+                    <select name="tipo_tela" class="text-capitalizer" >
                         <option selected value="<?=$sql->getResult()[0]['tipo_tela']?>"><?=$sql->getResult()[0]['tipo_tela']?></option>
                         <option value="normal">Normal</option>
                         <option value="wide">WideScreen</option>
                         <option value="super-wide">Super Wide-Screen</option>
                     </select>
                 </div>
-                <div class="col form-inline">
+            </div>
+            <div class="row">
+                 <div class="col form-inline">
                     <label>VNC</label>
-                    <select name="vnc" <?if(!in_array($sql->getResult()[0]['id_categoria'],$categorias)){print "disabled";}?>>
+                    <select name="vnc" class="text-capitalize">
                         <option selected value="<?=$sql->getResult()[0]['vnc']?>"><?=$sql->getResult()[0]['vnc']?></option>
                         <option value="sim">Sim</option>
                         <option value="nao">Não</option>
                     </select>
                 </div>
-            </div>
-            <div class="row">
-                 <div class="col form-inline">
+                <div class="col form-inline">
                     <label>V.A)</label>
-                    <input type="text" name="va" value="<?=$sql->getResult()[0]['va']?>" <?if($sql->getResult()[0]['id_categoria'] != 3 || $sql->getResult()[0]['id_categoria'] != 8 ){print "disabled";}?>>
+                    <input type="text" name="va" class="text-capitalize" value="<?=$sql->getResult()[0]['va']?>">
                 </div>
                 <div class="col form-inline">
-                    <label>Status</label>
-                    <select name="status">
+                     <label>Status</label>
+                    <select name="status" class="text-capitalize">
                         <option selected value="<?=$sql->getResult()[0]['status']?>"><?=$sql->getResult()[0]['status']?></option>
                         <option value="ativo">ativo</option>
                         <option value="baixado">baixado</option>
                     </select>
                 </div>
-                <div class="col form-inline">
-                    <div class="col">
-                        <button type="button" class="btn btn-primary" onclick="editaEquipamento()">Salvar Alterações</button>
-                        &nbsp;
-                        <img src="./app/imagens/load.gif" class="form_load" alt="[CARREGANDO...]" title="CARREGANDO.." /> 
+            </div>
+            <div class="row">
+                <div class="col">
+                    
+                </div>
+                <div class="col">
+                    <div class="col form-inline">
+                        <button type="submit" style="margin-right: 10px;" class="btn btn-primary" onclick="editaEquipamento()">Salvar</button>
+                     
+                        <button type="button" onclick="history.back();" class="btn btn-primary">Voltar</button>
                     </div>
-                    <div class="col">
-                        <button type="button" class="btn btn-primary" onclick="history.back();">Voltar</button>
-                    </div>
+                </div>
+                <div class="col">
+                    
                 </div>
             </div>
         </form>

@@ -13,11 +13,6 @@ function mblower($texto) {
     return print strip_tags(trim(mb_strtolower($texto, 'UTF-8')));
 }
 
-function paginaSegura() {
-    if(!isset($_SESSION['UserLogado'])):
-        header("Location:".HOME."");
-    endif;
-}
 
 //PHPErro :: personaliza o gatilho do PHP
 function PHPErro($ErrNo, $ErrMsg, $ErrFile, $ErrLine) {
@@ -40,5 +35,13 @@ function Valor($valor) {
 
        return $valor;
 }
+
+function paginaSegura() {
+    if(!isset($_SESSION['UserLogado'])):
+        header("Location:".HOME."");
+        exit();
+    endif;
+}
+
 
 set_error_handler('PHPErro');

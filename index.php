@@ -10,6 +10,7 @@ session_start();
 require_once './app/composer/vendor/autoload.php';
 require_once './app/config/config.inc.php';
 require_once './app/funcoes/func.inc.php';
+
 ?>
 
 <!DOCTYPE html> 
@@ -18,7 +19,7 @@ require_once './app/funcoes/func.inc.php';
         <meta charset="utf-8">     
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">    
-        <title>.:SysLab - homolog :.</title>         
+        <title>.:SysLab:.</title>         
         <link rel="shortcut icon" href="./app/imagens/icons/syslab-logo.PNG" type="image/x-icon">
         <link rel="stylesheet" href="./app/libs/BootStrap-4.0/css/bootstrap.css" />
         <link rel="stylesheet" href="./app/libs/JQuery-ui-1.12.1/jquery-ui.css" />
@@ -90,9 +91,7 @@ require_once './app/funcoes/func.inc.php';
                         <ul class="submenu-1">
                             <li><a href="index.php?pg=relatorio/saida">Saídas</a></li>
                             <li><a href="index.php?pg=relatorio/entrada">Entradas</a></li>
-                            <li><a href="#">Relatorio003</a></li>
-                            <li><a href="#">Relatorio004</a></li>
-                            <li><a href="#">Relatorio005</a></li>
+                            <li><a href="index.php?pg=relatorio/aguardo-de-peca">Aguardo de Peça</a></li>
                         </ul>
                     </li>
                     <li><a href="#">Administração</a>
@@ -101,16 +100,22 @@ require_once './app/funcoes/func.inc.php';
                                 <ul class="submenu-2">
                                     <li><a href="index.php?pg=cadastra/equipamento">Equipamento</a></li>
                                     <li><a href="index.php?pg=cadastra/localidade">Localidade</a></li>
-                                    <li><a href="index.php?pg=cadastra/software">Windows/Office</a></li>
                                 <?if(GRUPO >= 3):?>    
-                                    <li><a href="index.php?pg=cadastra/motivo-entrada">Motivo de Entrada</a></li>
                                     <li><a href="index.php?pg=cadastra/secretaria">Secretaria</a></li>
-                                    <li><a href="index.php?pg=cadastra/status">Status</a></li>
                                     <li><a href="index.php?pg=cadastra/empresa">Empresa</a></li>
                                 <?if(GRUPO == 4):?>    
                                     <li><a href="index.php?pg=cadastra/categoria">Categoria</a></li>
                                     <li><a href="index.php?pg=cadastra/fornecedor">Fornecedor</a></li>
                                     <li><a href="index.php?pg=cadastra/usuario">Usuario</a></li>  
+                                    <li><a href="#">Tabelas de Apoio</a>
+                                        <ul class="submenu-3">
+                                            <li><a href="index.php?pg=cadastra/processador">Processador</a></li>
+                                            <li><a href="index.php?pg=cadastra/memoria">Memória Ram</a></li>
+                                            <li><a href="index.php?pg=cadastra/software">Windows/Office</a></li>
+                                            <li><a href="index.php?pg=cadastra/motivo-entrada">Motivo de Entrada</a></li>
+                                            <li><a href="index.php?pg=cadastra/status">Status</a></li>
+                                        </ul>
+                                    </li>  
                                 <?endif;endif;?>
                                 </ul>
                             </li>
@@ -179,6 +184,7 @@ require_once './app/funcoes/func.inc.php';
         </main>
         <div id="modal-busca-patrimonio" title="PESQUISA DE PATRIMONIO" style="display: none; z-index: 5000;"></div>
         <div id="dialog" title="AVISO"></div>
+        <div id="modal-entregas-regiao" title="ENTREGAS"></div>
     </body>
     
     <footer>
