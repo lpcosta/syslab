@@ -1163,7 +1163,7 @@ function pesquisaGeral(id){
 }
 
 /*PESQUISA OS*/
-/*   $('#formSearchOs').validate({
+   $('#formSearchOs').validate({
         onfocusout: false,
         onkeyup: false,
         rules:{
@@ -1187,7 +1187,7 @@ function pesquisaGeral(id){
                 });
              return false;
         }
-    });*/
+});
 /*FIM DA PESQUISA DE os*/
 
 /*CADASTRA SECRETARIA*/

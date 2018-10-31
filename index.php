@@ -141,16 +141,16 @@ require_once './app/funcoes/func.inc.php';
                     </li>
                 </ul> 
                 
-                <!--<form name="formSearchOs" id="formSearchOs" onsubmit="return false;" style="max-width: 300px !important;">
+                <form name="formSearchOs" id="formSearchOs" onsubmit="return false;" style="max-width: 300px !important;">
                      <input type="hidden" name="acao" value="os" />
-                    <label for="txtBusca">Pesquisar:</label>
-                    <input type="search" size="7" placeholder="os..." name="busca" maxlength="7" id="txtBuscaOs" required="">
+                    <label for="txtBusca">OS:</label>
+                    <input type="search" size="7" placeholder="Pesquisar..." name="busca" maxlength="7" id="txtBuscaOs" required="">
                     <button type="submit" name="btnSearch" id="btnSearch">Buscar</button>
-                </form>-->
+                </form>
                 
                 <form name="formSearch" id="formSearch" class="text-right" onsubmit="return false;" style="max-width: 300px !important;">
                     <input type="hidden" name="acao" value="patrimonio" />
-                    <input type="search" onkeydown="autoCompletar(this,'patrimonio','pesquisageral')" size="7" placeholder="os,n/s,pat" name="busca" id="txtBusca" required="">
+                    <input type="search" onkeydown="autoCompletar(this,'patrimonio','pesquisageral')" size="7" placeholder="sn,pat..." name="busca" id="txtBusca" required="">
                     <!--<button type="submit" name="btnSearch" id="btnSearch">Buscar</button>-->
                     <img src="app/imagens/icons/img-search.PNG" alt="search..." title="pesquisar" onclick="$('#formSearch').submit();"/>
                 </form>

@@ -46,30 +46,24 @@
                 google.charts.setOnLoadCallback(graficoStatus);
                 google.charts.setOnLoadCallback(graficoEquipamentos);
                 
-                /*graficos dos equipamentos*/
                 function drawChart() {
                     var data = google.visualization.arrayToDataTable([
                     ['','Tec.'],
                     <?
                     $mes = date('m');
-                    /*$dt_ini = date('Y') . "-" . "$mes" . "-01";
-                    $dt_fin = date('Y') . "-" . "$mes" . "-31";*/
                     $dt = new Datas();
                     $sql->FullRead("SELECT tecnico.nome tecnico,count(*) total FROM tb_sys010 avaliacao 
                                             JOIN tb_sys001 tecnico ON tecnico.id = avaliacao.id_tecnico_bancada 
                                         AND avaliacao.id_status != :STS AND avaliacao.data between :DTINI AND :DTFIM GROUP BY id_tecnico_bancada", "STS=3&DTINI="."{$dt->geraDatas()[0]}"."&DTFIM="."{$dt->geraDatas()[1]}"."");
                     $total = 0;
                     foreach ($sql->getResult() as $ava) {
-                        /* Essa é a maneira correta de printer os array’s pois de qualquer outra maneira não irá printar */
                         print "['" . ucwords($ava['tecnico']) . "'," . $ava['total'] . "],";
                         $total += $ava['total'];
                     }
                     ?>]);
                     var options = {
-                        /*title: 'Produtividade da Bancada ' + ' (' +<?= $total ?> + ' Avaliaçoes)',*/
                         is3D: true
                     };
-                    /*var chart = new google.visualization.ColumnChart(document.getElementById('grafico-bancada'));*/
                     var chart = new google.visualization.ColumnChart(document.getElementById('grafico-bancada'));
                     chart.draw(data, options);
                     var chart = new google.visualization.PieChart(document.getElementById('grafico-bancada-pie'));
@@ -109,6 +103,7 @@
                     ['',''],
                     <?
                     $datas = new Datas();
+                    
                     $sql->FullRead("SELECT C.descricao equipamento, COUNT(*) total
                             FROM
                                 tb_sys010 avaliacao 
@@ -119,7 +114,7 @@
                                     JOIN
                                 tb_sys003 C ON C.id = EQ.id_categoria
                             AND avaliacao.data BETWEEN :DTINI AND :DTFIM
-                            GROUP BY C.id ORDER BY C.id;", "DTINI="."{$datas->geraDatas()[0]}"."&DTFIM="."{$datas->geraDatas()[1]}"."");
+                            GROUP BY C.id ORDER BY C.id", "DTINI="."{$datas->geraDatas()[0]}"."&DTFIM="."{$datas->geraDatas()[1]}"."");
                     
                     foreach ($sql->getResult() as $ava) {
                         print "['" . ucwords($ava['equipamento']) . "'," . $ava['total'] . "],";

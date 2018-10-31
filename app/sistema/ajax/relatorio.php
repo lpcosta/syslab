@@ -745,7 +745,7 @@ switch ($acao):
                 endforeach;
         ?>
         <hr />
-        <table>
+        <table class="relatorio">
             <tr>
                 <th rowspan="5" style="width: 78px;"><img src="<?= LOGO_LORAC ?>"/></th>
             </tr>
@@ -788,14 +788,14 @@ switch ($acao):
             </tr>
             <tr>
                 <td colspan="5">            
-                    <table class="table-bordered">
+                    <table class="table-bordered relatorio">
                         <tr class="text-uppercase">
-                            <th class="text-center">Equipamento</th>
+                            <th class="text-left left">Equipamento</th>
                             <th class="text-center">Total</th>
                         </tr>
                         <?foreach ($sql->getResult() as $res):?>
                         <tr class="text-capitalize">
-                            <td class="text-center"><?=$res['equipamento']?></td>
+                            <td class="text-left left"><?=$res['equipamento']?></td>
                             <td class="text-center"><?=$res['total']?></td>
                         </tr>
                         <?endforeach;?>
@@ -817,12 +817,12 @@ switch ($acao):
                                 ORDER BY tecnico.nome;", "DTINI="."{$dtini}"."&DTFIM="."{$dtfim}"."&IDTEC={$id_tecnico}");
                     ?>
                         <tr class="text-uppercase">
-                            <th class="text-center">Status</th>
+                            <th class="text-left left">Status</th>
                             <th class="text-center">Total</th>
                         </tr>
                         <?foreach ($sql->getResult() as $res):?>
                         <tr class="text-capitalize">
-                            <td class="text-center"><?=$res['status']?></td>
+                            <td class="text-left left"><?=$res['status']?></td>
                             <td class="text-center" style="width: 200px;"><?=$res['total']?></td>
                         </tr>
                         <?endforeach;?>
@@ -830,8 +830,85 @@ switch ($acao):
                 </td>
             </tr>
         </table>
-        <?endif;?>
-      <?break;
+        <? else:
+            $sql->FullRead("SELECT tecnico.nome, COUNT(*) total
+                            FROM
+                                tb_sys001 tecnico
+                                    JOIN
+                                tb_sys010 avaliacao ON tecnico.id = avaliacao.id_tecnico_bancada
+                                    JOIN
+                                tb_sys006 IE ON IE.id = avaliacao.id_item_entrada
+                                    JOIN
+                                tb_sys004 EQ ON EQ.patrimonio = IE.patrimonio
+                                    JOIN
+                                tb_sys003 C ON C.id = EQ.id_categoria
+                                    AND avaliacao.data BETWEEN :DTINI AND :DTFIM AND avaliacao.id_status != 3
+                            GROUP BY tecnico.nome ORDER BY tecnico.nome", "DTINI="."{$dtini}"."&DTFIM="."{$dtfim}"."");
+                $total = 0;
+                foreach ($sql->getResult() as $res):
+                    $total += $res['total'];
+                endforeach;
+        ?>
+        <hr />
+            <table class="relatorio">
+                <tr>
+                    <th rowspan="5" style="width: 78px;"><img src="<?= LOGO_LORAC ?>"/></th>
+                </tr>
+                <tr>
+                    <th colspan="2" class="text-center text-uppercase"><?= PREFEITURA ?></th>
+                    <th rowspan="4" style="width: 78px;"><img src="<?= LOGO_SYSLAB ?>"/></th>
+                </tr>
+                <tr>
+                    <th colspan="2" class="text-center text-uppercase"><?= SECRETARIA ?></th>
+                </tr>
+                <tr>
+                    <th colspan="2" class="text-center text-uppercase"><?= DIRETORIA ?></th>
+                </tr>
+                <tr>
+                    <th class="text-center text-uppercase"><?= GERENCIA ?></th>
+                </tr>
+                <tr>
+                    <th colspan="4">&nbsp;</th>
+                </tr>
+                <tr>
+                    <th colspan="4" class="text-center">RELATÓRIO DE BANCADA</th>
+                </tr>
+                <tr>
+                    <td colspan="5">
+                        <table class="relatorio">
+                            <tr class="left">
+                                <td><b>Emissão</b></td>
+                                <td><?=date("d/m/Y H:i:s")?></td>
+                                <td><b>Período</b></td>
+                                <td><?=$dt_inicial.' À '.$dt_final?></td>
+                            </tr>
+                            <tr class="left">
+                                <td><b>Técnico</b></td>
+                                <td class="text-capitalize">Todos</td>
+                                <td><b>Avaliações</b></td>
+                                <td><?=$total?></td>
+                            </tr>
+                        </table>                    
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="5">            
+                        <table class="table-bordered relatorio">
+                            <tr class="text-uppercase">
+                                <th class="text-left left">Técnicos</th>
+                                <th class="text-center">Total</th>
+                            </tr>
+                            <?foreach ($sql->getResult() as $res):?>
+                            <tr class="text-capitalize">
+                                <td class="text-left left"><?=$res['nome']?></td>
+                                <td class="text-center"><?=$res['total']?></td>
+                            </tr>
+                            <?endforeach;?>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        <?endif;break;
     default :
         print "<h1>ERRO! parametro que especifica o tipo de relatório nao passado!</h1>";
 endswitch;
