@@ -5,36 +5,46 @@ require_once '../../config/post.inc.php';
 
 $sql        = new Read();
 $cria       = new Create();
-$texto      = new Check();
+$check      = new Check();
+foreach ($post as $key => $value):
+    $post[$key]=$check->setTexto($value);
+endforeach;
 
 $sql->FullRead("SELECT id_status FROM tb_sys005 WHERE id_tecnico = :TEC AND identrada = :ID", "TEC={$tecnico}&ID={$entrada}");
 
-    if($sql->getResult()[0]['id_status']==1 && !empty($txtPatrimonio)):
+    if($sql->getResult()[0]['id_status']==1 && !empty($patrimonio)):
         
-        $sql->FullRead("SELECT patrimonio FROM tb_sys004 WHERE patrimonio = :PAT", "PAT="."{$txtPatrimonio}"."");
+        $sql->FullRead("SELECT patrimonio FROM tb_sys004 WHERE patrimonio = :PAT", "PAT="."{$post['patrimonio']}"."");
         
         if($sql->getRowCount() != 0):
             
-            $sql->FullRead("SELECT * FROM tb_sys006 WHERE patrimonio = :PAT AND status != :STS", "PAT="."{$txtPatrimonio}"."&STS=3");
+            $sql->FullRead("SELECT * FROM tb_sys006 WHERE patrimonio = :PAT AND status != :STS", "PAT="."{$post['patrimonio']}"."&STS=3");
             
             if($sql->getRowCount() != 0):
                print intval(1);
                $itens = NULL;
             else:
-                if($txtOs != 10):
-                    $sql->FullRead("SELECT id FROM tb_sys006 WHERE os_sti = :OS AND status != :STS", "OS={$txtOs}&STS=3");
+                if($os_sti != 10):
+                    $sql->FullRead("SELECT id FROM tb_sys006 WHERE os_sti = :OS AND status != :STS", "OS={$post['os_sti']}&STS=3");
                     if($sql->getRowCount() == 0):
                         $cria->ExeCreate("tb_sys006", ["id_entrada"=>$entrada,
-                                                       "patrimonio"=>$texto->setTexto($txtPatrimonio),
-                                                       "motivo"=>$texto->setTexto($txtMotivo),
-                                                       "os_sti"=>$texto->setTexto($txtOs),
-                                                       "observacao"=>$texto->setTexto($txtObservacoes),
+                                                       "patrimonio"=>$post['patrimonio'],
+                                                       "motivo"=>$post['motivo'],
+                                                       "os_sti"=>$post['os_sti'],
+                                                       "observacao"=>$post['observacao'],
                                                        "status"=>1,
-                                                       "checklist"=>$texto->setTexto($txtChecklist),
-                                                       "local_uso"=>$local_uso
+                                                       "checklist"=>$post['checklist'],
+                                                       "local_uso"=>$post['local_uso']
                                                       ]);
                         if($cria->getResult()):
                             $itens = true;
+                            $check->setAtualizaCadastroEquipamento("{$post['patrimonio']}",["id_local"      => $post['id_local'],
+                                                                                            "andar"         => $post['andar'],
+                                                                                            "sala"          => $post['sala'],
+                                                                                            "id_categoria"  => $post['id_categoria'],
+                                                                                            "fabricante"    => $post['fabricante'],
+                                                                                            "modelo"        => $post['modelo']
+                                                                                            ]);
                         else:
                             print $cria->getError();
                         endif;
@@ -44,15 +54,22 @@ $sql->FullRead("SELECT id_status FROM tb_sys005 WHERE id_tecnico = :TEC AND iden
                     endif;
                 else:
                     $cria->ExeCreate("tb_sys006", ["id_entrada"=>$entrada,
-                                                       "patrimonio"=>$texto->setTexto($txtPatrimonio),
-                                                       "motivo"=>$texto->setTexto($txtMotivo),
-                                                       "os_sti"=>$texto->setTexto($txtOs),
-                                                       "observacao"=>$texto->setTexto($txtObservacoes),
+                                                       "patrimonio"=>$post['patrimonio'],
+                                                       "motivo"=>$post['motivo'],
+                                                       "os_sti"=>$post['os_sti'],
+                                                       "observacao"=>$post['observacao'],
                                                        "status"=>1,
-                                                       "checklist"=>$texto->setTexto($txtChecklist),
+                                                       "checklist"=>$post['checklist'],
                                                       ]);
                         if($cria->getResult()):
                             $itens = true;
+                            $check->setAtualizaCadastroEquipamento("{$post['patrimonio']}",["id_local"      => $post['id_local'],
+                                                                                            "andar"         => $post['andar'],
+                                                                                            "sala"          => $post['sala'],
+                                                                                            "id_categoria"  => $post['id_categoria'],
+                                                                                            "fabricante"    => $post['fabricante'],
+                                                                                            "modelo"        => $post['modelo']
+                                                                                            ]);
                         else:
                             print $cria->getError();
                         endif;

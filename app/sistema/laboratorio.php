@@ -79,7 +79,7 @@ $pendentes = new Read();
                     endif;?>   
                     <td class="text-left"><?= $rowEquipamento['equipamento'] . ' ' . $rowEquipamento['fabricante'] . ' ' . $rowEquipamento['modelo'] ?></td>
                     <td class="text-center"><?= $rowEquipamento['os'] ?></td>
-                    <td class="text-center cursor-pointer" onclick="mostraModal(<?= $rowEquipamento['patrimonio'] ?>)"><?= $rowEquipamento['patrimonio'] ?></td>
+                    <td class="text-center cursor-pointer" onclick="mostraModal('<?=$rowEquipamento['patrimonio'] ?>')"><?= $rowEquipamento['patrimonio'] ?></td>
                     <td class="text-center"><?= date('d/m/Y', strtotime($rowEquipamento['data']));?></td>
                     <?php if($res['id']==4):
                     print "<td class=\"text-center\">" . date('d/m/Y', strtotime($rowEquipamento['dt_last_update']))."</td>";

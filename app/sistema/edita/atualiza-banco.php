@@ -4,24 +4,21 @@
   $atu = new Update();
   
   
-  /*atualizar os preços de referencia de acordo com o ultimo resgistrado*/
-  /*
-  $sql->ExeRead("tb_sys020");
-  foreach ($sql->getResult() as $res):
-      $atu->ExeUpdate("tb_sys015", ["preco_refencia"=>$res['preco_peca']], "WHERE id_peca = :ID", "ID={$res['peca_id']}");
-      if($atu->getResult()):
-           print "Peça ".$res['peca_id']." Atualizada !</br />";
-      else:
-          print $atu->getError();
-      endif;
-  endforeach;
-*/
-function random_color() {
-    $letters = '0123456789ABCDEF';
-    for($i = 0; $i < 6; $i++) {
-        $index = rand(0,15);
-       $letters[$i] = $index;
+    function setAtualiza(array $entrada ){
+        $sql = new Read();
+        $atu = new Update();
+        $sql->FullRead("SELECT id,id_local,andar,sala,id_categoria ,fabricante,modelo,ip FROM tb_sys004 WHERE patrimonio = :PAT", "PAT=360609");
+        if($sql->getResult()):
+                if($sql->getResult()[0]['id_categoria'] != $entrada['id_categoria']):
+                    print "as categorias são diferente";
+                endif;
+        endif;
     }
-    return substr($letters, 0, 6); // abcd$letters;
-}
-print $cor = random_color();
+    
+    $dados =[  "fabricante"=>4,
+                "modelo"=>25,
+                "id_categoria"=>1,
+                "id_local"=>2
+            ];
+    
+    setAtualiza($dados);

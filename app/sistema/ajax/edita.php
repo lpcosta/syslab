@@ -73,6 +73,49 @@ switch ($acao):
             print "<code>".$atu->getError()."</code>";
         endif;
         break;
+    case 'processador':
+        unset($post['id']); unset($post['acao']);
+        $atu->ExeUpdate("tb_sys028", $post, "WHERE id = :ID", "ID={$id}");
+        if($atu->getResult()):
+            print "<span class='alert alert-success' role='alert'>Atualização Realizada!</span>";
+        else:
+            print "<code>".$atu->getError()."</code>";
+        endif;
+        break;
+    case 'windows':
+        unset($post['id']); unset($post['acao']);
+        $atu->ExeUpdate("tb_sys025", $post, "WHERE id_so = :ID", "ID={$id}");
+        if($atu->getResult()):
+            print "<span class='alert alert-success' role='alert'>Atualização Realizada!</span>";
+        else:
+            print "<code>".$atu->getError()."</code>";
+        endif;
+        break;
+    case 'office':
+        unset($post['id']); unset($post['acao']);
+        $atu->ExeUpdate("tb_sys026", $post, "WHERE id_office = :ID", "ID={$id}");
+        if($atu->getResult()):
+            print "<span class='alert alert-success' role='alert'>Atualização Realizada!</span>";
+        else:
+            print "<code>".$atu->getError()."</code>";
+        endif;
+        break;
+    case 'password':
+        unset($post['login']); unset($post['acao']);
+        $senha = new Senha();
+        $sql->FullRead("SELECT id FROM tb_sys001 WHERE login = :LGN AND senha = :PASS", "LGN=".$login."&PASS=".$senha->setSenha($pass_atu)."");
+        if($sql->getResult()):
+            $senha = $senha->setSenha($novo_pass);
+            $atu->ExeUpdate("tb_sys001", ["senha"=>$senha], "WHERE login = :LGN", "LGN={$login}");
+            if($atu->getResult()):
+                print "<span class='alert alert-success' role='alert'>Senha Redefinida!</span>";
+            else:
+                print "<code>".$atu->getError()."</code>";
+            endif;
+        else:
+             print "<span class='alert alert-warning'>Senha atual Informada Não confere!</span>";
+        endif;
+        break;
     default :
         print "<h1>Erro desconhecido! <code>acao default da condição de pesquisa</code></h1>";
 endswitch;

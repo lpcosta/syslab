@@ -199,6 +199,7 @@ $sql->ExeRead("tb_sys004 WHERE id = {$id}");
                 <option selected="" value="<?=$sql->getResult()[0]['hd']?>"><?=$sql->getResult()[0]['hd']?></option>
                 <option value="80gb">80GB</option>
                 <option value="160gb">160GB</option>
+                <option value="250gb">250GB</option>
                 <option value="320gb">320GB</option>
                 <option value="480gb">480GB</option>
                 <option value="500gb">500GB</option>

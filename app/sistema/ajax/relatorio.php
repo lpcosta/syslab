@@ -571,6 +571,267 @@ switch ($acao):
         <h1 class="text-center text-capitalize text-danger">nenhum registro encontrado!</h1>    
         <?endif;?>
        <?break;
+    case 'entrada-peca':
+        unset($post['acao']);
+        $dtini  = $dt->setDt($post['dt_inicial']);
+        $dtfim  = $dt->setDt($post['dt_final']);
+        $sql->FullRead("SELECT P.descricao_peca peca,P.id_peca,R.peca_serie serie,
+                        R.responsavel,R.preco_peca preco,R.observacao,
+                        sum(R.quantidade) quantidade,R.dt_recebimento data,
+                        F.nome_fornecedor fornecedor
+                    FROM
+                        tb_sys020 R JOIN
+                        tb_sys015 P ON P.id_peca = R.peca_id JOIN
+                        tb_sys019 F ON F.id_fornecedor = R.fornecedor_id
+                    AND R.dt_recebimento between :DTINI AND :DTFIM GROUP BY P.id_peca ORDER BY R.dt_recebimento DESC", "DTINI="."{$dtini}"."&DTFIM="."{$dtfim}"."");
+        ?>
+        <table>
+            <tr>
+                <th rowspan="5" style="width: 78px;"><img src="<?= LOGO_LORAC ?>"/></th>
+            </tr>
+            <tr>
+                <th colspan="2" class="text-center text-uppercase"><?= PREFEITURA ?></th>
+                <th rowspan="4" style="width: 78px;"><img src="<?= LOGO_SYSLAB ?>"/></th>
+            </tr>
+            <tr>
+                <th colspan="2" class="text-center text-uppercase"><?= SECRETARIA ?></th>
+            </tr>
+            <tr>
+                <th colspan="2" class="text-center text-uppercase"><?= DIRETORIA ?></th>
+            </tr>
+            <tr>
+                <th class="text-center text-uppercase"><?= GERENCIA ?></th>
+            </tr>
+            <tr>
+                <th colspan="4">&nbsp;</th>
+            </tr>
+            <tr>
+                <th colspan="4" class="text-center">RELATÓRIO DE RECEBIMENTO DE PEÇA</th>
+            </tr>
+            <tr>
+                <th>Período</th>
+                <td colspan="3"><?=$dt_inicial.' À '.$dt_final?></td>
+            </tr>
+            <tr>
+                <td colspan="4">&nbsp;</td>
+            </tr>
+            <tr>
+                <td colspan="5">            
+                    <table class="table-bordered">
+                        <tr class="text-uppercase">
+                            <th class="text-center">código</th>
+                            <th class="text-left">peça</th>
+                            <th class="text-center">preço</th>
+                            <th class="text-center">qtde.</th>
+                            <th class="text-left">fornecedor</th>
+                            <th class="text-center">data</th>
+                            <th class="text-center">série</th>
+                        </tr>
+                        <? foreach ($sql->getResult() as $res):?>
+                        <tr>
+                            <td class="text-center"><?=$res['id_peca']?></td>
+                            <td class="text-capitalize"><?=$res['peca']?></td>
+                            <td class="text-center">R$ <?=str_replace(".",",",$res['preco'])?></td>
+                            <td class="text-center"><?=$res['quantidade']?></td>
+                            <td class="text-capitalize"><?=$res['fornecedor']?></td>
+                            <td><?=date("d/m/Y",strtotime($res['data']))?></td>
+                            <td class="text-center text-uppercase"><?=$res['serie']?></td>
+                        </tr>
+                        <? endforeach;?>
+                    </table>
+                </td>
+            </tr>
+        </table>
+        <?break;
+    case 'saida-peca':
+        unset($post['acao']);
+        $dtini  = $dt->setDt($post['dt_inicial']);
+        $dtfim  = $dt->setDt($post['dt_final']);
+        if(isset($resumo)):
+            $sql->FullRead("SELECT B.dt_baixa,B.ordem_servico os,B.peca_id,P.descricao_peca peca,count(peca_id) quantidade
+                            FROM tb_sys015 P 
+                            JOIN tb_sys016 B ON B.peca_id = P.id_peca
+                        AND B.dt_baixa between :DTINI and :DTFIM GROUP BY B.peca_id", "DTINI="."{$dtini}"."&DTFIM="."{$dtfim}"."");
+        else:
+            $sql->FullRead("SELECT B.dt_baixa,B.ordem_servico os,B.peca_id,P.descricao_peca peca
+                            FROM tb_sys015 P 
+                            JOIN tb_sys016 B ON B.peca_id = P.id_peca
+                        AND B.dt_baixa between :DTINI and :DTFIM", "DTINI="."{$dtini}"."&DTFIM="."{$dtfim}"."");                    
+        endif;
+        ?>
+        <table>
+            <tr>
+                <th rowspan="5" style="width: 78px;"><img src="<?= LOGO_LORAC ?>"/></th>
+            </tr>
+            <tr>
+                <th colspan="2" class="text-center text-uppercase"><?= PREFEITURA ?></th>
+                <th rowspan="4" style="width: 78px;"><img src="<?= LOGO_SYSLAB ?>"/></th>
+            </tr>
+            <tr>
+                <th colspan="2" class="text-center text-uppercase"><?= SECRETARIA ?></th>
+            </tr>
+            <tr>
+                <th colspan="2" class="text-center text-uppercase"><?= DIRETORIA ?></th>
+            </tr>
+            <tr>
+                <th class="text-center text-uppercase"><?= GERENCIA ?></th>
+            </tr>
+            <tr>
+                <th colspan="4">&nbsp;</th>
+            </tr>
+            <tr>
+                <th colspan="4" class="text-center">RELATÓRIO DE SAÍDA DE PEÇA</th>
+            </tr>
+            <tr>
+                <th>Período</th>
+                <td colspan="3"><?=$dt_inicial.' À '.$dt_final?></td>
+            </tr>
+            <tr>
+                <td colspan="4">&nbsp;</td>
+            </tr>
+            <tr>
+                <td colspan="5">            
+                    <table class="table-bordered">
+                        <tr class="text-uppercase">
+                            <th class="text-center">código</th>
+                            <th class="text-left">peça</th>
+                        <?if(isset($resumo)):?>
+                            <th class="text-center">Quantidade</th>
+                        <?else:?>
+                            <th class="text-center">os</th>
+                            <th class="text-center">dt.saida</th>
+                        <?endif;?>
+                        </tr>
+                        <? foreach ($sql->getResult() as $res):?>
+                        <tr>
+                            <td class="text-center"><?=$res['peca_id']?></td>
+                            <td class="text-capitalize"><?=$res['peca']?></td>
+                         <?if(isset($resumo)):?>
+                            <td class="text-center"><?=$res['quantidade']?></td>
+                         <?else:?>
+                            <td class="text-center"><?=$res['os']?></td>
+                            <td class="text-center"><?=date("d/m/Y",strtotime($res['dt_baixa']))?></td>
+                        <?endif;?>
+                        </tr>
+                        <? endforeach;?>
+                    </table>
+                </td>
+            </tr>
+        </table>
+        <?break;
+    case 'bancada':
+        unset($post['acao']);
+        $dtini  = $dt->setDt($post['dt_inicial']);
+        $dtfim  = $dt->setDt($post['dt_final']);
+        if(intval($id_tecnico)):
+            $sql->FullRead("SELECT tecnico.nome, C.descricao equipamento, COUNT(*) total
+                            FROM
+                                tb_sys001 tecnico
+                                    JOIN
+                                tb_sys010 avaliacao ON tecnico.id = avaliacao.id_tecnico_bancada
+                                    JOIN
+                                tb_sys006 IE ON IE.id = avaliacao.id_item_entrada
+                                    JOIN
+                                tb_sys004 EQ ON EQ.patrimonio = IE.patrimonio
+                                    JOIN
+                                tb_sys003 C ON C.id = EQ.id_categoria
+                                    AND avaliacao.data BETWEEN :DTINI AND :DTFIM
+                                    AND tecnico.id = :IDTEC
+                            GROUP BY C.id ORDER BY tecnico.nome", "DTINI="."{$dtini}"."&DTFIM="."{$dtfim}"."&IDTEC={$id_tecnico}");
+                $tecnico = $sql->getResult()[0]['nome'];
+                $total = 0;
+                foreach ($sql->getResult() as $res):
+                    $total += $res['total'];
+                endforeach;
+        ?>
+        <hr />
+        <table>
+            <tr>
+                <th rowspan="5" style="width: 78px;"><img src="<?= LOGO_LORAC ?>"/></th>
+            </tr>
+            <tr>
+                <th colspan="2" class="text-center text-uppercase"><?= PREFEITURA ?></th>
+                <th rowspan="4" style="width: 78px;"><img src="<?= LOGO_SYSLAB ?>"/></th>
+            </tr>
+            <tr>
+                <th colspan="2" class="text-center text-uppercase"><?= SECRETARIA ?></th>
+            </tr>
+            <tr>
+                <th colspan="2" class="text-center text-uppercase"><?= DIRETORIA ?></th>
+            </tr>
+            <tr>
+                <th class="text-center text-uppercase"><?= GERENCIA ?></th>
+            </tr>
+            <tr>
+                <th colspan="4">&nbsp;</th>
+            </tr>
+            <tr>
+                <th colspan="4" class="text-center">RELATÓRIO DE BANCADA</th>
+            </tr>
+            <tr>
+                <td colspan="5">
+                    <table class="relatorio">
+                        <tr class="left">
+                            <td><b>Emissão</b></td>
+                            <td><?=date("d/m/Y H:i:s")?></td>
+                            <td><b>Período</b></td>
+                            <td><?=$dt_inicial.' À '.$dt_final?></td>
+                        </tr>
+                        <tr class="left">
+                            <td><b>Técnico</b></td>
+                            <td class="text-capitalize"><?=$tecnico?></td>
+                            <td><b>Avaliações</b></td>
+                            <td><?=$total?></td>
+                        </tr>
+                    </table>                    
+                </td>
+            </tr>
+            <tr>
+                <td colspan="5">            
+                    <table class="table-bordered">
+                        <tr class="text-uppercase">
+                            <th class="text-center">Equipamento</th>
+                            <th class="text-center">Total</th>
+                        </tr>
+                        <?foreach ($sql->getResult() as $res):?>
+                        <tr class="text-capitalize">
+                            <td class="text-center"><?=$res['equipamento']?></td>
+                            <td class="text-center"><?=$res['total']?></td>
+                        </tr>
+                        <?endforeach;?>
+                    <?$sql->FullRead("SELECT 
+                                    tecnico.nome, S.descricao status, COUNT(*) total
+                                FROM
+                                    tb_sys001 tecnico
+                                        JOIN
+                                    tb_sys010 avaliacao ON tecnico.id = avaliacao.id_tecnico_bancada
+                                        JOIN
+                                    tb_sys006 IE ON IE.id = avaliacao.id_item_entrada
+                                        JOIN
+                                    tb_sys004 EQ ON EQ.patrimonio = IE.patrimonio
+                                        JOIN
+                                    tb_sys002 S ON S.id = avaliacao.id_status
+                                        AND avaliacao.data BETWEEN :DTINI AND :DTFIM
+                                        AND tecnico.id = :IDTEC
+                                GROUP BY S.id
+                                ORDER BY tecnico.nome;", "DTINI="."{$dtini}"."&DTFIM="."{$dtfim}"."&IDTEC={$id_tecnico}");
+                    ?>
+                        <tr class="text-uppercase">
+                            <th class="text-center">Status</th>
+                            <th class="text-center">Total</th>
+                        </tr>
+                        <?foreach ($sql->getResult() as $res):?>
+                        <tr class="text-capitalize">
+                            <td class="text-center"><?=$res['status']?></td>
+                            <td class="text-center" style="width: 200px;"><?=$res['total']?></td>
+                        </tr>
+                        <?endforeach;?>
+                    </table>
+                </td>
+            </tr>
+        </table>
+        <?endif;?>
+      <?break;
     default :
         print "<h1>ERRO! parametro que especifica o tipo de relatório nao passado!</h1>";
 endswitch;

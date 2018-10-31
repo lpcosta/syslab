@@ -1,6 +1,6 @@
 <?php
    paginaSegura();
-    if(GRUPO != 4):
+    if(GRUPO < 3):
        header("Location:".HOME."");
        exit();
    endif;
@@ -49,11 +49,13 @@
                 <div class="col-md form-inline">
                     <label><b>Geração</b></label>
                     <input type="text" name="geracao" class="form-control text-uppercase editable-<?=$i?>" disabled="" value="<?=$proc['geracao']?>" style="width: 80px;"/>
+                <?if(GRUPO == 4):?>
                     &nbsp;
                     <button type="button" class="btn btn-primary btn-edita-proc-<?=$i?>" onclick="liberaEdicaoProcessador(<?=$i?>)">Editar</button>
                     <button type="button" class="btn btn-primary btn-salva-proc-<?=$i?>" onclick="editaProcessador(<?=$i?>);" style="display:none;">Salvar</button>
                     &nbsp;&nbsp;
                     <button type="button" class="btn btn-primary btn-deleta-proc-<?=$i?>" onclick="">Excluir</button>
+                <?endif;?>
                 </div>
             </div>
         </form>

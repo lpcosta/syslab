@@ -131,5 +131,23 @@ class Check {
             return false;
         endif;
     }
-
+    
+    public function setAtualizaCadastroEquipamento($patrimonio,array $entrada ){
+        $sql = new Read();$atu = new Update();
+        $sql->FullRead("SELECT id,id_local,andar,sala,id_categoria,fabricante,modelo FROM tb_sys004 WHERE patrimonio = :PAT", "PAT="."{$patrimonio}"."");
+        if($sql->getResult()){
+            if($sql->getResult()[0]['id_categoria'] != $entrada['id_categoria'])
+            {$atu->ExeUpdate("tb_sys004", ["id_categoria"=>$entrada['id_categoria']], "WHERE id = :ID", "ID={$sql->getResult()[0]['id']}");}
+            if($sql->getResult()[0]['id_local'] != $entrada['id_local'])
+            {$atu->ExeUpdate("tb_sys004", ["id_local"=>$entrada['id_local']], "WHERE id = :ID", "ID={$sql->getResult()[0]['id']}");}
+            if($sql->getResult()[0]['andar'] != $entrada['andar'])
+            {$atu->ExeUpdate("tb_sys004", ["andar"=>$entrada['andar']], "WHERE id = :ID", "ID={$sql->getResult()[0]['id']}");}
+            if($sql->getResult()[0]['sala'] != $entrada['sala'])
+            {$atu->ExeUpdate("tb_sys004", ["sala"=>$entrada['sala']], "WHERE id = :ID", "ID={$sql->getResult()[0]['id']}");}
+            if($sql->getResult()[0]['fabricante'] != $entrada['fabricante'])
+            {$atu->ExeUpdate("tb_sys004", ["fabricante"=>$entrada['fabricante']], "WHERE id = :ID", "ID={$sql->getResult()[0]['id']}");}
+            if($sql->getResult()[0]['modelo'] != $entrada['modelo'])
+            {$atu->ExeUpdate("tb_sys004", ["modelo"=>$entrada['modelo']], "WHERE id = :ID", "ID={$sql->getResult()[0]['id']}");}
+        }
+    }
 }

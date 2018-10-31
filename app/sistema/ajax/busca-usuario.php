@@ -82,8 +82,11 @@ $sql->ExeRead("tb_sys001 WHERE id = {$id}");
             <label>Tipo</label>
             <select  name="tipo" class="text-capitalize editable" disabled="">
                 <option selected value="<?=$sql->getResult()[0]['tipo']?>"><?=$sql->getResult()[0]['tipo']?></option>                        
-                 <option value="técnico">Técnico</option>
-                 <option value="usuario">Usuario</option>
+                 <option value="usuario">Usuário</option>
+                 <option value="bancada">Bancada</option>
+                 <option value="interno">Interno</option>
+                 <option value="externo">Externo</option>
+                 <option value="remoto">Remoto</option>
             </select>
         </div>
     </div>

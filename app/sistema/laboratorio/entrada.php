@@ -43,56 +43,73 @@ $sql = new Read();
             <div class="row">
                 <div class="col form-inline">
                     <label>O.S</label>
-                    <input type="text" id="txtOs" name="txtOs" onkeydown="if(event.keyCode === 13){$('#txtPatrimonio').focus()}"/>
+                    <input type="text" id="txtOs" name="os_sti" onkeydown="if(event.keyCode === 13){$('#txtPatrimonio').focus()}"/>
                 </div>
                 <div class="col form-inline">
                     <label>Patrimônio</label>
-                    <input type="text" id="txtPatrimonio" name="txtPatrimonio" maxlength="7" onblur="checaCadastroPatrimonio(this.value)" onkeydown="if(event.keyCode === 13){$('#txtMotivo').focus()}"/>
+                    <input type="text" id="txtPatrimonio" name="patrimonio" maxlength="7" onblur="checaCadastroPatrimonio(this.value)" onkeydown="if(event.keyCode === 13){$('#txtMotivo').focus()}"/>
                 </div>
             </div>
             <div class="row">
                 <div class="col form-inline">
                     <label>Equipamento</label>
-                    <input type="text" class="text-capitalize" id="txtEquipamento"/>
+                    <select class="text-capitalize" id="txtEquipamento" name="id_categoria" style="max-width: 200px;">
+                        <?php $sql->ExeRead("tb_sys003"); ?>
+                        <option selected value="">Selecione...</option>
+                        <?php foreach ($sql->getResult() as $res):
+                            print "<option value=".$res['id'].">".ucfirst($res['descricao'])."</option>";
+                        endforeach;
+                        ?>
+                    </select>
                 </div>
                 <div class="col form-inline">
-                   <label>modelo</label>
-                   <select id="txtModelo" class="text-capitalize">
-                       <option selected value="" class="cmbv_modelos">Selecione</option>
-                   </select>
+                    <label>Fabricante</label>
+                    <select class="text-capitalize" id="txtFabricante" name="fabricante" onchange="getModelos(this.value);" onblur="getModelos(this.value);" style="max-width: 203px;">
+                        <?php $sql->FullRead("SELECT FAB.id_fabricante,FAB.nome_fabricante FROM tb_sys022 MDL JOIN tb_sys018 FAB ON FAB.id_fabricante = MDL.fabricante_id GROUP BY FAB.id_fabricante ORDER BY FAB.nome_fabricante"); ?>
+                        <option selected value="">Selecione...</option>
+                        <?php foreach ($sql->getResult() as $res):
+                            print "<option value=".$res['id_fabricante'].">".ucfirst($res['nome_fabricante'])."</option>";
+                        endforeach;
+                        ?>
+                    </select>
                 </div>
             </div>
             <div class="row">
                <div class="col form-inline">
-                    <label>Fabricante</label>
-                    <input type="text" id="txtFabricante" class="text-capitalize"/>
+                   <label>modelo</label>
+                   <select id="txtModelo" name="modelo" class="text-capitalize" style="max-width: 250px;">
+                       <option selected value="" class="cmbv_modelos">Selecione</option>
+                   </select>
                 </div>
                 <div class="col form-inline">
                     <label>Checklist</label>
-                    <input type="text" id="txtChecklist" name="txtChecklist" />
+                    <input type="text" id="txtChecklist" name="checklist" />
                 </div>
 
             </div>
             <div class="row">
                 <div class="col form-inline">
                    <label>Localidade</label>
-                   <input type="text" id="txtCr" style="width: 20px;" />-<input type="text" id="txtLocalidade" class="text-capitalize" style="min-width: 550px;" />
+                   <input type="text" id="txtCr" onblur="setaLocalidade(this.value,true);" style="width: 20px;" />-<select id="txtLocalidade" name="id_local" onkeydown="if (event.keyCode === 13){$('#txtAndar').focus();}" class="text-capitalize" style="width: calc(100% - 300px);">
+                        <option selected value="" class="localidade">Selecione...</option>                        
+                        <?$sql->FullRead("SELECT id,local FROM tb_sys008 ORDER BY local");
+                        foreach($sql->getResult() as $res):
+                            print "<option value=".$res['id'].">".$res['local']."</option>";
+                        endforeach;
+                        ?>
+                    </select>
                 </div>
-            </div>
-            <div class="row">
                 <div class="col form-inline">
-                   <label>Andar</label>
-                   <input type="text" id="txtAndar" size="5" maxlength="10" class="text-capitalize" onkeydown="if(event.keyCode === 13){$('#txtSala').focus();}" placeholder="Andar..." style="margin-right: 10px;"/>
-                </div>
-                <div class="col form-inline">
-                    <label>Sala</label>
-                    <input type="text" id="txtSala" size="15" maxlength="20" class="text-capitalize" onkeydown="if(event.keyCode === 13){$('#txtMotivo').focus();}" placeholder="Sala..." />
+                    <label>Andar</label>
+                    <input type="text" id="txtAndar" name="andar" size="5" maxlength="10" class="text-capitalize" onkeydown="if(event.keyCode === 13){$('#txtSala').focus();}" placeholder="Andar..." style="margin-right: 10px;"/>
+                    <label style="width: 50px;">Sala</label>
+                    <input type="text" id="txtSala" name="sala" size="15" maxlength="20" class="text-capitalize" onkeydown="if(event.keyCode === 13){$('#txtMotivo').focus();}" placeholder="Sala..." />
                 </div>
             </div>
             <div class="row">
                 <div class="col form-inline">
                     <label>Motivo</label>
-                    <select id="txtMotivo" name="txtMotivo" class="text-capitalize" onkeydown="if (event.keyCode === 13){$('#txtObservacoes').focus();}" style="width: 300px;">
+                    <select id="txtMotivo" name="motivo" class="text-capitalize" onkeydown="if (event.keyCode === 13){$('#txtObservacoes').focus();}" style="width: 300px;">
                         <option selected value="">Selecione</option>  
                         <optgroup label="Motivos Gerais">
                             <?$sql->FullRead("SELECT motivo FROM tb_sys017 WHERE categoria = :CAT ORDER BY motivo", "CAT=0");
@@ -138,7 +155,7 @@ $sql = new Read();
             <div class="row">
                 <div class="col form-inline">
                     <label for="txtObservacoes">Observações</label>
-                    <textarea id="txtObservacoes" name="txtObservacoes" wrap="hard"></textarea>
+                    <textarea id="txtObservacoes" name="observacao" wrap="hard"></textarea>
                 </div>
 
                 <div class="col btn-entrada">

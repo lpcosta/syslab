@@ -1,10 +1,10 @@
 /* by Leandro Pereira*/
-
 $( ".tabs" ).tabs({
       /*show: { 
           effect: "blind", duration: 5
       }*/
    });
+
 /*######### autocomplete ##################*/  
 function autoCompletar(obj,target,fnc){
     $('#'+obj.id).autocomplete({
@@ -354,6 +354,34 @@ function fctLogin()
           }
       });
 }/*FIM LOGIN*/
+
+$('#form-reset-senha').validate({
+    rules:{
+        pass_atu        :{required:true,minlength: 8},
+        novo_pass       :{required:true,minlength:8},
+        conf_novo_pass  :{required:true,minlength:8}
+    },
+    submitHandler: function(){
+        if($.trim($('#txtPassNew').val()) != $.trim($('#txtConfPassNew').val()))
+        {
+             modal('Senhas Não Conferem!');
+        }else{
+            var dados = $(".reset-senha").serialize();
+            $.ajax({
+                type: "POST",
+                url: "./app/sistema/ajax/edita.php",
+                data: dados,
+                dataType:'HTML',
+                success: function(res)
+                {
+                   modal(res);
+                }
+            });
+        }
+    }
+});          
+
+
 $(".data").datepicker({
     defaultDate: "getDate()",
     dateFormat: 'dd/mm/yy',
@@ -411,11 +439,15 @@ function verificaEntrada(t){
 function validaItemEntrada(t,e){
     $('#iten-entrada').validate({
         rules:{
-            txtOs           :{required:true,number:true},
-            txtPatrimonio   :{required:true,minlength:6,maxlength:7},
-            txtMotivo       :{required:true},
-            local_uso       :{required:true},
-            txtObservacoes  :{required:true, minWords: 5}
+            os_sti       :{required:true,number:true},
+            patrimonio   :{required:true,minlength:6,maxlength:7},
+            id_categoria :{required:true},
+            fabricante   :{required:true},
+            modelo       :{required:true},
+            id_local     :{required:true},
+            motivo       :{required:true},
+            local_uso    :{required:true},
+            observacao   :{required:true, minWords: 5}
         },
         submitHandler: function(){
            adicionaItemEntrada(t,e);
@@ -635,15 +667,16 @@ function setaPeca(peca,qtde=null)
                 var d = new Date().getTime();
                 $.post('./app/sistema/ajax/busca-cod-peca.php',
                 {peca:peca}, function (res){
-                   if(res){
+                   
                     var dados = res.split(',');
-                    $("div.div-qtde").remove();$("#txtPecaSerie").attr({'value':d,'readonly':true});
-                    $("#txtObservacao").before("<div class='col-md form-inline div-qtde'><label>Quantidade </label><input type='text'  name='qtde' class='form-control' onblur='$('#txtQtde').attr('value',this.value)' /></div>" );
-                    $('#txtPreco').val(dados[1]);
-                    }
-                    else{$("div.div-qtde").remove();$("#txtPecaSerie").attr({'value':'','readonly':false});}
+                    if(dados[2]=='0'){
+                        $("div.div-qtde").remove();$("#txtPecaSerie").attr({'value':d,'readonly':true});
+                        $("#txtObservacao").before("<div class='col-md form-inline div-qtde'><label>Quantidade </label><input type='text'  name='qtde' class='form-control' onblur='$('#txtQtde').attr('value',this.value)' /></div>" );
+                        }else{
+                            $("div.div-qtde").remove();$("#txtPecaSerie").attr({'value':'','readonly':false});
+                        }
+                        $('#txtPreco').val(dados[1]);
                     });
-                    
                 }
             $('#txtCodPeca').val(peca);
             $('#txtPeca').val(peca);
@@ -692,6 +725,8 @@ function validaRelatorio(t,idfrm){
            $('.gera-excel').show();
            geraRelatorio(idfrm);
        };
+    }else if(t=='bancada'){
+        geraRelatorio(idfrm);
     }else{
         switch($('#tipoRel').val()){
             case 'codigo':
@@ -754,24 +789,22 @@ function checaCadastroPatrimonio(p)
 {
     if($.trim(p)!=''){
         $.post('./app/sistema/ajax/checa-cadastro-patrimonio.php',
-                {
-                    patrimonio: p
-                }, function (res)
+                {patrimonio: p}, function (res)
         {
             if (!$.isNumeric(res))
             {
                 dados = res.split(',');
+                var loc = ['30','31','32','33'];
+                if($.inArray(dados[1], loc)=='0'){dados[1]='';}
+                $('#txtEquipamento').val(dados[0]);
+                $('#txtFabricante').val(dados[3]);
+                $('#txtLocalidade').val(dados[1]);
+                $('#txtCr').val(dados[2]);
+                $('#txtAndar').val(dados[6]);
+                $('#txtSala').val(dados[7]);
 
-                $('#txtEquipamento').val(dados[0]).attr('readonly',true).css({'background-color':'#EBEBE4'});
-                $('#txtLocalidade').val(dados[2]).attr('readonly',true).css({'background-color':'#EBEBE4'});
-                $('#txtFabricante').val(dados[5]).attr('readonly',true).css({'background-color':'#EBEBE4'});
-                $('#txtCr').val(dados[4]).attr('readonly',true).css({'background-color':'#EBEBE4'});
-                $('#txtAndar').val(dados[10]).attr('readonly',true).css({'background-color':'#EBEBE4'});
-                $('#txtSala').val(dados[11]).attr('readonly',true).css({'background-color':'#EBEBE4'});
-                $('#txtModelo').val(dados[1]).css({'background-color':'#EBEBE4'});
-                
-                getModelos(dados[6],dados[8]);
-                
+                getModelos(dados[3],dados[4]);
+            
                 switch(dados[1]){
                     case '1':
                         $('#txtObservacoes').attr('placeholder','Obs: NÃO ESQUECER DE Informar se a Impressora veio com com ou sem toner e se a mesma é usada na rede ou via cabo usb.');
@@ -1074,14 +1107,15 @@ function baixaPeca(peca,os,id){
     });
     /*FIM DO CADASTRO DE EMPRESA*/
 /*########### PESQUISA ENTREGAS POR REGIAO##########*/
-function mostraEntregasRegiao(regiao){
+function modalGeral(id,url,titulo){
+    $('#modal').attr('title',titulo);
     $.ajax({
         type: "POST",
-        url: "./app/sistema/pesquisa/entregas-regiao.php",
-        data: {regiao:regiao},
+        url: url,
+        data: {id:id},
         success: function( res )
         {
-          show_modal('#modal-entregas-regiao',res);                              
+          show_modal('#modal',res);                              
         }
     });
 }
@@ -1302,12 +1336,49 @@ $('#cadastra-memoria').validate({
     }
 });
 
+function liberaEdicao(id){
+    $('.editable-'+id).attr('disabled',false);
+    $('.btn-edita-'+id).hide();
+    $('.btn-salva-'+id).show();
+}
+
+function editaWindows(id){
+    var dados = $(".edita-win-"+id).serialize();
+    $.ajax({
+            url: './app/sistema/ajax/edita.php',
+            data: dados,
+            type:'POST',
+            dataType:'HTML',
+        success: function (res){
+            $('.editable-'+id).attr('disabled',true);
+            $('.btn-edita-'+id).show();
+            $('.btn-salva-'+id).hide();
+            modal(res);
+        }
+    });
+}
+function editaOffice(id){
+    var dados = $(".edita-office-"+id).serialize();
+    $.ajax({
+            url: './app/sistema/ajax/edita.php',
+            data: dados,
+            type:'POST',
+            dataType:'HTML',
+        success: function (res){
+            $('.editable-'+id).attr('disabled',true);
+            $('.btn-edita-'+id).show();
+            $('.btn-salva-'+id).hide();
+            modal(res);
+        }
+    });
+}
 
 function liberaEdicaoMemoria(i){
     $('.editable-'+i).attr('disabled',false);
     $('.btn-edit-'+i).hide();
     $('.btn-salva-'+i).show();
 }
+
 function editaMemoria(i){
     var dados = $(".edita-mem-"+i).serialize();
         $.ajax({
@@ -1319,6 +1390,28 @@ function editaMemoria(i){
             $('.editable-'+i).attr('disabled',true);
             $('.btn-edit-'+i).show();
             $('.btn-salva-'+i).hide();
+            modal(res);
+        }
+    });
+}
+
+function liberaEdicaoProcessador(i){
+    $('.editable-'+i).attr('disabled',false);
+    $('.btn-edita-proc-'+i).hide();
+    $('.btn-salva-proc-'+i).show();
+}
+
+function editaProcessador(i){
+    var dados = $(".edita-proc-"+i).serialize();
+        $.ajax({
+            url: './app/sistema/ajax/edita.php',
+            data: dados,
+            type:'POST',
+            dataType:'HTML',
+        success: function (res){
+            $('.editable-'+i).attr('disabled',true);
+            $('.btn-edita-proc-'+i).show();
+            $('.btn-salva-proc-'+i).hide();
             modal(res);
         }
     });
@@ -1368,42 +1461,46 @@ function avaliaEquipamento(id){
 }
 /*################# validação da avaliação ###########################*/
 
-function validaAvaliacao(s,e,id,peca)/*s=status,e=equipamento,id=do cadastro do equipamento e peca=quantidade de agaurdo de peça*/
+function validaAvaliacao(s,e,id,peca,tipo)/*s=status,e=equipamento,id=do cadastro do equipamento e peca=quantidade de agaurdo de peça,tipo = somente tecncios de bancada podem avaliar*/
 {
-    if(s=='4' && peca > 0){
-         modal("<span class='alert alert-warning text-danger'>É PRECISO DAR BAIXA NAS PEÇA(S) QUE ESTE EQUIPAMENTO AGUARDA ANTES DE AVALIA-LO!</span>");
-    }else{
-        $.ajax({
-            url: './app/sistema/ajax/valida-avaliacao.php',
-            data:{equipamento:e,id:id},
-            type:'POST',
-            dataType:'HTML',
-            beforeSend:function(){
-               $('.frm_load').fadeIn(500);
-            },
-            success: function (res){
-                $('.frm_load').fadeOut(500);
-                if(res){modal(res);}
-                else{
-                    switch(s){
-                        case '4':
-                            $('.avaliacao').show();
-                            $('.btn-avalia').show();
-                            $('.aguardo-peca').hide();
-                            break;
-                        case '5':
-                            $('.avaliacao').show();
-                            $('.btn-avalia').show();
-                            $('.aguardo-peca').show();
-                            break;
-                        default:
-                           $('.aguardo-peca').hide();
-                           $('.avaliacao').show();
-                           $('.btn-avalia').show();
+    if(tipo=='bancada'){
+        if(s=='4' && peca > 0){
+             modal("<span class='alert alert-warning text-danger'>É PRECISO DAR BAIXA NAS PEÇA(S) QUE ESTE EQUIPAMENTO AGUARDA ANTES DE AVALIA-LO!</span>");
+        }else{
+            $.ajax({
+                url: './app/sistema/ajax/valida-avaliacao.php',
+                data:{equipamento:e,id:id},
+                type:'POST',
+                dataType:'HTML',
+                beforeSend:function(){
+                   $('.frm_load').fadeIn(500);
+                },
+                success: function (res){
+                    $('.frm_load').fadeOut(500);
+                    if(res){modal(res);}
+                    else{
+                        switch(s){
+                            case '4':
+                                $('.avaliacao').show();
+                                $('.btn-avalia').show();
+                                $('.aguardo-peca').hide();
+                                break;
+                            case '5':
+                                $('.avaliacao').show();
+                                $('.btn-avalia').show();
+                                $('.aguardo-peca').show();
+                                break;
+                            default:
+                               $('.aguardo-peca').hide();
+                               $('.avaliacao').show();
+                               $('.btn-avalia').show();
+                       }
                    }
-               }
-            }
-        });
+                }
+            });
+        }
+    }else{
+       modal("<span class='alert alert-warning text-danger'>VOCÊ NÃO TEM AUTORIZAÇÃO PARA AVALIAR EQUIPAMENTO!</span>");
     }
 }
 /*###################### avalia equipamento ##############################*/
@@ -1429,15 +1526,13 @@ function avalia(s,a,p){
                     type:'POST',
                     dataType:'HTML',
                 beforeSend:function(){
-               $('.form_load').fadeIn(500);
+                    $('.form_load').fadeIn(500);
                 },
                 success: function (res){
                     $('.form_load').fadeOut(500);
                     if(s=='4')
                     {modal(res,'index.php?pg=bancada');}
-                    else{
-                        $('#form-bancada-search').submit();
-                    }
+                    else{$('#form-bancada-search').submit();}
                    
                 }
             });
@@ -1495,7 +1590,7 @@ $("#form-header-report").validate({
     submitHandler: function(){
         var dados = $("#form-header-report").serialize();
         $.ajax({
-            url: './app/sistema/ajax/rel-entrada-peca.php',
+            url: './app/sistema/ajax/relatorio.php',
             data: dados,
             type:'POST',
             dataType:'HTML',
@@ -1529,7 +1624,8 @@ function show_modal(id,html)
         show    :{effect: "slideDown",duration:800},
         hide    : {effect: "slideUp",duration:800},
         buttons: {
-          Fechar: function(){$( this ).dialog( "close" );}
+            Imprimir: function(){$(id).printArea();},
+            Fechar: function(){$( this ).dialog( "close" );}
         }
         /*close: function() {
             if(bancada){

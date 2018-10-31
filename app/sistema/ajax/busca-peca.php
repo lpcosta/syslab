@@ -37,8 +37,9 @@ $sql->FullRead("SELECT * FROM tb_sys015 WHERE id_peca = :ID", "ID={$codigo}");
         <div class="col form-inline">
             <label>Flag</label>
             <select name="flag" class="editable" disabled="">
-                <option selected value="0">Não Marcado</option>
-                <option value="1">Marcado</option>
+               <option selected value="<?=$sql->getResult()[0]['flag']?>"><?if($sql->getResult()[0]['flag']== 1){print "Marcado";}else {print "Nao Marcado";}?></option>
+                <option value=1>Marcado</option>
+                <option value=0>Não Marcado</option>
             </select>
         </div>
         <div class="col form-inline">

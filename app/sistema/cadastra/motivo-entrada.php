@@ -1,6 +1,6 @@
 <?php
    paginaSegura();
-    if(GRUPO >= 3):
+    if(GRUPO != 4):
        header("Location:".HOME."");
        exit();
    endif;

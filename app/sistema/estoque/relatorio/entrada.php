@@ -12,6 +12,7 @@
     </ul>
     <div id="r-e-e" class="header-report">
         <form id="form-header-report" onsubmit="return false">
+            <input type="hidden" name="acao" value="entrada-peca" />
             <div class="row">
                 <div class="col form-inline">
                     <label>Data Inicial</label>

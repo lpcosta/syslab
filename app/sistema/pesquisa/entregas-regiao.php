@@ -1,7 +1,9 @@
 <?php
+session_start();
 require_once '../../config/config.inc.php';
+require_once '../../funcoes/func.inc.php';
 require_once '../../config/post.inc.php';
-
+paginaSegura();
 $sql = new Read();
 $dt = new Datas();
 $dt_fim = date('d/m/Y');
@@ -38,7 +40,7 @@ $dt_fim = date('d/m/Y');
             tb_sys010 A ON A.id_item_entrada = IE.id
                 JOIN
             tb_sys018 F ON F.id_fabricante = EQ.fabricante
-                AND IE.status = :STS AND L.regiao_id = :REGIAO GROUP BY EQ.patrimonio ORDER BY L.local","STS=4&REGIAO={$regiao}");
+                AND IE.status = :STS AND L.regiao_id = :REGIAO GROUP BY EQ.patrimonio ORDER BY L.local","STS=4&REGIAO={$id}");
 ?>
 <table class="table table-hover">
     <tr class="text-uppercase text-primary">
@@ -57,10 +59,10 @@ $dt_fim = date('d/m/Y');
         <td class="text-left"><?=$rowEquipamento['endereco']?></td>
         <td class="text-left"><?= $rowEquipamento['equipamento'] . ' ' . $rowEquipamento['fabricante'] . ' ' . $rowEquipamento['modelo'] ?></td>
         <td class="text-center"><?= $rowEquipamento['os'] ?></td>
-        <td class="text-center cursor-pointer" onclick="mostraModal(<?= $rowEquipamento['patrimonio'] ?>)"><?= $rowEquipamento['patrimonio'] ?></td>
+        <td class="text-center cursor-pointer" onclick="mostraModal('<?=$rowEquipamento['patrimonio']?>')"><?= $rowEquipamento['patrimonio'] ?></td>
         <td class="text-center"><?= date('d/m/Y', strtotime($rowEquipamento['data']));?></td>
-        <td class="text-center"><?=date('d/m/Y', strtotime($rowEquipamento['dtava']));?></td>
+        <td class="text-center"><?= date('d/m/Y', strtotime($rowEquipamento['dtava']));?></td>
         <td class="text-center"><?=$dt->setData($rowEquipamento['data'], HOJE) ?></td>
     </tr>
-<?php endforeach;?>
+<?endforeach;?>
 </table>

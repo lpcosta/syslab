@@ -80,8 +80,7 @@ require_once './app/funcoes/func.inc.php';
                             <li><a href="#">Relatórios</a>
                                 <ul class="submenu-2">
                                     <li><a href="index.php?pg=estoque/relatorio/entrada">Entrada</a></li>
-                                    <li><a href="#">Saida</a></li>
-                                    <li><a href="index.php?pg=estoque/relatorio/pecas-faltantes">Peças Faltantes</a></li>
+                                    <li><a href="index.php?pg=estoque/relatorio/saida">Saida</a></li>
                                 </ul>
                             </li>
                         </ul>
@@ -92,6 +91,7 @@ require_once './app/funcoes/func.inc.php';
                             <li><a href="index.php?pg=relatorio/saida">Saídas</a></li>
                             <li><a href="index.php?pg=relatorio/entrada">Entradas</a></li>
                             <li><a href="index.php?pg=relatorio/aguardo-de-peca">Aguardo de Peça</a></li>
+                            <li><a href="index.php?pg=relatorio/bancada">Bancada</a></li>
                         </ul>
                     </li>
                     <li><a href="#">Administração</a>
@@ -103,29 +103,29 @@ require_once './app/funcoes/func.inc.php';
                                 <?if(GRUPO >= 3):?>    
                                     <li><a href="index.php?pg=cadastra/secretaria">Secretaria</a></li>
                                     <li><a href="index.php?pg=cadastra/empresa">Empresa</a></li>
-                                <?if(GRUPO == 4):?>    
+                                <? endif;if(GRUPO == 4):?>    
                                     <li><a href="index.php?pg=cadastra/categoria">Categoria</a></li>
-                                    <li><a href="index.php?pg=cadastra/fornecedor">Fornecedor</a></li>
                                     <li><a href="index.php?pg=cadastra/usuario">Usuario</a></li>  
+                                <?endif;if(GRUPO >= 3):?>
                                     <li><a href="#">Tabelas de Apoio</a>
                                         <ul class="submenu-3">
-                                            <li><a href="index.php?pg=cadastra/processador">Processador</a></li>
                                             <li><a href="index.php?pg=cadastra/memoria">Memória Ram</a></li>
-                                            <li><a href="index.php?pg=cadastra/software">Windows/Office</a></li>
+                                            <li><a href="index.php?pg=cadastra/processador">Processador</a></li>
+                                            <?if(GRUPO == 4):?>
+                                            <li><a href="index.php?pg=cadastra/fornecedor">Fornecedor</a></li>
                                             <li><a href="index.php?pg=cadastra/motivo-entrada">Motivo de Entrada</a></li>
-                                            <li><a href="index.php?pg=cadastra/status">Status</a></li>
+                                            <li><a href="index.php?pg=cadastra/status">Status</a></li>  
+                                            <li><a href="index.php?pg=cadastra/software">Windows/Office</a></li>
+                                            <li><a href="index.php?pg=cadastra/modelo-equipamento">Modelo Equipamento</a></li>
+                                            <?endif;?>
                                         </ul>
+                                         <?endif;?>
                                     </li>  
-                                <?endif;endif;?>
                                 </ul>
                             </li>
                             <li><a href="#">Gerenciar</a>
                                 <ul class="submenu-2">
-                                    <li><a href="index.php?pg=gerenciar/equipamento">Equipamento</a>
-                                        <ul class="submenu-3">
-                                            <li><a href="index.php?pg=cadastra/modelo-equipamento">Cadastrar Modelo</a></li>
-                                        </ul>
-                                    </li>
+                                    <li><a href="index.php?pg=gerenciar/equipamento">Equipamento</a></li>
                                     <li><a href="index.php?pg=gerenciar/windows-office">Windows/Office</a></li>
                                     <li><a href="index.php?pg=gerenciar/localidade">Localidade</a></li>
                                     <?if(GRUPO == 4):?>
@@ -134,7 +134,7 @@ require_once './app/funcoes/func.inc.php';
                                     <?endif;?>
                                 </ul>
                             </li>
-                            <li><a href="#">Alterar Senha</a></li>
+                            <li><a href="index.php?pg=reset-senha">Alterar Senha</a></li>
                             <li><a href="#">Backup</a></li>
                             <li><a href="index.php?pg=logs">Logs</a></li>
                         </ul>
@@ -184,7 +184,7 @@ require_once './app/funcoes/func.inc.php';
         </main>
         <div id="modal-busca-patrimonio" title="PESQUISA DE PATRIMONIO" style="display: none; z-index: 5000;"></div>
         <div id="dialog" title="AVISO"></div>
-        <div id="modal-entregas-regiao" title="ENTREGAS"></div>
+        <div id="modal"></div>
     </body>
     
     <footer>

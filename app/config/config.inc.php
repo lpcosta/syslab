@@ -24,9 +24,11 @@ if(isset($_SESSION['UserLogado'])):
 
     define ('ID_TECNICO',  intval($_SESSION['UserLogado']['id']));//ID DO TÉCNICO LOGADO
     define ('GRUPO', intval($_SESSION['UserLogado']['grupo_id']));//GRUPO DE ACESSO A RECURSOS
+    define ('LOGIN',$_SESSION['UserLogado']['login']);
 else:
     define("GRUPO", 0);
     define("ID_TECNICO", 0);
+    define("LOGIN",NULL);
 endif;
 // AUTO LOAD DE CLASSES ####################
 spl_autoload_register(function($class){

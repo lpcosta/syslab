@@ -161,6 +161,8 @@ if(isset($id)):
             $sqlMem = new Read();
             $sqlMem->ExeRead("tb_sys029 WHERE id = {$sql->getResult()[0]['memoria_ram_id']}");
             $memoria = $sqlMem->getResult()[0]['capacidade'].' '.$sqlMem->getResult()[0]['tipo_memoria'];
+        else:
+            $memoria = "";
         endif;
         if($sql->getResult()[0]['processador_id'] !=0):
             $sqlProc = new Read();
@@ -169,6 +171,8 @@ if(isset($id)):
             if($sqlProc->getResult()[0]['geracao']!=0):
                 $processador .=$sqlProc->getResult()[0]['geracao'].'ªGeração';
             endif;
+        else:
+            $processador = "";
         endif;
     ?>
           <div class="row">
@@ -325,7 +329,7 @@ if(isset($id)):
         <input type="hidden" name="email_tecnico_entrada" value="<?=$sql->getResult()[0]['email']?>" />
         <div class="row">
             <div class="col form-inline">
-                <select id="txtStatus" name="id_status" class="text-capitalize" onchange="validaAvaliacao(this.value,<?=$categoria?>,<?=$sql->getResult()[0]['id_equipamento']?>,<?=$pecas?>)" style="max-width:165px; " >
+                <select id="txtStatus" name="id_status" class="text-capitalize" onchange="validaAvaliacao(this.value,<?=$categoria?>,<?=$sql->getResult()[0]['id_equipamento']?>,<?=$pecas?>,'<?=$_SESSION['UserLogado']['tipo']?>')" style="max-width:165px; " >
                     <option value="">Avaliar...</option>
                     <?$sql->ExeRead("tb_sys002");
                     foreach ($sql->getResult() as $res):

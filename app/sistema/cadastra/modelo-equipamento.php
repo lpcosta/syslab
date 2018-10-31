@@ -1,8 +1,10 @@
 <?php
- paginaSegura();
-    
-$sql = new Read();
-
+    paginaSegura();
+    if(GRUPO != 4):
+       header("Location:".HOME."");
+       exit();
+   endif;
+    $sql = new Read();
 ?>
 <div class="tabs">
     <ul>

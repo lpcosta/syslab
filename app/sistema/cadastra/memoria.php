@@ -1,6 +1,6 @@
 <?php
    paginaSegura();
-    if(GRUPO != 4):
+    if(GRUPO < 3):
        header("Location:".HOME."");
        exit();
    endif;
@@ -54,11 +54,13 @@
                 <div class="col-md form-inline">
                     <label><b>Capacidade</b></label>
                     <input type="text" name="capacidade" class="form-control text-uppercase editable-<?=$i?>" disabled="" value="<?=$mem['capacidade']?>" style="width: 90px;"/>
+                <?if(GRUPO == 4):?>
                     &nbsp;
                     <button type="button" class="btn btn-primary btn-edit-<?=$i?>" onclick="liberaEdicaoMemoria(<?=$i?>)">Editar</button>
                     <button type="button" class="btn btn-primary btn-salva-<?=$i?>" onclick="editaMemoria(<?=$i?>);" style="display:none;">Salvar</button>
                     &nbsp;&nbsp;
                     <button type="button" class="btn btn-primary btn-deleta-<?=$i?>" onclick="">Excluir</button>
+                <?endif;?>
                 </div>
             </div>
         </form>

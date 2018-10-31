@@ -97,6 +97,12 @@ header > div#div-user-logado{background-color: #B1ABAC;width: 140px;height: 38px
 .dados-edita label{width:110px; text-align: left; display: block;}
 .dados-edita input,select,textarea {border: 1px solid #09f;padding-left: 5px;color: #000; height: 25px; width: calc(90% - 115px);}
 /*fim dos estilos de pesquisas*/
+
+#form-reset-senha{width: 50%; margin: 0 auto;}
+#form-reset-senha label{width: 130px; display: block;text-align: left;}
+#form-reset-senha input{width: 243px;}
+
+
 /*FIM CLASSES GLOBAIS*/
 table.printer{margin-bottom: 20px;}
 /*TABS*/
@@ -129,6 +135,8 @@ table.printer{margin-bottom: 20px;}
 
 
 @media (max-width: 1024px) {
+.header-report label{margin-right: 5px; font-size: 10pt; width: 100%;display: block;}
+.header-report input[type='button'],input[type='submit'],button[type='button']{font-size: 10pt; width: 100px; padding: 3px; margin: 3px;}
 .tabs .tabela-tab th,td {font-size: 10pt;}
 .grafico-home{width: 290px; height: 300px;}
  #txtPeca{font-size: 9pt;}

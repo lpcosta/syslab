@@ -342,10 +342,10 @@ if($sql->getResult()):
             <td class="text-center"><?=$res['os']?></td>
             <td class="text-left text-capitalize"><?=$res['tecnico']?></td>
             <td style="max-width: 300px;" class="text-left"><?= ucfirst($res['avaliacao'])?></td>
-        <?if($res['sts'] == 4 && $_SESSION['UserLogado']['grupo_id'] == 4):?>
+        <?if($res['sts'] != 3 && $_SESSION['UserLogado']['grupo_id'] == 4):?>
             <td class="text-left"><a href="index.php?pg=edita/edita-avaliacao&id=<?=$res['id']?>"><button>Editar</button></a></td>
         <?else:?>
-            <td class="text-left">&nbsp;</td>b 
+            <td class="text-left">&nbsp;</td>
         <?endif;?>
             <td><?=$res['status']?></td>
         <?if(!empty($res['peca_id'])):

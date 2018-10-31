@@ -17,8 +17,8 @@ ul.menu{ float:left; font-family:Verdana, Geneva, sans-serif; font-size:15px;pad
 .menu ul.submenu-2 a{  width:148px; padding:0 5px;}
  
 /* Configurações nivel 3*/
-.menu li:hover > ul.submenu-3{ display:block; top:0; left:148px; padding:0px; width:148px;}
-.menu ul.submenu-3 a{width:148px; padding:0 5px;}
+.menu li:hover > ul.submenu-3{ display:block; top:0; left:148px; padding:0px; width:170px;}
+.menu ul.submenu-3 a{width:170px; padding:0 5px;}
  
  
 /*Configurações de cores*/

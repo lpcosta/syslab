@@ -30,7 +30,7 @@ if(isset($_POST['btnAltera'])):
                                           ], "WHERE login = :LOGIN", "LOGIN={$login}");
                 if($atu->getResult()):
                     $msg = "Senha Alterada!<br />"
-                    . "<a href=\"http://localhost/syslab/\">Clique para Logar</a>";          
+                    . "<a href=\"http://syslab.lpcosta.com.br/\">Clique para Logar</a>";          
                 else:
                     $msg = "Erro ".$atu->getResult();
                 endif;
@@ -68,7 +68,7 @@ endif;
     <body>
         <header>
             <div id="div-logo">
-                <img src ='../imagens/logos/logo-sistema.png' alt="Logo do Sistema" title="Logo do Sistema" onclick="location.href='http://localhost/syslab/'" />
+                <img src ='../imagens/logos/logo-sistema.png' alt="Logo do Sistema" title="Logo do Sistema" onclick="location.href='https://syslab.lpcosta.com.br/'" />
             </div>
             <div id="div-nome-sistema">
                 <p>syslab</p>
@@ -76,7 +76,7 @@ endif;
             <div id="div-user-logado">
                 <?php if(isset($_SESSION['UserLogado'])):?>
                 <img src="app/imagens/icons/avatar.png" alt="Avatar" />
-                <p>tbpdomingos</p>
+                <p><?=''?></p>
                 <p><a href="index.php?ref=logoff">sair</a></p>
                 <? endif;?>
             </div>

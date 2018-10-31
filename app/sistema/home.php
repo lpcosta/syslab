@@ -41,7 +41,7 @@ $stsEquipamento = $sql->getResult();
                         <th class="text-center">quantidade</th>
                     </tr>
                 <? foreach ($equipamentos as $res):?>
-                    <tr class="text-capitalize" style="cursor:pointer;" onclick="location.href='index.php?pg=laboratorio/equipamento&cid='+<?=$res['id']?>">
+                    <tr class="text-capitalize" style="cursor:pointer;" onclick="modalGeral(<?=$res['id']?>,'./app/sistema/pesquisa/equipamento-categoria.php','EQUIPAMENTO')">
                         <td><?=$res['equipamento']?></td>
                         <td class="text-center"><?=$res['total']?></td>
                     </tr>
@@ -80,7 +80,7 @@ $stsEquipamento = $sql->getResult();
                                         JOIN tb_sys008 L ON L.id = EQ.id_local
                                         JOIN tb_sys023 R ON R.id_regiao = L.regiao_id AND IE.status = :STS group by L.regiao_id order by L.local","STS=4");
                     foreach ($regiao->getResult() as $reg):?>
-                    <tr style="cursor: pointer" onclick="mostraEntregasRegiao(<?=$reg['id_regiao']?>)">
+                    <tr style="cursor: pointer" onclick="modalGeral(<?=$reg['id_regiao']?>,'./app/sistema/pesquisa/entregas-regiao.php','ENTREGAS')">
                         <td class="text-capitalize"><?=$reg['regiao']?></td>
                         <td class="text-center"><?=$reg['total']?></td>
                     </tr>
