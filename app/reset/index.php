@@ -84,17 +84,20 @@ endif;
         </header>
         <main>
             <?php
-                $get = filter_input_array(INPUT_GET,FILTER_DEFAULT);
-                $setGet = array_map("strip_tags", $get);
-                $getHash   = array_map("trim", $setGet);
-                extract($getHash);
+            require_once '../config/get.inc.php';
+            if(!empty($hash) && !empty($login)):
                 $hashCompara = md5(sha1(date('d-m-Y')));
-            if(!isset($login)):
-                $login='';
-            endif;
-            $sql->FullRead("SELECT nome,login FROM tb_sys001 WHERE hash = :HASH AND login = :LOGIN", "HASH={$hash}&LOGIN="."{$login}"."");
-            
-            if($sql->getRowCount() > 0):?>
+                if(isset($pl) && !empty($pl) && $pl == 1):
+                    $sql->FullRead("SELECT nome,login FROM tb_sys001 WHERE login = :LOGIN", "LOGIN="."{$login}"."");
+                    if($sql->getRowCount() == 1 && $hashCompara == $hash):
+                        $resultado = $sql->getResult();
+                    endif;
+                else:
+                    $sql->FullRead("SELECT nome,login FROM tb_sys001 WHERE hash = :HASH AND login = :LOGIN", "HASH={$hash}&LOGIN="."{$login}"."");
+                    $resultado = $sql->getResult();
+                endif;
+            endif;            
+            if($resultado > 0):?>
                     <div id="login">
                         <div class="boxin">
                             <h1>Altere sua Senha</h1>
@@ -111,7 +114,7 @@ endif;
                                </div>
                                 <?php endif;?>
                                  <hr />
-                                <input type="submit" name="btnAltera" value="Alterar" style="width: 100%;" />
+                                 <input type="submit" name="btnAltera" class="btn btn-primary" value="Alterar" style="width: 100%;" />
                             </form>
                         </div>
                     </div>                           

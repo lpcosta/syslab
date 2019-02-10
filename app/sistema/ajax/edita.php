@@ -116,6 +116,15 @@ switch ($acao):
              print "<span class='alert alert-warning'>Senha atual Informada Não confere!</span>";
         endif;
         break;
+    case 'entrada':
+        unset($post['id']); unset($post['acao']);
+        $atu->ExeUpdate("tb_sys006", $post, "WHERE id = :ID", "ID={$id}");
+        if($atu->getResult()):
+            print "<span class='alert alert-success' role='alert'>Atualização Realizada!</span>";
+        else:
+            print "<code>".$atu->getError()."</code>";
+        endif;
+        break;
     default :
         print "<h1>Erro desconhecido! <code>acao default da condição de pesquisa</code></h1>";
 endswitch;

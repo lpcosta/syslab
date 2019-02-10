@@ -92,6 +92,7 @@ require_once './app/funcoes/func.inc.php';
                             <li><a href="index.php?pg=relatorio/entrada">Entradas</a></li>
                             <li><a href="index.php?pg=relatorio/aguardo-de-peca">Aguardo de Peça</a></li>
                             <li><a href="index.php?pg=relatorio/bancada">Bancada</a></li>
+                            <li><a href="index.php?pg=relatorio/equipamento">Equipamento</a></li>
                         </ul>
                     </li>
                     <li><a href="#">Administração</a>
@@ -129,8 +130,10 @@ require_once './app/funcoes/func.inc.php';
                                     <li><a href="index.php?pg=gerenciar/windows-office">Windows/Office</a></li>
                                     <li><a href="index.php?pg=gerenciar/localidade">Localidade</a></li>
                                     <?if(GRUPO == 4):?>
+                                    <li><a href="index.php?pg=gerenciar/entrada">Entrada</a></li>
                                     <li><a href="index.php?pg=gerenciar/usuarios">Usuario</a></li>
                                     <li><a href="index.php?pg=edita/atualiza-banco">Atualizar Banco</a></li>
+                                   
                                     <?endif;?>
                                 </ul>
                             </li>
@@ -150,7 +153,7 @@ require_once './app/funcoes/func.inc.php';
                 
                 <form name="formSearch" id="formSearch" class="text-right" onsubmit="return false;" style="max-width: 300px !important;">
                     <input type="hidden" name="acao" value="patrimonio" />
-                    <input type="search" onkeydown="autoCompletar(this,'patrimonio','pesquisageral')" size="7" placeholder="sn,pat..." name="busca" id="txtBusca" required="">
+                    <input type="search" onkeydown="autoCompletar(this,'patrimonio','pesquisaPatrimonioId')" size="7" placeholder="sn,pat..." name="busca" id="txtBusca" required="">
                     <!--<button type="submit" name="btnSearch" id="btnSearch">Buscar</button>-->
                     <img src="app/imagens/icons/img-search.PNG" alt="search..." title="pesquisar" onclick="$('#formSearch').submit();"/>
                 </form>
@@ -193,7 +196,7 @@ require_once './app/funcoes/func.inc.php';
         </div>
     </footer>
     <script src="./app/libs/JQuery/jquery-3.3.1.min.js" /></script>
-    <script src="./app/libs/BootStrap-4.0/js/bootstrap.js" /></script>
+<!--<script src="./app/libs/BootStrap-4.0/js/bootstrap.js" /></script>-->
     <script src="./app/libs/JQuery-ui-1.12.1/jquery-ui.js" /></script>
     <script src="./app/libs/JQuery-Masked-Input/src/jquery.maskedinput.js" /></script>
     <script src="./app/libs/JQuery-Validate/jquery.validate.js"></script>

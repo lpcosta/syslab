@@ -35,8 +35,8 @@ function autoCompletar(obj,target,fnc){
                 case 'usuario':
                     buscaUsuario(ui.item.value);
                     break;
-                case 'pesquisageral':
-                    pesquisaGeral(ui.item.label);
+                case 'pesquisaPatrimonioId':
+                    pesquisaPatrimonioId(ui.item.value);
                     break;
                 case 'avalia':
                     avaliaEquipamento(ui.item.value);
@@ -298,6 +298,23 @@ function editaLocalidade(id){
             $('.btn-acao-edita').toggle();
             $('.btn-acao-salva').toggle();
             buscaLocalidade(id);
+            modal(res);
+        }
+    });
+}
+
+function editaEntrada(id){
+    var dados = $(".edita-entrada-"+id).serialize();
+    $.ajax({
+        url: "./app/sistema/ajax/edita.php",
+        data: dados,
+        type: "POST",
+        dataType:'HTML',
+        success: function(res)
+        {
+            $('.btn-salva-'+id).hide();
+            $('.btn-edita-'+id).show();
+            $('#frm-g-entrada').submit();
             modal(res);
         }
     });
@@ -727,6 +744,12 @@ function validaRelatorio(t,idfrm){
        };
     }else if(t=='bancada'){
         geraRelatorio(idfrm);
+    }else if(t=='equipamento'){
+       var  e = $('#txtEquipamento').val(),
+            l = $('#txtLocalidade').val();
+            if(e.trim() == ''){modal("<span class='alert alert-warning text-danger'>Selecione um <b>equipamento</b>!</span>");$('#txtEquipamento').focus();}
+            else if(l.trim() == ''){modal("<span class='alert alert-warning text-danger'>É necessário informar uma <b>localidade</b>!</span>");$('#txtLocalidade').focus();}
+            else{geraRelatorio(idfrm);}
     }else{
         switch($('#tipoRel').val()){
             case 'codigo':
@@ -1150,11 +1173,12 @@ function mostraModal(p){
     $("#formSearch").submit();
 }
 
-function pesquisaGeral(id){
+function pesquisaPatrimonioId(id){
+    
     $.ajax({
         type: "POST",
         url: "./app/sistema/pesquisa/patrimonio.php",
-        data: {busca:id},
+        data: {busca:id,acao:'id'},
         success: function( res )
         {
           show_modal('#modal-busca-patrimonio',res);                              
@@ -1603,6 +1627,29 @@ $("#form-header-report").validate({
                 $(".relatorio").html(res);
 
                 $('.btnPrinter').show();
+            }
+        });
+    }
+});
+
+$('#frm-g-entrada').validate({
+    rules:{
+        entrada:{required:true,number:true}
+    },
+    submitHandler: function(){
+        var dados = $("#frm-g-entrada").serialize();
+        $.ajax({
+            url: './app/sistema/ajax/busca-entrada.php',
+            data: dados,
+            type:'POST',
+            dataType:'HTML',
+            beforeSend:function(){
+                $('.form_load').fadeIn(500);
+            },
+            success: function (res){
+                $('.form_load').fadeOut(500);
+               
+                $(".dados-edita-entrada").html(res);
             }
         });
     }

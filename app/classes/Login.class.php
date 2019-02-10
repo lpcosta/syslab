@@ -64,9 +64,12 @@ class Login {
             endif;
         else:
             if($this->Tentativa < 3):
-                if($this->Result['situacao']==='l' && $this->Result['senha_padrao']==='sim'):
+                $senha       = new Senha();
+                $password    = $senha->setSenha($this->Senha);
+                $compara     = $senha->setSenha("syslabab");
+                if($this->Result['situacao']==='l' && $this->Result['senha_padrao']=='sim' && $password == $compara):
                     $hash = md5(sha1(date('d-m-Y')));
-                    $this->Result = "SUA SENHA DEVE SER ALTERADA!<br /><a href=".HOME."/app/reset/index.php?hash=".$hash."&login=".$this->Result['login'].">ALTERAR</a>";
+                    $this->Result = "SUA SENHA DEVE SER ALTERADA!<br /><a href=".HOME."app/reset/index.php?hash=".$hash."&login=".$this->Result['login']."&pl=1>ALTERAR</a>";
                 else:
                     $this->Execute();
                 endif;
@@ -110,7 +113,7 @@ class Login {
         $atu = new Update();
         $_SESSION['UserLogado']=true;
         $_SESSION['UserLogado'] = $this->Result;
-        $atu->ExeUpdate("tb_sys001", ["tentativa_login"=>0,"situacao"=>'l',"senha_padrao"=>'nao'], "WHERE login = :LGN", "LGN={$this->Login}");
+        $atu->ExeUpdate("tb_sys001", ["tentativa_login"=>0,"situacao"=>'l',"senha_padrao"=>'nao',"dt_ultimo_login"=>date('Y-m-d H:i:s')], "WHERE login = :LGN", "LGN={$this->Login}");
         $sql->ExeCreate("tb_sys024", ["tecnico"=> $this->Result['nome'],"data"=>date('Y-m-d H:i:s'),"ip" => $this->ip,"host" => $this->host,"acao" =>1,"msg" => 'fez login no ip']);
         $this->Result = true;        
     }

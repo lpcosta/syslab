@@ -909,6 +909,122 @@ switch ($acao):
                 </tr>
             </table>
         <?endif;break;
+        case 'equipamento':unset($post['acao']);
+            if($categoria==0):
+                $sql->FullRead("SELECT EQ.patrimonio,
+                                    EQ.serie,
+                                    C.descricao equipamento,
+                                    F.nome_fabricante fabricante,
+                                    M.modelo
+                                FROM
+                                    tb_sys004 EQ
+                                        JOIN
+                                    tb_sys003 C ON C.id = EQ.id_categoria
+                                        JOIN
+                                    tb_sys018 F ON F.id_fabricante = EQ.fabricante
+                                        JOIN
+                                    tb_sys008 L ON L.id = EQ.id_local
+                                        JOIN
+                                    tb_sys022 M ON M.id_modelo = EQ.modelo AND L.id = :ID", "ID={$localidade}");
+            else:
+                $sql->FullRead("SELECT EQ.patrimonio,
+                                    EQ.serie,
+                                    C.descricao equipamento,
+                                    F.nome_fabricante fabricante,
+                                    M.modelo
+                                FROM
+                                    tb_sys004 EQ
+                                        JOIN
+                                    tb_sys003 C ON C.id = EQ.id_categoria
+                                        JOIN
+                                    tb_sys018 F ON F.id_fabricante = EQ.fabricante
+                                        JOIN
+                                    tb_sys008 L ON L.id = EQ.id_local
+                                        JOIN
+                                    tb_sys022 M ON M.id_modelo = EQ.modelo AND L.id = :ID AND C.id = :EQPMT", "ID={$localidade}&EQPMT={$categoria}");
+            endif;
+        ?>
+            <table class="relatorio">
+            <tr>
+                <th rowspan="5" style="width:110px;"><img src="<?= LOGO_PSA ?>"/></th>
+            </tr>
+            <tr>
+                <th colspan="2" class="text-center text-uppercase"><?= PREFEITURA ?></th>
+                <th rowspan="4" style="width:110px;">&nbsp;</th>
+            </tr>
+            <tr>
+                <th colspan="2" class="text-center text-uppercase"><?= SECRETARIA ?></th>
+            </tr>
+            <tr>
+                <th colspan="2" class="text-center text-uppercase"><?= DIRETORIA ?></th>
+            </tr>
+            <!--<tr>
+                <th class="text-center text-uppercase"><?= GERENCIA ?></th>
+            </tr>-->
+            <tr>
+                <th colspan="4">&nbsp;</th>
+            </tr>
+            <tr>
+                <th colspan="4" class="text-center text-uppercase">Relatório de Equipamentos</th>
+            </tr>
+            <tr>
+                <td colspan="4">&nbsp;</td>
+            </tr>
+             <tr>
+                 <td colspan="4">
+                     <table class="relatorio">
+                         <tr>
+                             <th class="text-left left">Equipamento</th>
+                             <th class="text-center">Total</th>
+                         </tr>
+                    <?
+                        $eqpmtcount = new Read();
+                        $eqpmtcount->FullRead("SELECT 
+                                            C.descricao equipamento,
+                                            count(*) total
+                                        FROM
+                                            tb_sys004 EQ
+                                                JOIN
+                                            tb_sys003 C ON C.id = EQ.id_categoria
+                                                JOIN
+                                            tb_sys008 L ON L.id = EQ.id_local AND L.id = :LOCAL group by C.id order by C.id","LOCAL={$localidade}");
+                        foreach ($eqpmtcount->getResult() as $row):
+                    ?>
+                         <tr>
+                             <td class="text-left left text-capitalize"><?=$row['equipamento']?></td>
+                             <td class="text-center"><?=$row['total']?></td>
+                         </tr>
+                    <? endforeach;?>
+                     </table>
+                 </td>
+            </tr>
+            <tr>
+                <td colspan="4">&nbsp;</td>
+            </tr>
+            <tr>
+                <td colspan="5">            
+                     <table class="relatorio">
+                        <tr>
+                            <th class="text-center">PATRIMÔNIO</th>
+                            <th class="text-center">EQUIPAMENTO</th>
+                            <th class="text-center">FABRICANTE</th>
+                            <th class="text-center">MODELO</th>
+                            <th class="text-center">SÉRIE</th>
+                        </tr>
+                    <? foreach ($sql->getResult() as $res):?>
+                        <tr>
+                            <td class="text-center text-uppercase"><?=$res['patrimonio']?></td>
+                            <td class="text-center text-uppercase"><?=$res['equipamento']?></td>
+                            <td class="text-center text-uppercase"><?=$res['fabricante']?></td>
+                            <td class="text-center text-uppercase"><?=$res['modelo']?></td>
+                            <td class="text-center text-uppercase"><?=$res['serie']?></td>
+                        </tr>
+                    <? endforeach;?>
+                    </table>
+                </td>
+            </tr>
+        </table>
+        <?break;
     default :
         print "<h1>ERRO! parametro que especifica o tipo de relatório nao passado!</h1>";
 endswitch;

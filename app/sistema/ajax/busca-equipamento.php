@@ -167,7 +167,7 @@ $sql->ExeRead("tb_sys004 WHERE id = {$id}");
              <label>processador</label>
             <select name="processador_id" class="text-uppercase editable-cpu" disabled="">
                 <?if(!empty($sql->getResult()[0]['processador_id'])){ $combo->ExeRead("tb_sys028 WHERE id = {$sql->getResult()[0]['processador_id']}");?>
-                <option selected value="<?=$sql->getResult()[0]['processador_id']?>"><?=$combo->getResult()[0]['processador'];if($sql->getResult()[0]['geracao']!=0){print $sql->getResult()[0]['geracao'].'ª Geração';}?></option>
+                <option selected value="<?=$sql->getResult()[0]['processador_id']?>"><?=$combo->getResult()[0]['processador'].' ';if($combo->getResult()[0]['geracao']!=0){print $combo->getResult()[0]['geracao'].'ª'.' Geração';}?></option>
                 <?}else{?>
                 <option selected value="">Selecione...</option>
                 <?}?>

@@ -6,122 +6,127 @@ $sql = new Read();
 $texto = new Check();
 
 $busca = $texto->setTexto($busca);
-if($acao == 'patrimonio'):
-    $sql->FullRead("SELECT 
-    EQ.patrimonio,
-    EQ.serie,
-    C.descricao equipamento,
-    C.id categoria,
-    EQ.andar,
-    EQ.sala,
-    EQ.status baixa,
-    EQ.ip,
-    EQ.so_id,
-    EQ.office_id,
-    EQ.key_so,
-    EQ.key_office,
-    EQ.memoria_ram_id,
-    EQ.processador_id,
-    EQ.hd,
-    EQ.status situacao,
-    L.local,
-    L.cr,
-    F.nome_fabricante fabricante,
-    M.modelo
-FROM
-    tb_sys004 EQ
-        JOIN
-    tb_sys003 C ON C.id = EQ.id_categoria
-        JOIN
-    tb_sys018 F ON F.id_fabricante = EQ.fabricante
-        JOIN
-    tb_sys022 M ON M.id_modelo = EQ.modelo
-        JOIN
-    tb_sys008 L ON L.id = EQ.id_local
-        AND EQ.patrimonio = :PAT", "PAT="."{$busca}"."");
-        
-    if($sql->getRowCount() == 0):
-        $sql->FullRead("SELECT 
-            EQ.patrimonio,
-            EQ.serie,
-            C.descricao equipamento,
-            C.id categoria,
-            EQ.andar,
-            EQ.sala,
-            EQ.status baixa,
-            EQ.ip,
-            EQ.so_id,
-            EQ.office_id,
-            EQ.key_so,
-            EQ.key_office,
-            EQ.memoria_ram_id,
-            EQ.processador_id,
-            EQ.hd,
-            EQ.status situacao,
-            L.local,
-            L.cr,
-            F.nome_fabricante fabricante,
-            M.modelo
-        FROM
-            tb_sys004 EQ
-                JOIN
-            tb_sys006 IE ON IE.patrimonio = EQ.patrimonio
-                JOIN
-            tb_sys003 C ON C.id = EQ.id_categoria
-                JOIN
-            tb_sys018 F ON F.id_fabricante = EQ.fabricante
-                JOIN
-            tb_sys022 M ON M.id_modelo = EQ.modelo
-                JOIN
-            tb_sys008 L ON L.id = EQ.id_local
-                AND EQ.serie = :SERIE", "SERIE="."{$busca}"."");   
-    endif;
-elseif($acao == 'os'):
-    
-    $sql->FullRead("SELECT 
-        EQ.patrimonio,
-        EQ.serie,
-        C.descricao equipamento,
-        C.id categoria,
-        EQ.andar,
-        EQ.sala,
-        EQ.status baixa,
-        EQ.ip,
-        EQ.so_id,
-        EQ.office_id,
-        EQ.key_so,
-        EQ.key_office,
-        EQ.memoria_ram_id,
-        EQ.processador_id,
-        EQ.hd,
-        EQ.status situacao,
-        L.local,
-        L.cr,
-        F.nome_fabricante fabricante,
-        M.modelo
-    FROM
-        tb_sys004 EQ
-            JOIN
-        tb_sys006 IE ON IE.patrimonio = EQ.patrimonio
-            JOIN
-        tb_sys003 C ON C.id = EQ.id_categoria
-            JOIN
-        tb_sys018 F ON F.id_fabricante = EQ.fabricante
-            JOIN
-        tb_sys022 M ON M.id_modelo = EQ.modelo
-            JOIN
-        tb_sys008 L ON L.id = EQ.id_local
-            AND IE.os_sti = :OS", "OS="."{$busca}"."");
 
-endif;
+switch ($acao):
+    case 'patrimonio':
+       $sql->FullRead("SELECT 
+                            EQ.patrimonio,
+                            EQ.serie,
+                            C.descricao equipamento,
+                            C.id categoria,
+                            EQ.andar,
+                            EQ.sala,
+                            EQ.status baixa,
+                            EQ.ip,
+                            EQ.so_id,
+                            EQ.office_id,
+                            EQ.key_so,
+                            EQ.key_office,
+                            EQ.memoria_ram_id,
+                            EQ.processador_id,
+                            EQ.hd,
+                            EQ.status situacao,
+                            L.local,
+                            L.cr,
+                            F.nome_fabricante fabricante,
+                            M.modelo
+                    FROM
+                        tb_sys004 EQ
+                            JOIN
+                        tb_sys003 C ON C.id = EQ.id_categoria
+                            JOIN
+                        tb_sys018 F ON F.id_fabricante = EQ.fabricante
+                            JOIN
+                        tb_sys022 M ON M.id_modelo = EQ.modelo
+                            JOIN
+                        tb_sys008 L ON L.id = EQ.id_local
+                    AND EQ.patrimonio = :PAT", "PAT="."{$busca}"."");
+        break;
+    case 'os':
+        $sql->FullRead("SELECT 
+                            EQ.patrimonio,
+                            EQ.serie,
+                            C.descricao equipamento,
+                            C.id categoria,
+                            EQ.andar,
+                            EQ.sala,
+                            EQ.status baixa,
+                            EQ.ip,
+                            EQ.so_id,
+                            EQ.office_id,
+                            EQ.key_so,
+                            EQ.key_office,
+                            EQ.memoria_ram_id,
+                            EQ.processador_id,
+                            EQ.hd,
+                            EQ.status situacao,
+                            L.local,
+                            L.cr,
+                            F.nome_fabricante fabricante,
+                            M.modelo
+                        FROM
+                            tb_sys004 EQ
+                                JOIN
+                            tb_sys006 IE ON IE.patrimonio = EQ.patrimonio
+                                JOIN
+                            tb_sys003 C ON C.id = EQ.id_categoria
+                                JOIN
+                            tb_sys018 F ON F.id_fabricante = EQ.fabricante
+                                JOIN
+                            tb_sys022 M ON M.id_modelo = EQ.modelo
+                                JOIN
+                            tb_sys008 L ON L.id = EQ.id_local
+                        AND IE.os_sti = :OS", "OS="."{$busca}"."");
+        break;
+    case 'id':
+            $sql->FullRead("SELECT 
+                                EQ.patrimonio,
+                                EQ.serie,
+                                C.descricao equipamento,
+                                C.id categoria,
+                                EQ.andar,
+                                EQ.sala,
+                                EQ.status baixa,
+                                EQ.ip,
+                                EQ.so_id,
+                                EQ.office_id,
+                                EQ.key_so,
+                                EQ.key_office,
+                                EQ.memoria_ram_id,
+                                EQ.processador_id,
+                                EQ.hd,
+                                EQ.status situacao,
+                                L.local,
+                                L.cr,
+                                F.nome_fabricante fabricante,
+                                M.modelo
+                            FROM
+                                tb_sys004 EQ
+                                    JOIN
+                                tb_sys006 IE ON IE.patrimonio = EQ.patrimonio
+                                    JOIN
+                                tb_sys003 C ON C.id = EQ.id_categoria
+                                    JOIN
+                                tb_sys018 F ON F.id_fabricante = EQ.fabricante
+                                    JOIN
+                                tb_sys022 M ON M.id_modelo = EQ.modelo
+                                    JOIN
+                                tb_sys008 L ON L.id = EQ.id_local
+                            AND EQ.id = :ID", "ID="."{$busca}"."");
+        break;
+    default :
+        print "<h2>erro ao pesquisar...</h2>";
+        break;
+endswitch;
 
     $categorias=[2,5,17,22,23,26];
-    
+    //setando a categoria do equipamento
     if(isset($sql->getResult()[0]['categoria'])):
         $categoria = $sql->getResult()[0]['categoria'];
     else:
         $categoria = 0;
     endif;
+    //verificando se a categoria setada faz parte do array $categorias
     if(in_array($categoria,$categorias)):
         if($sql->getResult()[0]['so_id'] !=0):
             $sqlSo = new Read();
@@ -143,7 +148,7 @@ endif;
             $sqlProc->ExeRead("tb_sys028 WHERE id = {$sql->getResult()[0]['processador_id']}");
             $processador = $sqlProc->getResult()[0]['processador'].' ';
             if($sqlProc->getResult()[0]['geracao']!=0):
-                $processador .=$sqlProc->getResult()[0]['geracao'].'ªGeração';
+                $processador .=$sqlProc->getResult()[0]['geracao'].'ª'.' Geração';
             endif;
         endif;
     endif;
@@ -292,8 +297,10 @@ if($sql->getResult()):
         <td><?=$res['observacao']?></td>
     <?if($res['status']=='fechado'):
         $sql->FullRead("SELECT id_saida FROM tb_sys009 WHERE id_item_entrada = :ITEM","ITEM={$res['id']}");
+        //o operador condicional "?:" (ternário) 
+        @$saida = intval($sql->getResult()[0]['id_saida']) ? $sql->getResult()[0]['id_saida'] : '';
         ?>
-        <td class="text-center cursor-pointer" onclick="location.href='index.php?pg=relatorio/saida&id='+<?=$sql->getResult()[0]['id_saida']?>"><?=$sql->getResult()[0]['id_saida']?></td>
+        <td class="text-center cursor-pointer" onclick="location.href='index.php?pg=relatorio/saida&id='+<?=$saida?>"><?=$saida?></td>
     <?else:?>
         <td>&nbsp;</td>
     <?endif;?>
