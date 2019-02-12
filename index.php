@@ -129,17 +129,28 @@ require_once './app/funcoes/func.inc.php';
                                     <li><a href="index.php?pg=gerenciar/equipamento">Equipamento</a></li>
                                     <li><a href="index.php?pg=gerenciar/windows-office">Windows/Office</a></li>
                                     <li><a href="index.php?pg=gerenciar/localidade">Localidade</a></li>
-                                    <?if(GRUPO == 4):?>
                                     <li><a href="index.php?pg=gerenciar/entrada">Entrada</a></li>
+                                    <?if(GRUPO == 4):?>
                                     <li><a href="index.php?pg=gerenciar/usuarios">Usuario</a></li>
                                     <li><a href="index.php?pg=edita/atualiza-banco">Atualizar Banco</a></li>
-                                   
                                     <?endif;?>
+                                </ul>
+                            </li>
+                            <li><a href="#">Documentar</a>
+                                <ul class="submenu-2">
+                                    <li><a href="#">Switch</a></li>
+                                    <li><a href="#">Router</a></li>
                                 </ul>
                             </li>
                             <li><a href="index.php?pg=reset-senha">Alterar Senha</a></li>
                             <li><a href="#">Backup</a></li>
                             <li><a href="index.php?pg=logs">Logs</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#">Consultar</a>
+                        <ul class="submenu-1">
+                            <li><a href="index.php?pg=consulta/localidade">Localidade</a></li>
+                            <li><a href="#">Equipamento</a></li>
                         </ul>
                     </li>
                 </ul> 

@@ -4,7 +4,7 @@ $( ".tabs" ).tabs({
           effect: "blind", duration: 5
       }*/
    });
-
+   
 /*######### autocomplete ##################*/  
 function autoCompletar(obj,target,fnc){
     $('#'+obj.id).autocomplete({
@@ -40,6 +40,9 @@ function autoCompletar(obj,target,fnc){
                     break;
                 case 'avalia':
                     avaliaEquipamento(ui.item.value);
+                    break;
+                case 'consultalocal':
+                    consultaLocalidade(ui.item.value);
                     break;
                 default:
                     return false;
@@ -144,6 +147,22 @@ function buscaLocalidade(id){
         success: function( res )
         {$('.form_load').fadeOut();
             $('.dados-edita').html(res);
+        }
+    });
+}
+
+function consultaLocalidade(id){
+   $.ajax({
+        type: "POST",
+        url: "./app/sistema/ajax/consulta-localidade.php",
+        data: {id:id},
+        dataType:'HTML',
+        beforeSend:function(){
+         $('.form_load').fadeIn(300);
+        },
+        success: function( res )
+        {$('.form_load').fadeOut();
+            $('.dados').html(res);
         }
     });
 }
@@ -873,6 +892,8 @@ function checaCadastroPatrimonio(p)
 function setCadEquipamento(e){
    switch(e){
         case '1':
+        case '28':
+        case '29':
                 $('.opcao-cad-cpu').hide();
                 $('.opcao-cad-monitor').hide();
                 $('.opcao-cad-estabilizador').hide();
